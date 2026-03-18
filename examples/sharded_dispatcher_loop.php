@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -34,9 +36,11 @@ $client = new Client(
         'tcp://127.0.0.1:6372?read_write_timeout=0',
         'tcp://127.0.0.1:6373?read_write_timeout=0',
         'tcp://127.0.0.1:6374?read_write_timeout=0',
-    ], [
+    ],
+    [
         'cluster' => 'redis',
-    ]);
+    ]
+);
 
 // 2. Run pub/sub loop.
 $pubSub = $client->pubSubLoop();

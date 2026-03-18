@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -311,7 +313,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['sentinels', 'svc']
+                'SENTINEL',
+                ['sentinels', 'svc']
             ))
             ->willReturn(
                 [
@@ -359,7 +362,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['sentinels', 'svc']
+                'SENTINEL',
+                ['sentinels', 'svc']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($sentinel1, 'Unknown connection error [127.0.0.1:5381]')
@@ -370,7 +374,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['sentinels', 'svc']
+                'SENTINEL',
+                ['sentinels', 'svc']
             ))
             ->willReturn(
                 [
@@ -413,7 +418,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['sentinels', 'svc']
+                'SENTINEL',
+                ['sentinels', 'svc']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($sentinel1, 'Unknown connection error [127.0.0.1:5381]')
@@ -540,7 +546,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['get-master-addr-by-name', 'svc']
+                'SENTINEL',
+                ['get-master-addr-by-name', 'svc']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($sentinel1, 'Unknown connection error [127.0.0.1:5381]')
@@ -607,7 +614,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['slaves', 'svc']
+                'SENTINEL',
+                ['slaves', 'svc']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($sentinel1, 'Unknown connection error [127.0.0.1:5381]')
@@ -665,7 +673,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['slaves', 'svc']
+                'SENTINEL',
+                ['slaves', 'svc']
             ))
             ->willReturn(
                 [
@@ -1212,7 +1221,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['slaves', 'svc']
+                'SENTINEL',
+                ['slaves', 'svc']
             ))
             ->willReturn(
                 [
@@ -1301,7 +1311,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['slaves', 'svc']
+                'SENTINEL',
+                ['slaves', 'svc']
             ))
             ->willReturn(
                 [
@@ -1385,7 +1396,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['get-master-addr-by-name', 'svc']
+                'SENTINEL',
+                ['get-master-addr-by-name', 'svc']
             ))
             ->willReturn(
                 ['127.0.0.1', '6391']
@@ -1455,7 +1467,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['get-master-addr-by-name', 'svc']
+                'SENTINEL',
+                ['get-master-addr-by-name', 'svc']
             ))
             ->willReturn(null);
 
@@ -1496,7 +1509,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['get-master-addr-by-name', 'svc']
+                'SENTINEL',
+                ['get-master-addr-by-name', 'svc']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($sentinel1, 'Unknown connection error [127.0.0.1:5381]')
@@ -1535,7 +1549,10 @@ class SentinelReplicationTest extends PredisTestCase
         $factory = new Connection\Factory();
 
         $replication = new SentinelReplication(
-            'svc', ['tcp://127.0.0.1:5381?role=sentinel'], $factory, $strategy
+            'svc',
+            ['tcp://127.0.0.1:5381?role=sentinel'],
+            $factory,
+            $strategy
         );
 
         $this->assertSame($strategy, $replication->getReplicationStrategy());
@@ -1579,7 +1596,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->exactly(2))
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['sentinels', 'svc']
+                'SENTINEL',
+                ['sentinels', 'svc']
             ))
             ->willReturnOnConsecutiveCalls(
                 $this->throwException(new Connection\ConnectionException($sentinel1, 'Unknown connection error [127.0.0.1:5381]')),
@@ -1599,7 +1617,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['sentinels', 'svc']
+                'SENTINEL',
+                ['sentinels', 'svc']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($sentinel2, 'Unknown connection error [127.0.0.1:5382]')
@@ -1845,7 +1864,8 @@ class SentinelReplicationTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'SENTINEL', ['slaves', 'svc']
+                'SENTINEL',
+                ['slaves', 'svc']
             ))
             ->willReturn(
                 [

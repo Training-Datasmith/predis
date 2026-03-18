@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -217,7 +219,8 @@ class SET_Test extends PredisCommandTestCase
         $redis = $this->getClient();
 
         $this->assertEquals(
-            'OK', $redis->set('foo', 'barbar', null, null, null)
+            'OK',
+            $redis->set('foo', 'barbar', null, null, null)
         );
     }
 
@@ -230,7 +233,8 @@ class SET_Test extends PredisCommandTestCase
         $redis = $this->getClient();
 
         $this->assertEquals(
-            'OK', $redis->set('foo', null)
+            'OK',
+            $redis->set('foo', null)
         );
     }
 
@@ -243,7 +247,8 @@ class SET_Test extends PredisCommandTestCase
         $redis = $this->getClient();
 
         $this->assertEquals(
-            'OK', $redis->set('foo', false)
+            'OK',
+            $redis->set('foo', false)
         );
     }
 

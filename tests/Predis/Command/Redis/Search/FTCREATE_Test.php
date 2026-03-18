@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -144,11 +146,13 @@ class FTCREATE_Test extends PredisCommandTestCase
         $redis = $this->getClient();
 
         $schema = [
-            new VectorField('float16',
+            new VectorField(
+                'float16',
                 'FLAT',
                 ['TYPE', 'FLOAT16', 'DIM', 768, 'DISTANCE_METRIC', 'COSINE']
             ),
-            new VectorField('bfloat16',
+            new VectorField(
+                'bfloat16',
                 'FLAT',
                 ['TYPE', 'BFLOAT16', 'DIM', 768, 'DISTANCE_METRIC', 'COSINE']
             ),
@@ -173,10 +177,22 @@ class FTCREATE_Test extends PredisCommandTestCase
             new TextField(
                 'text_empty',
                 '',
-                false, false, false, '', 1, false, true
+                false,
+                false,
+                false,
+                '',
+                1,
+                false,
+                true
             ),
-            new TagField('tag_empty',
-                '', false, false, ',', false, true
+            new TagField(
+                'tag_empty',
+                '',
+                false,
+                false,
+                ',',
+                false,
+                true
             ),
             new NumericField('num_missing', '', false, false, true),
             new GeoField('geo_missing', '', false, false, true),
@@ -184,10 +200,23 @@ class FTCREATE_Test extends PredisCommandTestCase
                 'text_empty_missing',
                 '',
                 false,
-                false, false, '', 1, false, true, true
+                false,
+                false,
+                '',
+                1,
+                false,
+                true,
+                true
             ),
-            new TagField('tag_empty_missing',
-                '', false, false, ',', false, true, true
+            new TagField(
+                'tag_empty_missing',
+                '',
+                false,
+                false,
+                ',',
+                false,
+                true,
+                true
             ),
         ];
 
@@ -208,7 +237,8 @@ class FTCREATE_Test extends PredisCommandTestCase
 
         $this->assertEquals('OK', $redis->ftcreate('test', [
             new VectorField(
-                'v', 'SVS-VAMANA',
+                'v',
+                'SVS-VAMANA',
                 ['TYPE', 'FLOAT32',
                     'DIM', 8,
                     'DISTANCE_METRIC', 'L2',
@@ -259,7 +289,8 @@ class FTCREATE_Test extends PredisCommandTestCase
 
         $this->assertEquals('OK', $redis->ftcreate('test', [
             new VectorField(
-                'v', 'SVS-VAMANA',
+                'v',
+                'SVS-VAMANA',
                 ['TYPE', 'FLOAT32',
                     'DIM', 8,
                     'DISTANCE_METRIC', 'L2',

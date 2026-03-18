@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -113,7 +115,8 @@ class EXPIREAT_Test extends PredisCommandTestCase
 
         $this->assertSame(1, $redis->expireat('foo', $now + 1));
         $this->assertThat($redis->ttl('foo'), $this->logicalAnd(
-            $this->greaterThanOrEqual(0), $this->lessThanOrEqual(1)
+            $this->greaterThanOrEqual(0),
+            $this->lessThanOrEqual(1)
         ));
 
         $this->sleep(2.0);

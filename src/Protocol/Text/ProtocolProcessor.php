@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -95,7 +97,8 @@ class ProtocolProcessor implements ProtocolProcessorInterface
 
             default:
                 CommunicationException::handle(new ProtocolException(
-                    $connection, "Unknown response prefix: '$prefix' [{$connection->getParameters()}]"
+                    $connection,
+                    "Unknown response prefix: '$prefix' [{$connection->getParameters()}]"
                 ));
 
                 return;

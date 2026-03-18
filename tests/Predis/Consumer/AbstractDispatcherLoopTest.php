@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -38,7 +40,7 @@ class AbstractDispatcherLoopTest extends PredisTestCase
             ->setConstructorArgs([$mockClient])
             ->getMock();
 
-        $this->testClass = new class($this->mockConsumer) extends AbstractDispatcherLoop {
+        $this->testClass = new class ($this->mockConsumer) extends AbstractDispatcherLoop {
             public function run(): void
             {
                 // NOOP

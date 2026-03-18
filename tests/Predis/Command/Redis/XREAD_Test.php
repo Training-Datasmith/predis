@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -50,7 +52,8 @@ class XREAD_Test extends PredisCommandTestCase
         $this->assertSame(
             ['stream1' => [['id1', ['field', 'value']], ['id2', ['field', 'value']]]],
             $this->getCommand()->parseResponse(
-                [['stream1', [['id1', ['field', 'value']], ['id2', ['field', 'value']]]]])
+                [['stream1', [['id1', ['field', 'value']], ['id2', ['field', 'value']]]]]
+            )
         );
     }
 

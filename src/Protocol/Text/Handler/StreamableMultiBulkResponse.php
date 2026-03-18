@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -37,7 +39,8 @@ class StreamableMultiBulkResponse implements ResponseHandlerInterface
 
         if ("$length" != $payload) {
             CommunicationException::handle(new ProtocolException(
-                $connection, "Cannot parse '$payload' as a valid length for a multi-bulk response [{$connection->getParameters()}]"
+                $connection,
+                "Cannot parse '$payload' as a valid length for a multi-bulk response [{$connection->getParameters()}]"
             ));
         }
 

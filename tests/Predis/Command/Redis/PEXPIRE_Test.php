@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -134,7 +136,8 @@ class PEXPIRE_Test extends PredisCommandTestCase
 
         $this->sleep(0.5);
         $this->assertThat($redis->pttl('foo'), $this->logicalAnd(
-            $this->lessThanOrEqual($ttl), $this->greaterThan($ttl - 800)
+            $this->lessThanOrEqual($ttl),
+            $this->greaterThan($ttl - 800)
         ));
     }
 

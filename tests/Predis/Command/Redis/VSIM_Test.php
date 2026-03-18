@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -75,17 +77,23 @@ class VSIM_Test extends PredisCommandTestCase
 
         $this->assertTrue(
             $redis->vadd(
-                'key', VectorUtility::toBlob([0.1, 0.2, 0.3, 0.4]), 'elem1'
+                'key',
+                VectorUtility::toBlob([0.1, 0.2, 0.3, 0.4]),
+                'elem1'
             )
         );
         $this->assertTrue(
             $redis->vadd(
-                'key', VectorUtility::toBlob([0.9, 0.8, 0.7, 0.6]), 'elem2'
+                'key',
+                VectorUtility::toBlob([0.9, 0.8, 0.7, 0.6]),
+                'elem2'
             )
         );
         $this->assertTrue(
             $redis->vadd(
-                'key', VectorUtility::toBlob([0.5, 0.6, 0.7, 0.8]), 'elem3'
+                'key',
+                VectorUtility::toBlob([0.5, 0.6, 0.7, 0.8]),
+                'elem3'
             )
         );
 
@@ -126,7 +134,13 @@ class VSIM_Test extends PredisCommandTestCase
         $this->assertSame(
             ['elem2', 'elem1'],
             $redis->vsim(
-                'key', [0.9, 0.8, 0.7, 0.6], false, false, null, 0.2, null,
+                'key',
+                [0.9, 0.8, 0.7, 0.6],
+                false,
+                false,
+                null,
+                0.2,
+                null,
                 '.years >= 18'
             )
         );
@@ -143,17 +157,23 @@ class VSIM_Test extends PredisCommandTestCase
 
         $this->assertTrue(
             $redis->vadd(
-                'key', VectorUtility::toBlob([0.1, 0.2, 0.3, 0.4]), 'elem1'
+                'key',
+                VectorUtility::toBlob([0.1, 0.2, 0.3, 0.4]),
+                'elem1'
             )
         );
         $this->assertTrue(
             $redis->vadd(
-                'key', VectorUtility::toBlob([0.9, 0.8, 0.7, 0.6]), 'elem2'
+                'key',
+                VectorUtility::toBlob([0.9, 0.8, 0.7, 0.6]),
+                'elem2'
             )
         );
         $this->assertTrue(
             $redis->vadd(
-                'key', VectorUtility::toBlob([0.5, 0.6, 0.7, 0.8]), 'elem3'
+                'key',
+                VectorUtility::toBlob([0.5, 0.6, 0.7, 0.8]),
+                'elem3'
             )
         );
 
@@ -194,7 +214,13 @@ class VSIM_Test extends PredisCommandTestCase
         $this->assertSame(
             ['elem2', 'elem1'],
             $redis->vsim(
-                'key', [0.9, 0.8, 0.7, 0.6], false, false, null, 0.2, null,
+                'key',
+                [0.9, 0.8, 0.7, 0.6],
+                false,
+                false,
+                null,
+                0.2,
+                null,
                 '.years >= 18'
             )
         );

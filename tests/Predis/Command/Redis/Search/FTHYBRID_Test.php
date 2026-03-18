@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -1113,10 +1115,14 @@ class FTHYBRID_Test extends PredisCommandTestCase
             new TagField('color'),
             new TagField('item_type'),
             new NumericField('size'),
-            new VectorField('embedding', 'FLAT',
+            new VectorField(
+                'embedding',
+                'FLAT',
                 ['TYPE', 'FLOAT32', 'DIM', 4, 'DISTANCE_METRIC', 'L2']
             ),
-            new VectorField('embedding-hnsw', 'HNSW',
+            new VectorField(
+                'embedding-hnsw',
+                'HNSW',
                 ['TYPE', 'FLOAT32', 'DIM', 4, 'DISTANCE_METRIC', 'L2']
             ),
         ];

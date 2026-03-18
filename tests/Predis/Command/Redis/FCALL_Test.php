@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -108,8 +110,11 @@ class FCALL_Test extends PredisCommandTestCase
     {
         $redis = $this->getResp3Client();
 
-        $this->assertSame('mylib', $redis->function->load(
-            "#!lua name=mylib \n redis.register_function('myfunc', function(keys, args) return 'hello' end)")
+        $this->assertSame(
+            'mylib',
+            $redis->function->load(
+                "#!lua name=mylib \n redis.register_function('myfunc', function(keys, args) return 'hello' end)"
+            )
         );
 
         $actualResponse = $redis->fcall('myfunc', []);

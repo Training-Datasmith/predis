@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -50,7 +52,7 @@ class AbstractContainerTest extends TestCase
         $this->mockCommand = $this->getMockBuilder(CommandInterface::class)->getMock();
         $this->mockClient = $this->getMockBuilder(ClientInterface::class)->getMock();
 
-        $this->testClass = new class($this->mockClient) extends AbstractContainer {
+        $this->testClass = new class ($this->mockClient) extends AbstractContainer {
             public function getContainerCommandId(): string
             {
                 return 'test';

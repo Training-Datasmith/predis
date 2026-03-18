@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -22,7 +24,7 @@ class ExpansionTest extends PredisTestCase
 
     protected function setUp(): void
     {
-        $this->testClass = new class extends RedisCommand {
+        $this->testClass = new class () extends RedisCommand {
             use Expansion;
 
             public static $expansionArgumentPositionOffset = 0;

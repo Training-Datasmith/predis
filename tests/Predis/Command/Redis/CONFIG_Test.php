@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -183,8 +185,10 @@ class CONFIG_Test extends PredisCommandTestCase
 
         $this->assertEquals('OK', $redis->config('SET', 'search-default-dialect', 2));
         $this->assertEquals(2, (int) $redis->ftconfig->get('DEFAULT_DIALECT')[0][1]);
-        $this->assertEquals(2,
-            (int) $redis->config('GET', 'search-default-dialect')['search-default-dialect']);
+        $this->assertEquals(
+            2,
+            (int) $redis->config('GET', 'search-default-dialect')['search-default-dialect']
+        );
         $this->assertEquals(
             'OK',
             $redis->config('SET', 'search-default-dialect', $default_dialect)
@@ -199,14 +203,22 @@ class CONFIG_Test extends PredisCommandTestCase
     {
         $redis = $this->getClient();
 
-        $this->assertGreaterThan(0,
-            (int) $redis->config('GET', 'search-timeout')['search-timeout']);
-        $this->assertGreaterThanOrEqual(0,
-            (int) $redis->config('GET', 'ts-retention-policy')['ts-retention-policy']);
-        $this->assertGreaterThanOrEqual(0,
-            (int) $redis->config('GET', 'bf-error-rate')['bf-error-rate']);
-        $this->assertGreaterThan(0,
-            (int) $redis->config('GET', 'cf-initial-size')['cf-initial-size']);
+        $this->assertGreaterThan(
+            0,
+            (int) $redis->config('GET', 'search-timeout')['search-timeout']
+        );
+        $this->assertGreaterThanOrEqual(
+            0,
+            (int) $redis->config('GET', 'ts-retention-policy')['ts-retention-policy']
+        );
+        $this->assertGreaterThanOrEqual(
+            0,
+            (int) $redis->config('GET', 'bf-error-rate')['bf-error-rate']
+        );
+        $this->assertGreaterThan(
+            0,
+            (int) $redis->config('GET', 'cf-initial-size')['cf-initial-size']
+        );
 
         $this->expectException(ServerException::class);
         $redis->config('SET', 'search-max-doctablesize', 10000);

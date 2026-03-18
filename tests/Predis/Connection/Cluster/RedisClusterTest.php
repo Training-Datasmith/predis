@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -306,7 +308,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willReturn($slotsmap);
 
@@ -603,7 +606,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'GET', ['node:1001']
+                'GET',
+                ['node:1001']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($connection1, 'Unknown connection error [127.0.0.1:6381]')
@@ -614,7 +618,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willReturn($slotsmap);
 
@@ -623,7 +628,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willReturn($slotsmap);
 
@@ -676,7 +682,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'GET', ['node:1001']
+                'GET',
+                ['node:1001']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($connection1, 'Unknown connection error [127.0.0.1:6381]')
@@ -687,7 +694,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'GET', ['node:1001']
+                'GET',
+                ['node:1001']
             ))
             ->willReturn(
                 new Response\Error('MOVED 1970 127.0.0.1:9381')
@@ -703,7 +711,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'GET', ['node:1001']
+                'GET',
+                ['node:1001']
             ))
             ->willReturn('value:1001');
 
@@ -793,7 +802,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($connection1, 'Unknown connection error [127.0.0.1:6381]')
@@ -804,7 +814,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($connection2, 'Unknown connection error [127.0.0.1:6383]')
@@ -815,7 +826,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willReturn($slotsmap);
 
@@ -863,7 +875,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($connection1, 'Unknown connection error [127.0.0.1:6381]')
@@ -874,7 +887,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->any())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($connection2, 'Unknown connection error [127.0.0.1:6382]')
@@ -1197,7 +1211,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willReturn($response);
 
@@ -1337,7 +1352,8 @@ class RedisClusterTest extends PredisTestCase
                     ->will($this->onConsecutiveCalls(
                         $clusterDownError,
                         $clusterDownError,
-                        'foobar'));
+                        'foobar'
+                    ));
 
         $cluster = new RedisCluster(new Connection\Factory(), new Parameters());
         $cluster->useClusterSlots(false);
@@ -1450,7 +1466,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($connection1, 'Unknown connection error [127.0.0.1:6381]')
@@ -1461,7 +1478,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willThrowException(
                 new Connection\ConnectionException($connection2, 'Unknown connection error [127.0.0.1:6383]')
@@ -1472,7 +1490,8 @@ class RedisClusterTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'CLUSTER', ['SLOTS']
+                'CLUSTER',
+                ['SLOTS']
             ))
             ->willReturn($slotsmap);
 

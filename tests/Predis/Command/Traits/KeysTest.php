@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -24,7 +26,7 @@ class KeysTest extends PredisTestCase
     {
         parent::setUp();
 
-        $this->testClass = new class extends RedisCommand {
+        $this->testClass = new class () extends RedisCommand {
             use Keys;
 
             public static $keysArgumentPositionOffset = 0;

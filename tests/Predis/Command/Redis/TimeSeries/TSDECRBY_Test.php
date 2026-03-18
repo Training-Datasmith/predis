@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -182,8 +184,11 @@ class TSDECRBY_Test extends PredisCommandTestCase
     {
         $redis = $this->getClient();
 
-        $this->assertEquals(1000,
-            $redis->tsdecrby('temperature:2:32', 27,
+        $this->assertEquals(
+            1000,
+            $redis->tsdecrby(
+                'temperature:2:32',
+                27,
                 (new DecrByArguments())
                     ->timestamp(1000)
                     ->duplicatePolicy(CommonArguments::POLICY_LAST)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -376,7 +378,8 @@ class MultiExec implements ClientContextInterface
             if ($execResponse === null || $execResponse === false) {
                 if ($attempts === 0) {
                     throw new AbortedMultiExecException(
-                        $this, 'The current transaction has been aborted by the server.'
+                        $this,
+                        'The current transaction has been aborted by the server.'
                     );
                 }
 
@@ -463,7 +466,8 @@ class MultiExec implements ClientContextInterface
         // connections we can safely assume that Predis\Client::getConnection()
         // will return a Predis\Connection\NodeConnectionInterface instance.
         CommunicationException::handle(new ProtocolException(
-            $this->client->getConnection(), $message
+            $this->client->getConnection(),
+            $message
         ));
     }
 }

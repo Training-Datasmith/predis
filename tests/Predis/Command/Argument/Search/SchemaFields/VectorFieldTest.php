@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -23,6 +25,7 @@ class VectorFieldTest extends TestCase
     {
         $this->assertSame(
             ['field_name', 'AS', 'field', 'VECTOR', 'FLAT', 2, 'attribute_name', 'attribute_value'],
-            (new VectorField('field_name', 'FLAT', ['attribute_name', 'attribute_value'], 'field'))->toArray());
+            (new VectorField('field_name', 'FLAT', ['attribute_name', 'attribute_value'], 'field'))->toArray()
+        );
     }
 }

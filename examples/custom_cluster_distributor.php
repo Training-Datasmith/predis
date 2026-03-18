@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -113,6 +115,10 @@ if (isset($server1['Keyspace'], $server2['Keyspace'])) {
     $server2 = $server2['Keyspace'];
 }
 
-printf("Server '%s' has %d keys while server '%s' has %d keys.\n",
-    'first', $server1['db15']['keys'], 'second', $server2['db15']['keys']
+printf(
+    "Server '%s' has %d keys while server '%s' has %d keys.\n",
+    'first',
+    $server1['db15']['keys'],
+    'second',
+    $server2['db15']['keys']
 );

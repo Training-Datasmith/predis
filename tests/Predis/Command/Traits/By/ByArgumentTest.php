@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -23,7 +25,7 @@ class ByArgumentTest extends PredisTestCase
     {
         parent::setUp();
 
-        $this->testClass = new class extends RedisCommand {
+        $this->testClass = new class () extends RedisCommand {
             use ByArgument;
 
             public static $byArgumentPositionOffset = 0;

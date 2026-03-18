@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -177,7 +179,7 @@ class CommandTest extends PredisTestCase
      */
     public function testSerializeCommand(): void
     {
-        $command = new class extends Command {
+        $command = new class () extends Command {
             public function getId()
             {
                 return 'Test';

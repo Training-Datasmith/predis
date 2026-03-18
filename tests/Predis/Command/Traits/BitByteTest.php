@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -21,7 +23,7 @@ class BitByteTest extends PredisTestCase
 
     protected function setUp(): void
     {
-        $this->testClass = new class extends RedisCommand {
+        $this->testClass = new class () extends RedisCommand {
             use BitByte;
 
             public function getId()

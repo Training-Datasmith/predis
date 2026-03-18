@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -45,7 +47,8 @@ class SSLTest extends PredisTestCase
      */
     public function testExecuteCommandOverSSLConnectionFailsOnIncorrectCertificate()
     {
-        $redis = new Client($this->getDefaultParametersArray() + [
+        $redis = new Client(
+            $this->getDefaultParametersArray() + [
             'ssl' => ['cafile' => '/tmp/invalid.crt', 'verify_peer' => true, 'verify_peer_name' => false]]
         );
 

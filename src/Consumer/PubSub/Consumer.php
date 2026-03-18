@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -115,7 +117,8 @@ class Consumer extends AbstractConsumer
     protected function writeRequest($method, array $arguments)
     {
         $this->client->getConnection()->writeRequest(
-            $this->client->createCommand($method,
+            $this->client->createCommand(
+                $method,
                 Command::normalizeArguments($arguments)
             )
         );

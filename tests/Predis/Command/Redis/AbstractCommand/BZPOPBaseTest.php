@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -26,7 +28,7 @@ class BZPOPBaseTest extends PredisTestCase
     {
         parent::setUp();
 
-        $this->testCommand = new class extends BZPOPBase {
+        $this->testCommand = new class () extends BZPOPBase {
             public function getId(): string
             {
                 return 'test';

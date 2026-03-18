@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -100,14 +102,26 @@ class VADD_Test extends PredisCommandTestCase
         // With attributes as JSON
         $this->assertTrue(
             $redis->vadd(
-                'key', [0.1, 0.2, 0.3, 0.4], 'elem5', 10, true, VADD::QUANT_Q8, null,
+                'key',
+                [0.1, 0.2, 0.3, 0.4],
+                'elem5',
+                10,
+                true,
+                VADD::QUANT_Q8,
+                null,
                 '{"key1":"value1","key2":"value2"}'
             )
         );
         // With attributes as associative array
         $this->assertTrue(
             $redis->vadd(
-                'key', [0.1, 0.2, 0.3, 0.4], 'elem6', 10, true, VADD::QUANT_Q8, null,
+                'key',
+                [0.1, 0.2, 0.3, 0.4],
+                'elem6',
+                10,
+                true,
+                VADD::QUANT_Q8,
+                null,
                 ['key1' => 'value1', 'key2' => 'value2']
             )
         );
@@ -141,14 +155,26 @@ class VADD_Test extends PredisCommandTestCase
         // With attributes as JSON
         $this->assertTrue(
             $redis->vadd(
-                'key', [0.1, 0.2, 0.3, 0.4], 'elem5', 10, true, VADD::QUANT_Q8, null,
+                'key',
+                [0.1, 0.2, 0.3, 0.4],
+                'elem5',
+                10,
+                true,
+                VADD::QUANT_Q8,
+                null,
                 '{"key1":"value1","key2":"value2"}'
             )
         );
         // With attributes as associative array
         $this->assertTrue(
             $redis->vadd(
-                'key', [0.1, 0.2, 0.3, 0.4], 'elem6', 10, true, VADD::QUANT_Q8, null,
+                'key',
+                [0.1, 0.2, 0.3, 0.4],
+                'elem6',
+                10,
+                true,
+                VADD::QUANT_Q8,
+                null,
                 ['key1' => 'value1', 'key2' => 'value2']
             )
         );

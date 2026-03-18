@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -437,7 +439,8 @@ abstract class PredisConnectionTestCase extends PredisTestCase
 
         $this->assertInstanceOf('Predis\Response\Error', $error = $connection->read());
         $this->assertMatchesRegularExpression(
-            '/[ERR|WRONGTYPE] Operation against a key holding the wrong kind of value/', $error->getMessage()
+            '/[ERR|WRONGTYPE] Operation against a key holding the wrong kind of value/',
+            $error->getMessage()
         );
     }
 

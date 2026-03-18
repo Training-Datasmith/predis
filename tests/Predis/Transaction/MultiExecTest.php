@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -1208,7 +1210,9 @@ class MultiExecTest extends PredisTestCase
      */
     protected static function commandsToIDs(array $commands): array
     {
-        return array_map(static function ($cmd) { return $cmd->getId(); }, $commands);
+        return array_map(static function ($cmd) {
+            return $cmd->getId();
+        }, $commands);
     }
 
     /**

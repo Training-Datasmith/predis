@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -124,7 +126,8 @@ class Commands implements OptionInterface
 
         if (isset($options->prefix)) {
             throw new InvalidArgumentException(sprintf(
-                '%s does not support key prefixing', RawFactory::class
+                '%s does not support key prefixing',
+                RawFactory::class
             ));
         }
 

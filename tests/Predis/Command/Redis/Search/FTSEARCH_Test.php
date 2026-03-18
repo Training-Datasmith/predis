@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -193,7 +195,8 @@ class FTSEARCH_Test extends PredisCommandTestCase
 
         $this->assertEquals('OK', $redis->ftcreate('test', [
             new VectorField(
-                'v', 'HNSW',
+                'v',
+                'HNSW',
                 ['TYPE', 'FLOAT32', 'DIM', 2, 'DISTANCE_METRIC', 'L2']
             ),
         ]));
@@ -270,7 +273,8 @@ class FTSEARCH_Test extends PredisCommandTestCase
 
         $this->assertEquals('OK', $redis->ftcreate('test', [
             new VectorField(
-                'v', 'HNSW',
+                'v',
+                'HNSW',
                 ['TYPE', 'INT8', 'DIM', 2, 'DISTANCE_METRIC', 'L2']
             ),
         ]));
@@ -306,7 +310,8 @@ class FTSEARCH_Test extends PredisCommandTestCase
 
         $this->assertEquals('OK', $redis->ftcreate('test', [
             new VectorField(
-                'v', 'HNSW',
+                'v',
+                'HNSW',
                 ['TYPE', 'UINT8', 'DIM', 2, 'DISTANCE_METRIC', 'L2']
             ),
         ]));
@@ -347,12 +352,24 @@ class FTSEARCH_Test extends PredisCommandTestCase
             new TextField(
                 'text_empty',
                 '',
-                false, false, false, '', 1, false, true
+                false,
+                false,
+                false,
+                '',
+                1,
+                false,
+                true
             ),
             new TextField(
                 'text_not_empty',
                 '',
-                false, false, false, '', 1, false, false
+                false,
+                false,
+                false,
+                '',
+                1,
+                false,
+                false
             ),
         ];
 
@@ -396,12 +413,24 @@ class FTSEARCH_Test extends PredisCommandTestCase
             new TextField(
                 '$.text_empty',
                 'text_empty',
-                false, false, false, '', 1, false, true
+                false,
+                false,
+                false,
+                '',
+                1,
+                false,
+                true
             ),
             new TextField(
                 '$.text_not_empty',
                 'text_not_empty',
-                false, false, false, '', 1, false, false
+                false,
+                false,
+                false,
+                '',
+                1,
+                false,
+                false
             ),
         ];
 
@@ -439,7 +468,13 @@ class FTSEARCH_Test extends PredisCommandTestCase
         $redis = $this->getClient();
 
         $hashResponse = $redis->hmset(
-            'test:1', 'uuid', '3d3586fe-0416-4572-8ce', 'email', 'adriano@acme.com.ie', 'num', 5
+            'test:1',
+            'uuid',
+            '3d3586fe-0416-4572-8ce',
+            'email',
+            'adriano@acme.com.ie',
+            'num',
+            5
         );
         $this->assertEquals('OK', $hashResponse);
 
@@ -460,30 +495,42 @@ class FTSEARCH_Test extends PredisCommandTestCase
         $ftSearchArguments->dialect(4);
 
         $actualResponse = $redis->ftsearch(
-            'idx_hash', '@uuid:{$uuid}', $ftSearchArguments
+            'idx_hash',
+            '@uuid:{$uuid}',
+            $ftSearchArguments
         );
 
-        $this->assertSame([
+        $this->assertSame(
+            [
             1, 'test:1',
-            ['uuid', '3d3586fe-0416-4572-8ce', 'email', 'adriano@acme.com.ie', 'num', '5']], $actualResponse
+            ['uuid', '3d3586fe-0416-4572-8ce', 'email', 'adriano@acme.com.ie', 'num', '5']],
+            $actualResponse
         );
 
         $actualResponse = $redis->ftsearch(
-            'idx_hash', '@email:{$email}', $ftSearchArguments
+            'idx_hash',
+            '@email:{$email}',
+            $ftSearchArguments
         );
 
-        $this->assertSame([
+        $this->assertSame(
+            [
             1, 'test:1',
-            ['uuid', '3d3586fe-0416-4572-8ce', 'email', 'adriano@acme.com.ie', 'num', '5']], $actualResponse
+            ['uuid', '3d3586fe-0416-4572-8ce', 'email', 'adriano@acme.com.ie', 'num', '5']],
+            $actualResponse
         );
 
         $actualResponse = $redis->ftsearch(
-            'idx_hash', '@num:[5]', $ftSearchArguments
+            'idx_hash',
+            '@num:[5]',
+            $ftSearchArguments
         );
 
-        $this->assertSame([
+        $this->assertSame(
+            [
             1, 'test:1',
-            ['uuid', '3d3586fe-0416-4572-8ce', 'email', 'adriano@acme.com.ie', 'num', '5']], $actualResponse
+            ['uuid', '3d3586fe-0416-4572-8ce', 'email', 'adriano@acme.com.ie', 'num', '5']],
+            $actualResponse
         );
     }
 
@@ -526,7 +573,8 @@ class FTSEARCH_Test extends PredisCommandTestCase
                 2,
                 'geo:doc_polygon1',
                 'geo:doc_point2',
-            ], $actualResponse
+            ],
+            $actualResponse
         );
 
         $actualResponse = $redis->ftsearch('idx_geo', '@g:[disjoint $shape]', $ftSearchArguments);
@@ -535,7 +583,8 @@ class FTSEARCH_Test extends PredisCommandTestCase
                 2,
                 'geo:doc_polygon2',
                 'geo:doc_point1',
-            ], $actualResponse
+            ],
+            $actualResponse
         );
     }
 
@@ -558,8 +607,12 @@ class FTSEARCH_Test extends PredisCommandTestCase
         $ftCreateArguments->prefix(['geo:']);
 
         $schema = [
-            new GeoShapeField('g', '',
-                AbstractField::NOT_SORTABLE, false, GeoShapeField::COORD_FLAT
+            new GeoShapeField(
+                'g',
+                '',
+                AbstractField::NOT_SORTABLE,
+                false,
+                GeoShapeField::COORD_FLAT
             ),
         ];
 
@@ -579,7 +632,8 @@ class FTSEARCH_Test extends PredisCommandTestCase
             [
                 1,
                 'geo:doc_polygon1',
-            ], $actualResponse
+            ],
+            $actualResponse
         );
 
         $ftSearchArguments = new SearchArguments();
@@ -592,7 +646,8 @@ class FTSEARCH_Test extends PredisCommandTestCase
             [
                 1,
                 'geo:doc_polygon1',
-            ], $actualResponse
+            ],
+            $actualResponse
         );
 
         $ftSearchArguments = new SearchArguments();
@@ -606,7 +661,8 @@ class FTSEARCH_Test extends PredisCommandTestCase
                 2,
                 'geo:doc_polygon1',
                 'geo:doc_point2',
-            ], $actualResponse
+            ],
+            $actualResponse
         );
     }
 

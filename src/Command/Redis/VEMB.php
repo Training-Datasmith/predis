@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -45,7 +47,9 @@ class VEMB extends RedisCommand
     public function parseResponse($data): array
     {
         if (!$this->isRaw) {
-            return array_map(static function ($value): float { return (float) $value; }, $data);
+            return array_map(static function ($value): float {
+                return (float) $value;
+            }, $data);
         }
 
         $parsedData = [];

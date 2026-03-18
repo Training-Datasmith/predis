@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -125,7 +127,8 @@ EOT;
         $this->assertEquals(
             $expectedResponse,
             $redis->ftexplain(
-                'index', '(foo bar)|(hello world) @date:[100 200]|@date:[500 +inf]',
+                'index',
+                '(foo bar)|(hello world) @date:[100 200]|@date:[500 +inf]',
                 (new ExplainArguments())->dialect(1)
             )
         );

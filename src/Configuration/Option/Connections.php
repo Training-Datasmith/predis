@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -48,7 +50,8 @@ class Connections implements OptionInterface
             return $this->createFactoryByString($options, $value);
         }
         throw new InvalidArgumentException(sprintf(
-            '%s expects a valid connection factory', static::class
+            '%s expects a valid connection factory',
+            static::class
         ));
     }
 
@@ -105,7 +108,9 @@ class Connections implements OptionInterface
 
             default:
                 throw new InvalidArgumentException(sprintf(
-                    '%s does not recognize `%s` as a supported configuration string', static::class, $value
+                    '%s does not recognize `%s` as a supported configuration string',
+                    static::class,
+                    $value
                 ));
         }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -77,7 +79,8 @@ abstract class NonClusterConnectionStrategy implements StrategyInterface
         return $retry->callWithRetry(
             function () use ($command) {
                 return $this->connection->executeCommand($command);
-            }, function (CommunicationException $e): void {
+            },
+            function (CommunicationException $e): void {
                 $this->onFailCallback($e);
             }
         );
@@ -121,7 +124,8 @@ abstract class NonClusterConnectionStrategy implements StrategyInterface
         return $retry->callWithRetry(
             function () {
                 return $this->connection->executeCommand(new UNWATCH());
-            }, function (CommunicationException $e): void {
+            },
+            function (CommunicationException $e): void {
                 $this->onFailCallback($e);
             }
         );
@@ -148,7 +152,8 @@ abstract class NonClusterConnectionStrategy implements StrategyInterface
             $response = $retry->callWithRetry(
                 function () use ($command) {
                     return $this->connection->executeCommand($command);
-                }, function (CommunicationException $e): void {
+                },
+                function (CommunicationException $e): void {
                     $this->onFailCallback($e);
                 }
             );

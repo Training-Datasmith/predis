@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -71,8 +73,14 @@ class VGETATTR_Test extends PredisCommandTestCase
 
         $this->assertTrue(
             $redis->vadd(
-                'key', VectorUtility::toBlob([0.1, 0.2, 0.3, 0.4]), 'elem1', 10, false,
-                null, null, ['key' => 'value', 'key1' => 'value1']
+                'key',
+                VectorUtility::toBlob([0.1, 0.2, 0.3, 0.4]),
+                'elem1',
+                10,
+                false,
+                null,
+                null,
+                ['key' => 'value', 'key1' => 'value1']
             )
         );
 
@@ -95,8 +103,14 @@ class VGETATTR_Test extends PredisCommandTestCase
 
         $this->assertTrue(
             $redis->vadd(
-                'key', VectorUtility::toBlob([0.1, 0.2, 0.3, 0.4]), 'elem1', 10, false,
-                null, null, ['key' => 'value', 'key1' => 'value1']
+                'key',
+                VectorUtility::toBlob([0.1, 0.2, 0.3, 0.4]),
+                'elem1',
+                10,
+                false,
+                null,
+                null,
+                ['key' => 'value', 'key1' => 'value1']
             )
         );
 

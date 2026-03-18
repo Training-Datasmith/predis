@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -852,7 +854,8 @@ class MasterSlaveReplicationTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'EXISTS', ['key']
+                'EXISTS',
+                ['key']
             ))
             ->willReturn(
                 new Response\Error('LOADING')
@@ -863,7 +866,8 @@ class MasterSlaveReplicationTest extends PredisTestCase
             ->expects($this->once())
             ->method('executeCommand')
             ->with($this->isRedisCommand(
-                'EXISTS', ['key']
+                'EXISTS',
+                ['key']
             ))
             ->willReturn(1);
 
@@ -1072,7 +1076,8 @@ class MasterSlaveReplicationTest extends PredisTestCase
             ->with(
                 $this->isRedisCommand($cmdInfo)
             )
-            ->willReturn('
+            ->willReturn(
+                '
 # Replication
 role:master
 connected_slaves:2
@@ -1155,7 +1160,8 @@ repl_backlog_histlen:12978
             ->expects($this->once())
             ->method('executeCommand')
             ->with($cmdInfo)
-            ->willReturn('
+            ->willReturn(
+                '
 # Replication
 role:slave
 master_host:127.0.0.1
@@ -1179,7 +1185,8 @@ repl_backlog_histlen:0
             ->expects($this->once())
             ->method('executeCommand')
             ->with($cmdInfo)
-            ->willReturn('
+            ->willReturn(
+                '
 # Replication
 role:master
 connected_slaves:2
@@ -1273,7 +1280,8 @@ repl_backlog_histlen:12978
             ->expects($this->once())
             ->method('executeCommand')
             ->with($cmdInfo)
-            ->willReturn('
+            ->willReturn(
+                '
 # Replication
 role:slave
 master_host:127.0.0.1
@@ -1299,7 +1307,8 @@ repl_backlog_histlen:0
             ->with(
                 $this->isRedisCommand($cmdInfo)
             )
-            ->willReturn('
+            ->willReturn(
+                '
 # Replication
 role:master
 connected_slaves:2
@@ -1388,7 +1397,8 @@ repl_backlog_histlen:12978
             ->expects($this->once())
             ->method('executeCommand')
             ->with($cmdInfo)
-            ->willReturn('
+            ->willReturn(
+                '
 # Replication
 role:master
 connected_slaves:2

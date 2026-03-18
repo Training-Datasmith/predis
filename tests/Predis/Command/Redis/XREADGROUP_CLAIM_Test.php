@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -192,7 +194,12 @@ class XREADGROUP_CLAIM_Test extends PredisCommandTestCase
             $redis->xreadgroup_claim(
                 'group',
                 'consumer',
-                ['stream' => '>'], null, null, false, 10)
+                ['stream' => '>'],
+                null,
+                null,
+                false,
+                10
+            )
         );
 
         $this->assertCount(
@@ -246,7 +253,12 @@ class XREADGROUP_CLAIM_Test extends PredisCommandTestCase
             $redis->xreadgroup_claim(
                 'group',
                 'consumer',
-                ['stream' => '>', 'another_stream' => '>'], null, null, false, 10)
+                ['stream' => '>', 'another_stream' => '>'],
+                null,
+                null,
+                false,
+                10
+            )
         );
 
         $this->assertCount(

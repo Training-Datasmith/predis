@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -1224,7 +1226,9 @@ class ClientTest extends PredisTestCase
         $callable
             ->expects($this->once())
             ->method('__invoke')
-            ->willReturnCallback(static function ($tx) { $tx->ping(); });
+            ->willReturnCallback(static function ($tx) {
+                $tx->ping();
+            });
 
         $client = new Client($connection);
         $client->transaction($options, $callable);
@@ -1489,8 +1493,10 @@ class ClientTest extends PredisTestCase
         $this->assertSame('value', $client->get('key'));
 
         // AUTH doesn't throw exception if no authentication requires.
-        $clientWithPassword = new Client($this->getParameters(
-            ['password' => getenv('REDIS_PASSWORD') ?: constant('REDIS_PASSWORD')])
+        $clientWithPassword = new Client(
+            $this->getParameters(
+                ['password' => getenv('REDIS_PASSWORD') ?: constant('REDIS_PASSWORD')]
+            )
         );
         $this->assertEquals('OK', $clientWithPassword->set('key', 'value'));
         $this->assertSame('value', $clientWithPassword->get('key'));
@@ -1506,8 +1512,10 @@ class ClientTest extends PredisTestCase
             )
         );
 
-        $clientTestUser = new Client($this->getParameters(
-            ['username' => 'test_user', 'password' => 'foobar'])
+        $clientTestUser = new Client(
+            $this->getParameters(
+                ['username' => 'test_user', 'password' => 'foobar']
+            )
         );
         $this->assertEquals('test_user', $clientTestUser->acl->whoami());
         $this->assertEquals('OK', $clientTestUser->set('key', 'value'));

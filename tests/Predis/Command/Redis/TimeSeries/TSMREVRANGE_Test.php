@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -190,14 +192,24 @@ class TSMREVRANGE_Test extends PredisCommandTestCase
         $this->assertEquals(
             [1000, 1001],
             $redis->tsmadd(
-                'temperature:A', 1000, 'NaN', 'temperature:A', 1001, 27
+                'temperature:A',
+                1000,
+                'NaN',
+                'temperature:A',
+                1001,
+                27
             )
         );
 
         $this->assertEquals(
             [1000, 1001],
             $redis->tsmadd(
-                'temperature:B', 1000, 'NaN', 'temperature:B', 1001, 28
+                'temperature:B',
+                1000,
+                'NaN',
+                'temperature:B',
+                1001,
+                28
             )
         );
 

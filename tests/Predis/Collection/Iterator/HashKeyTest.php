@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -63,7 +65,8 @@ class HashKeyTest extends PredisTestCase
             ->with('key:hash', 0, [])
             ->willReturn(
                 [0, [],
-                ]);
+                ]
+            );
 
         $iterator = new HashKey($client, 'key:hash');
 

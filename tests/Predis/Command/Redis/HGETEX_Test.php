@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Predis package.
  *
@@ -89,8 +91,11 @@ class HGETEX_Test extends PredisCommandTestCase
         $redis = $this->getClient();
 
         $redis->hsetex(
-            'hash_key', ['field1' => 'value1'],
-            HSETEX::SET_NULL, HSETEX::TTL_EX, 100
+            'hash_key',
+            ['field1' => 'value1'],
+            HSETEX::SET_NULL,
+            HSETEX::TTL_EX,
+            100
         );
 
         $this->assertGreaterThan(0, $redis->hexpiretime('hash_key', ['field1'])[0]);
