@@ -19,9 +19,6 @@ interface StreamFactoryInterface
 {
     /**
      * Creates stream from given parameters.
-     *
-     * @param  ParametersInterface $parameters
-     * @return StreamInterface
      */
     public function createStream(ParametersInterface $parameters): StreamInterface;
 }

@@ -18,7 +18,7 @@ trait Timeout
 {
     private static $timeoutModifier = 'TIMEOUT';
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
 

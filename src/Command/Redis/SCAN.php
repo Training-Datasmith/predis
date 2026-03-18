@@ -22,7 +22,7 @@ class SCAN extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'SCAN';
     }
@@ -30,7 +30,7 @@ class SCAN extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) === 2 && is_array($arguments[1])) {
             $options = $this->prepareOptions(array_pop($arguments));
@@ -44,10 +44,8 @@ class SCAN extends RedisCommand
      * Returns a list of options and modifiers compatible with Redis.
      *
      * @param array $options List of options.
-     *
-     * @return array
      */
-    protected function prepareOptions($options)
+    protected function prepareOptions($options): array
     {
         $options = array_change_key_case($options, CASE_UPPER);
         $normalized = [];

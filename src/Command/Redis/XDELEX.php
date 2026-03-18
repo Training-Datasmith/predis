@@ -22,7 +22,7 @@ class XDELEX extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'XDELEX';
     }
@@ -30,7 +30,7 @@ class XDELEX extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], strtoupper($arguments[1])];
 
@@ -39,7 +39,7 @@ class XDELEX extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

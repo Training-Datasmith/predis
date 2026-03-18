@@ -22,7 +22,7 @@ class MSET extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'MSET';
     }
@@ -30,7 +30,7 @@ class MSET extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) === 1 && is_array($arguments[0])) {
             $flattenedKVs = [];
@@ -47,7 +47,7 @@ class MSET extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForInterleavedArgument($prefix);
     }

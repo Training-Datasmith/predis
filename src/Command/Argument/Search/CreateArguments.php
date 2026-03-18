@@ -27,7 +27,6 @@ class CreateArguments extends CommonArguments
     /**
      * Specify data type for given index. To index JSON you must have the RedisJSON module to be installed.
      *
-     * @param  string $modifier
      * @return $this
      */
     public function on(string $modifier = 'HASH'): self
@@ -46,7 +45,6 @@ class CreateArguments extends CommonArguments
     /**
      * Adds one or more prefixes into index.
      *
-     * @param  array $prefixes
      * @return $this
      */
     public function prefix(array $prefixes): self
@@ -61,7 +59,6 @@ class CreateArguments extends CommonArguments
     /**
      * Document attribute set as document language.
      *
-     * @param  string $languageAttribute
      * @return $this
      */
     public function languageField(string $languageAttribute): self
@@ -75,7 +72,6 @@ class CreateArguments extends CommonArguments
     /**
      * Default score for documents in the index.
      *
-     * @param  float $defaultScore
      * @return $this
      */
     public function score(float $defaultScore = 1.0): self
@@ -89,7 +85,6 @@ class CreateArguments extends CommonArguments
     /**
      * Document attribute that used as the document rank based on the user ranking.
      *
-     * @param  string $scoreAttribute
      * @return $this
      */
     public function scoreField(string $scoreAttribute): self
@@ -127,7 +122,6 @@ class CreateArguments extends CommonArguments
     /**
      * Creates a lightweight temporary index that expires after a specified period of inactivity, in seconds.
      *
-     * @param  int   $seconds
      * @return $this
      */
     public function temporary(int $seconds): self
@@ -177,7 +171,6 @@ class CreateArguments extends CommonArguments
     /**
      * Sets the index with a custom stopword list, to be ignored during indexing and search time.
      *
-     * @param  array $stopWords
      * @return $this
      */
     public function stopWords(array $stopWords): self

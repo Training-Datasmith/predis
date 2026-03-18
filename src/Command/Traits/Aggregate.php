@@ -34,7 +34,7 @@ trait Aggregate
      */
     private static $aggregateModifier = 'AGGREGATE';
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
 

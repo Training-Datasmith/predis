@@ -16,19 +16,12 @@ use Predis\Command\Command as RedisCommand;
 
 class VSETATTR extends RedisCommand
 {
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return 'VSETATTR';
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $lastArg = array_pop($arguments);
 
@@ -43,7 +36,6 @@ class VSETATTR extends RedisCommand
 
     /**
      * @param       $data
-     * @return bool
      */
     public function parseResponse($data): bool
     {

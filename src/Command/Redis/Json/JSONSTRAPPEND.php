@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class JSONSTRAPPEND extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'JSON.STRAPPEND';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

@@ -35,7 +35,7 @@ class MultiExecState
      *
      * @param int $flags Set of flags
      */
-    public function set($flags)
+    public function set($flags): void
     {
         $this->flags = $flags;
     }
@@ -55,7 +55,7 @@ class MultiExecState
      *
      * @param int $flags Set of flags
      */
-    public function flag($flags)
+    public function flag($flags): void
     {
         $this->flags |= $flags;
     }
@@ -65,7 +65,7 @@ class MultiExecState
      *
      * @param int $flags Set of flags
      */
-    public function unflag($flags)
+    public function unflag($flags): void
     {
         $this->flags &= ~$flags;
     }
@@ -74,10 +74,8 @@ class MultiExecState
      * Returns if the specified flag or set of flags is set.
      *
      * @param int $flags Flag
-     *
-     * @return bool
      */
-    public function check($flags)
+    public function check($flags): bool
     {
         return ($this->flags & $flags) === $flags;
     }
@@ -85,17 +83,15 @@ class MultiExecState
     /**
      * Resets the state of a transaction.
      */
-    public function reset()
+    public function reset(): void
     {
         $this->flags = 0;
     }
 
     /**
      * Returns the state of the RESET flag.
-     *
-     * @return bool
      */
-    public function isReset()
+    public function isReset(): bool
     {
         return $this->flags === 0;
     }
@@ -132,10 +128,8 @@ class MultiExecState
 
     /**
      * Returns if WATCH is allowed in the current state.
-     *
-     * @return bool
      */
-    public function isWatchAllowed()
+    public function isWatchAllowed(): bool
     {
         return $this->check(self::INITIALIZED) && !$this->check(self::CAS);
     }

@@ -16,19 +16,12 @@ use Predis\Command\Command as RedisCommand;
 
 class VRANDMEMBER extends RedisCommand
 {
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return 'VRANDMEMBER';
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $lastArg = array_pop($arguments);
 

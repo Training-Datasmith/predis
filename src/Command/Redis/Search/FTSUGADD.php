@@ -21,12 +21,12 @@ use Predis\Command\Command as RedisCommand;
  */
 class FTSUGADD extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.SUGADD';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$key, $string, $score] = $arguments;
         $commandArguments = (!empty($arguments[3])) ? $arguments[3]->toArray() : [];

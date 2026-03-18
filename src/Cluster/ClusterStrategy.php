@@ -219,7 +219,7 @@ abstract class ClusterStrategy implements StrategyInterface
      *
      * @throws InvalidArgumentException
      */
-    public function setCommandHandler($commandID, $callback = null)
+    public function setCommandHandler($commandID, $callback = null): void
     {
         $commandID = strtoupper($commandID);
 
@@ -240,8 +240,6 @@ abstract class ClusterStrategy implements StrategyInterface
 
     /**
      * Get fake key for commands with no key argument.
-     *
-     * @return string
      */
     protected function getFakeKey(): string
     {
@@ -423,7 +421,6 @@ abstract class ClusterStrategy implements StrategyInterface
     /**
      * Extracts key from SUNSUBSCRIBE command if it's given.
      *
-     * @param  CommandInterface $command
      * @return string
      */
     protected function getKeyFromSUnsubscribeCommand(CommandInterface $command): ?string

@@ -21,7 +21,7 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TDIGESTQUANTILE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TDIGEST.QUANTILE';
     }
@@ -53,7 +53,7 @@ class TDIGESTQUANTILE extends RedisCommand
         }, $data);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

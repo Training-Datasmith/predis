@@ -20,7 +20,7 @@ namespace Predis\Command\Redis\CuckooFilter;
  */
 class CFINSERTNX extends CFINSERT
 {
-    public function getId()
+    public function getId(): string
     {
         return 'CF.INSERTNX';
     }

@@ -16,9 +16,6 @@ use Predis\Command\Command as RedisCommand;
 
 class VREM extends RedisCommand
 {
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return 'VREM';
@@ -26,7 +23,6 @@ class VREM extends RedisCommand
 
     /**
      * @param       $data
-     * @return bool
      */
     public function parseResponse($data): bool
     {

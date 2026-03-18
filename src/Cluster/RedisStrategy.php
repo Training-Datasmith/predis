@@ -37,7 +37,7 @@ class RedisStrategy extends ClusterStrategy
     /**
      * {@inheritdoc}
      */
-    public function getSlotByKey($key)
+    public function getSlotByKey($key): int
     {
         $key = $this->extractKeyTag($key);
 
@@ -47,7 +47,7 @@ class RedisStrategy extends ClusterStrategy
     /**
      * {@inheritdoc}
      */
-    public function getDistributor()
+    public function getDistributor(): void
     {
         $class = get_class($this);
         throw new NotSupportedException("$class does not provide an external distributor");

@@ -40,8 +40,6 @@ class Retry
     ];
 
     /**
-     * @param RetryStrategyInterface $backoffStrategy
-     * @param int                    $retries
      * @param array|null             $catchableExceptions A list of exceptions classes that should be caught.
      *                                                    Overrides default list of the catchable exceptions.
      */
@@ -60,9 +58,6 @@ class Retry
 
     /**
      * Update the retry count.
-     *
-     * @param  int  $retries
-     * @return void
      */
     public function updateRetriesCount(int $retries): void
     {
@@ -71,26 +66,17 @@ class Retry
 
     /**
      * Extend catchable exceptions list.
-     *
-     * @param  array $catchableExceptions
-     * @return void
      */
     public function updateCatchableExceptions(array $catchableExceptions): void
     {
         $this->catchableExceptions = array_merge($this->catchableExceptions, $catchableExceptions);
     }
 
-    /**
-     * @return int
-     */
     public function getRetries(): int
     {
         return $this->retries;
     }
 
-    /**
-     * @return RetryStrategyInterface
-     */
     public function getStrategy(): RetryStrategyInterface
     {
         return $this->backoffStrategy;

@@ -16,12 +16,12 @@ use Predis\Command\Command as RedisCommand;
 
 class XAUTOCLAIM extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'XAUTOCLAIM';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = array_splice($arguments, 0, 5);
 

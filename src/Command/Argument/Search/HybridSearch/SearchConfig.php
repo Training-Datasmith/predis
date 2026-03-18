@@ -34,7 +34,6 @@ class SearchConfig implements ArrayableArgument
     /**
      * Search query.
      *
-     * @param  string $query
      * @return $this
      */
     public function query(string $query): self
@@ -45,7 +44,6 @@ class SearchConfig implements ArrayableArgument
     }
 
     /**
-     * @param  string $alias
      * @return $this
      */
     public function as(string $alias): self

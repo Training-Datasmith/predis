@@ -15,11 +15,7 @@ namespace Predis\Command\Argument\Search\SchemaFields;
 class NumericField extends AbstractField
 {
     /**
-     * @param string      $identifier
-     * @param string      $alias
      * @param bool|string $sortable
-     * @param bool        $noIndex
-     * @param bool        $allowsMissing
      */
     public function __construct(
         string $identifier,

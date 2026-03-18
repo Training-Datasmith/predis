@@ -216,7 +216,6 @@ class ClusterConnectionStrategy implements StrategyInterface
     /**
      * Assigns slot to a command and executes.
      *
-     * @param  CommandInterface $command
      * @return mixed
      */
     private function setSlotAndExecute(CommandInterface $command)

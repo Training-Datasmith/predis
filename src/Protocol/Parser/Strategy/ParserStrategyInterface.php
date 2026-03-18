@@ -17,7 +17,6 @@ interface ParserStrategyInterface
     /**
      * Parse given line of RESP protocol string.
      *
-     * @param  string $data
      * @return mixed
      */
     public function parseData(string $data);

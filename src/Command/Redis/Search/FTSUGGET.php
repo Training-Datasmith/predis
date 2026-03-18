@@ -21,12 +21,12 @@ use Predis\Command\Command as RedisCommand;
  */
 class FTSUGGET extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.SUGGET';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$key, $prefix] = $arguments;
         $commandArguments = (!empty($arguments[2])) ? $arguments[2]->toArray() : [];

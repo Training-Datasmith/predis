@@ -22,7 +22,7 @@ class ZRANGE extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZRANGE';
     }
@@ -30,7 +30,7 @@ class ZRANGE extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) === 4) {
             $lastType = gettype($arguments[3]);
@@ -54,10 +54,8 @@ class ZRANGE extends RedisCommand
      * Returns a list of options and modifiers compatible with Redis.
      *
      * @param array $options List of options.
-     *
-     * @return array
      */
-    protected function prepareOptions($options)
+    protected function prepareOptions($options): array
     {
         $opts = array_change_key_case($options, CASE_UPPER);
         $finalizedOpts = [];
@@ -126,7 +124,7 @@ class ZRANGE extends RedisCommand
         return $parsedData;
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

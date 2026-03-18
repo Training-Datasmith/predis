@@ -28,12 +28,12 @@ class GETEX extends RedisCommand
         'persist' => 'PERSIST',
     ];
 
-    public function getId()
+    public function getId(): string
     {
         return 'GETEX';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (!array_key_exists(1, $arguments) || $arguments[1] === '') {
             parent::setArguments([$arguments[0]]);

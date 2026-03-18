@@ -26,7 +26,7 @@ abstract class Command implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->arguments = $arguments;
         unset($this->slot);
@@ -35,7 +35,7 @@ abstract class Command implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function setRawArguments(array $arguments)
+    public function setRawArguments(array $arguments): void
     {
         $this->arguments = $arguments;
         unset($this->slot);
@@ -62,7 +62,7 @@ abstract class Command implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function setSlot($slot)
+    public function setSlot($slot): void
     {
         $this->slot = $slot;
     }
@@ -125,12 +125,10 @@ abstract class Command implements CommandInterface
 
     /**
      * Remove all false values from arguments.
-     *
-     * @return void
      */
     public function filterArguments(): void
     {
-        $this->arguments = array_filter($this->arguments, static function ($argument) {
+        $this->arguments = array_filter($this->arguments, static function ($argument): bool {
             return $argument !== false && $argument !== null;
         });
     }
@@ -174,7 +172,7 @@ abstract class Command implements CommandInterface
             // Fetch module configuration to resolve namespace.
             $moduleConfiguration = array_filter(
                 ClientConfiguration::getModules(),
-                static function ($module) use ($commandIdArray) {
+                static function (array $module) use ($commandIdArray): bool {
                     return $module['commandPrefix'] === $commandIdArray[0];
                 }
             );

@@ -60,12 +60,12 @@ class GEOSEARCH extends RedisCommand
     protected static $withDistArgumentPositionOffset = 7;
     protected static $withHashArgumentPositionOffset = 8;
 
-    public function getId()
+    public function getId(): string
     {
         return 'GEOSEARCH';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setSorting($arguments);
         $arguments = $this->getArguments();
@@ -89,7 +89,10 @@ class GEOSEARCH extends RedisCommand
         $this->filterArguments();
     }
 
-    public function parseResponse($data)
+    /**
+     * @return mixed[]
+     */
+    public function parseResponse($data): array
     {
         $parsedData = [];
         $itemKey = '';
@@ -120,7 +123,7 @@ class GEOSEARCH extends RedisCommand
         return $parsedData;
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

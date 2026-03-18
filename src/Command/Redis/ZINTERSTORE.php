@@ -20,7 +20,7 @@ class ZINTERSTORE extends ZUNIONSTORE
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZINTERSTORE';
     }

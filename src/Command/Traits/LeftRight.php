@@ -28,7 +28,7 @@ trait LeftRight
         'right' => 'RIGHT',
     ];
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
 

@@ -22,12 +22,12 @@ class RENAMENX extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'RENAMENX';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForAllArguments($prefix);
     }

@@ -22,7 +22,7 @@ class SHUTDOWN extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'SHUTDOWN';
     }
@@ -30,7 +30,7 @@ class SHUTDOWN extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (empty($arguments)) {
             parent::setArguments($arguments);

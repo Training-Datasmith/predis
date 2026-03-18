@@ -22,7 +22,7 @@ class INFO extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'INFO';
     }
@@ -45,8 +45,9 @@ class INFO extends RedisCommand
 
     /**
      * {@inheritdoc}
+     * @return array{}[]
      */
-    public function parseNewResponseFormat($lines)
+    public function parseNewResponseFormat($lines): array
     {
         $info = [];
         $current = null;
@@ -71,8 +72,9 @@ class INFO extends RedisCommand
 
     /**
      * {@inheritdoc}
+     * @return mixed[]
      */
-    public function parseOldResponseFormat($lines)
+    public function parseOldResponseFormat($lines): array
     {
         $info = [];
 
@@ -92,10 +94,8 @@ class INFO extends RedisCommand
      * Parses a single row of the response and returns the key-value pair.
      *
      * @param string $row Single row of the response.
-     *
-     * @return array
      */
-    protected function parseRow($row)
+    protected function parseRow($row): array
     {
         if (preg_match('/^module:name/', $row)) {
             return $this->parseModuleRow($row);
@@ -114,10 +114,8 @@ class INFO extends RedisCommand
      * Extracts the statistics of each logical DB from the string buffer.
      *
      * @param string $str Response buffer.
-     *
-     * @return array
      */
-    protected function parseDatabaseStats($str)
+    protected function parseDatabaseStats($str): array
     {
         $db = [];
 
@@ -131,9 +129,6 @@ class INFO extends RedisCommand
 
     /**
      * Parsing module rows because of different format.
-     *
-     * @param  string $row
-     * @return array
      */
     protected function parseModuleRow(string $row): array
     {

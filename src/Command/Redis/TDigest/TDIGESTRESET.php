@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TDIGESTRESET extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TDIGEST.RESET';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

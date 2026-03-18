@@ -21,7 +21,7 @@ trait ExpireOptions
         'lt' => 'LT',
     ];
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $value = array_pop($arguments);
 

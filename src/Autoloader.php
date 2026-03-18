@@ -40,7 +40,7 @@ class Autoloader
      *
      * @param bool $prepend Prepend the autoloader on the stack instead of appending it.
      */
-    public static function register($prepend = false)
+    public static function register($prepend = false): void
     {
         spl_autoload_register([new self(), 'autoload'], true, $prepend);
     }
@@ -50,7 +50,7 @@ class Autoloader
      *
      * @param string $className Fully qualified name of a class.
      */
-    public function autoload($className)
+    public function autoload($className): void
     {
         if (0 === strpos($className, $this->prefix)) {
             $parts = explode('\\', substr($className, $this->prefixLength));

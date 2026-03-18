@@ -37,12 +37,12 @@ class ZMPOP extends RedisCommand
     protected static $countArgumentPositionOffset = 2;
     protected static $modifierArgumentPositionOffset = 1;
 
-    public function getId()
+    public function getId(): string
     {
         return 'ZMPOP';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setCount($arguments);
         $arguments = $this->getArguments();
@@ -55,7 +55,10 @@ class ZMPOP extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function parseResponse($data)
+    /**
+     * @return mixed[]
+     */
+    public function parseResponse($data): array
     {
         $key = array_shift($data);
 

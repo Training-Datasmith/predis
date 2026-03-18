@@ -33,12 +33,12 @@ class LMPOP extends RedisCommand
     protected static $leftRightArgumentPositionOffset = 1;
     protected static $countArgumentPositionOffset = 2;
 
-    public function getId()
+    public function getId(): string
     {
         return 'LMPOP';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setCount($arguments);
         $arguments = $this->getArguments();
@@ -50,7 +50,7 @@ class LMPOP extends RedisCommand
         $this->filterArguments();
     }
 
-    public function parseResponse($data)
+    public function parseResponse($data): ?array
     {
         if (null === $data) {
             return null;
@@ -64,14 +64,14 @@ class LMPOP extends RedisCommand
         return $this->parseResponse($data);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $arguments = $this->getArguments();
 
         $keysOffset = static::$keysArgumentPositionOffset;
         $keysCount = $arguments[$keysOffset];
         $keys = array_slice($arguments, $keysOffset + 1, $keysCount);
-        $prefixedKeys = array_map(static function ($key) use ($prefix) {
+        $prefixedKeys = array_map(static function (string $key) use ($prefix): string {
             return $prefix . $key;
         }, $keys);
 

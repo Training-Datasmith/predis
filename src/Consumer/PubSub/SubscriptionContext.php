@@ -27,9 +27,6 @@ class SubscriptionContext
         $this->context = $context;
     }
 
-    /**
-     * @return string
-     */
     public function getContext(): string
     {
         return $this->context;

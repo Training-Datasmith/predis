@@ -23,12 +23,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TSDECRBY extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TS.DECRBY';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$key, $value] = $arguments;
         $commandArguments = (!empty($arguments[2])) ? $arguments[2]->toArray() : [];
@@ -39,7 +39,7 @@ class TSDECRBY extends RedisCommand
         ));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

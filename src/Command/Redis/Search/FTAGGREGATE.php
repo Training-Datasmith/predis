@@ -22,12 +22,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class FTAGGREGATE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.AGGREGATE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         // If command already deserialized, bypass logic.
         if (in_array('DIALECT', $arguments)) {
@@ -51,7 +51,7 @@ class FTAGGREGATE extends RedisCommand
         ));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

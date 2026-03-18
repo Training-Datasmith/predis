@@ -27,7 +27,7 @@ class GEORADIUS extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'GEORADIUS';
     }
@@ -35,7 +35,7 @@ class GEORADIUS extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if ($arguments && is_array(end($arguments))) {
             $options = array_change_key_case(array_pop($arguments), CASE_UPPER);
@@ -75,7 +75,7 @@ class GEORADIUS extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             $arguments[0] = "$prefix{$arguments[0]}";

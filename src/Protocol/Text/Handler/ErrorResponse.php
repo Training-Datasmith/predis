@@ -26,7 +26,7 @@ class ErrorResponse implements ResponseHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(CompositeConnectionInterface $connection, $payload)
+    public function handle(CompositeConnectionInterface $connection, $payload): \Predis\Response\Error
     {
         return new Error($payload);
     }

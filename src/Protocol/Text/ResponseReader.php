@@ -33,10 +33,8 @@ class ResponseReader implements ResponseReaderInterface
 
     /**
      * Returns the default handlers for the supported type of responses.
-     *
-     * @return array
      */
-    protected function getDefaultHandlers()
+    protected function getDefaultHandlers(): array
     {
         return [
             '+' => new Handler\StatusResponse(),
@@ -53,7 +51,7 @@ class ResponseReader implements ResponseReaderInterface
      * @param string                           $prefix  Identifier of the type of response.
      * @param Handler\ResponseHandlerInterface $handler Response handler.
      */
-    public function setHandler($prefix, Handler\ResponseHandlerInterface $handler)
+    public function setHandler($prefix, Handler\ResponseHandlerInterface $handler): void
     {
         $this->handlers[$prefix] = $handler;
     }

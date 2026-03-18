@@ -20,10 +20,7 @@ class CommandUtility
     /**
      * Converts RESP2 array into RESP3 dictionary.
      *
-     * @param  array         $array
      * @param  callable|null $callback  Callback that applies to each key, value (except arrays) before convert them into key => value
-     * @param  bool          $recursive
-     * @return array
      */
     public static function arrayToDictionary(array $array, ?callable $callback = null, bool $recursive = true): array
     {
@@ -59,7 +56,6 @@ class CommandUtility
      * Converts a value into XXH3 hash.
      *
      * @param         $value
-     * @return string
      */
     public static function xxh3Hash($value): string
     {
@@ -72,15 +68,12 @@ class CommandUtility
 
     /**
      * Converts associative array into flatten array (key1, value1...keyN, valueN).
-     *
-     * @param  array $dict
-     * @return array
      */
     public static function dictionaryToArray(array $dict): array
     {
         $array = [];
 
-        array_walk($dict, static function ($value, $key) use (&$array) {
+        array_walk($dict, static function ($value, $key) use (&$array): void {
             array_push($array, $key, $value);
         });
 

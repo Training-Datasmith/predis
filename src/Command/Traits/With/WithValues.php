@@ -19,7 +19,7 @@ use Predis\Command\Command;
  */
 trait WithValues
 {
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $withValues = array_pop($arguments);
 

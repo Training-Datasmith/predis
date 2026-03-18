@@ -22,7 +22,7 @@ class XACKDEL extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'XACKDEL';
     }
@@ -30,7 +30,7 @@ class XACKDEL extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], $arguments[1], strtoupper($arguments[2])];
 
@@ -39,7 +39,7 @@ class XACKDEL extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

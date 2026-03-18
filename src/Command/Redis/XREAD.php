@@ -16,12 +16,12 @@ use Predis\Command\Command as RedisCommand;
 
 class XREAD extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'XREAD';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [];
 

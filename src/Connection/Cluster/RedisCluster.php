@@ -115,7 +115,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
      *
      * @param int $retry Number of retry attempts.
      */
-    public function setRetryLimit($retry)
+    public function setRetryLimit($retry): void
     {
         $this->retryLimit = (int) $retry;
     }
@@ -125,7 +125,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
      *
      * @param int $retryInterval Milliseconds between retries.
      */
-    public function setRetryInterval($retryInterval)
+    public function setRetryInterval($retryInterval): void
     {
         $this->retryInterval = (int) $retryInterval;
     }
@@ -135,7 +135,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
      *
      * @return int Milliseconds between retries.
      */
-    public function getRetryInterval()
+    public function getRetryInterval(): int
     {
         return (int) $this->retryInterval;
     }
@@ -143,7 +143,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
     /**
      * {@inheritdoc}
      */
-    public function isConnected()
+    public function isConnected(): bool
     {
         foreach ($this->pool as $connection) {
             if ($connection->isConnected()) {
@@ -157,7 +157,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
     /**
      * {@inheritdoc}
      */
-    public function connect()
+    public function connect(): void
     {
         foreach ($this->pool as $connection) {
             $connection->connect();
@@ -167,7 +167,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
     /**
      * {@inheritdoc}
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         foreach ($this->pool as $connection) {
             $connection->disconnect();
@@ -177,7 +177,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
     /**
      * {@inheritdoc}
      */
-    public function add(NodeConnectionInterface $connection)
+    public function add(NodeConnectionInterface $connection): void
     {
         $this->pool[(string) $connection] = $connection;
         $this->slotmap->reset();
@@ -186,7 +186,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
     /**
      * {@inheritdoc}
      */
-    public function remove(NodeConnectionInterface $connection)
+    public function remove(NodeConnectionInterface $connection): bool
     {
         if (false !== $id = array_search($connection, $this->pool, true)) {
             $this->slotmap->reset();
@@ -206,7 +206,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
      *
      * @return bool True if the connection was in the pool.
      */
-    public function removeById($connectionID)
+    public function removeById($connectionID): bool
     {
         if (isset($this->pool[$connectionID])) {
             $this->slotmap->reset();
@@ -228,7 +228,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
      * initialization have the "slots" parameter properly set accordingly to the
      * current cluster configuration.
      */
-    public function buildSlotMap()
+    public function buildSlotMap(): void
     {
         $this->slotmap->reset();
 
@@ -277,7 +277,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
             return $connection->executeCommand($command);
         };
 
-        $failCallback = function (ConnectionException $exception) use (&$connection) {
+        $failCallback = function (ConnectionException $exception) use (&$connection): void {
             $connection = $exception->getConnection();
             $connection->disconnect();
 
@@ -298,7 +298,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
      *
      * @param NodeConnectionInterface|null $connection Optional connection instance.
      */
-    public function askSlotMap(?NodeConnectionInterface $connection = null)
+    public function askSlotMap(?NodeConnectionInterface $connection = null): void
     {
         if (!$connection && !$connection = $this->getRandomConnection()) {
             return;
@@ -381,11 +381,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
             );
         }
 
-        if (isset($this->slots[$slot])) {
-            return $this->slots[$slot];
-        }
-
-        return $this->getConnectionBySlot($slot);
+        return $this->slots[$slot] ?? $this->getConnectionBySlot($slot);
     }
 
     /**
@@ -547,7 +543,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
      * @return mixed
      * @throws Throwable
      */
-    private function retryCommandOnFailure(CommandInterface $command, $method)
+    private function retryCommandOnFailure(CommandInterface $command, string $method)
     {
         if ($this->connectionParameters->isDisabledRetry() || $this->connections instanceof RelayFactory) {
             // Override default parameters, for backward-compatibility
@@ -577,7 +573,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
 
         return $retry->callWithRetry(
             $doCallback,
-            function (Throwable $e) {
+            function (Throwable $e): void {
                 $this->onFailCallback($e);
             }
         );
@@ -586,7 +582,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
     /**
      * {@inheritdoc}
      */
-    public function writeRequest(CommandInterface $command)
+    public function writeRequest(CommandInterface $command): void
     {
         $this->retryCommandOnFailure($command, __FUNCTION__);
     }
@@ -701,7 +697,7 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
      *
      * @param bool $value Enable or disable the use of CLUSTER SLOTS.
      */
-    public function useClusterSlots($value)
+    public function useClusterSlots($value): void
     {
         $this->useClusterSlots = (bool) $value;
     }
@@ -734,11 +730,8 @@ class RedisCluster extends AbstractAggregateConnection implements ClusterInterfa
 
     /**
      * Handle exceptions.
-     *
-     * @param  Throwable $exception
-     * @return void
      */
-    private function onFailCallback(Throwable $exception)
+    private function onFailCallback(Throwable $exception): void
     {
         if ($exception instanceof ConnectionException) {
             $connection = $exception->getConnection();

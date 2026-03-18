@@ -22,7 +22,7 @@ class EVAL_ extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'EVAL';
     }
@@ -32,12 +32,12 @@ class EVAL_ extends RedisCommand
      *
      * @return string SHA1 hash.
      */
-    public function getScriptHash()
+    public function getScriptHash(): string
     {
         return sha1($this->getArgument(0));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             for ($i = 2; $i < $arguments[1] + 2; ++$i) {

@@ -21,7 +21,7 @@ trait Sorting
         'desc' => 'DESC',
     ];
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
 

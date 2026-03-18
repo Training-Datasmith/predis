@@ -19,7 +19,7 @@ use Predis\Command\Command as RedisCommand;
  */
 class CLUSTER extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'CLUSTER';
     }

@@ -21,7 +21,7 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TDIGESTMIN extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TDIGEST.MIN';
     }
@@ -47,7 +47,7 @@ class TDIGESTMIN extends RedisCommand
         }
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

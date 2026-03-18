@@ -26,17 +26,17 @@ class FireAndForget extends Pipeline
     /**
      * {@inheritdoc}
      */
-    protected function executePipeline(ConnectionInterface $connection, SplQueue $commands)
+    protected function executePipeline(ConnectionInterface $connection, SplQueue $commands): array
     {
         $retry = $connection->getParameters()->retry;
 
-        $retry->callWithRetry(function () use ($connection, $commands) {
+        $retry->callWithRetry(function () use ($connection, $commands): void {
             if ($connection instanceof AggregateConnectionInterface) {
                 $this->writeToMultiNode($connection, $commands);
             } else {
                 $this->writeToSingleNode($connection, $commands);
             }
-        }, static function (Throwable $e) {
+        }, static function (Throwable $e): void {
             if ($e instanceof CommunicationException) {
                 $e->getConnection()->disconnect();
             }

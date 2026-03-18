@@ -18,7 +18,7 @@ trait Indent
 {
     private static $indentModifier = 'INDENT';
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
 

@@ -21,12 +21,15 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TOPKINFO extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TOPK.INFO';
     }
 
-    public function parseResponse($data)
+    /**
+     * @return mixed[]
+     */
+    public function parseResponse($data): array
     {
         $result = [];
 
@@ -39,7 +42,7 @@ class TOPKINFO extends RedisCommand
         return $result;
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

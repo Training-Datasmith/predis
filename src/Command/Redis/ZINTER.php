@@ -28,7 +28,7 @@ class ZINTER extends ZINTERSTORE
     protected static $weightsArgumentPositionOffset = 1;
     protected static $aggregateArgumentPositionOffset = 2;
 
-    public function getId()
+    public function getId(): string
     {
         return 'ZINTER';
     }

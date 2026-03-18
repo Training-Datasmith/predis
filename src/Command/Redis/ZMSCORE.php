@@ -27,7 +27,7 @@ class ZMSCORE extends RedisCommand
     /**
      * {@inheritDoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZMSCORE';
     }

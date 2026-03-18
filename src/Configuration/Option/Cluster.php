@@ -58,7 +58,7 @@ class Cluster extends Aggregate
         switch ($description) {
             case 'redis':
             case 'redis-cluster':
-                return static function ($parameters, $options, $option) {
+                return static function ($parameters, $options, $option): \Predis\Connection\Cluster\RedisCluster {
                     $optionParameters = $options->parameters ?? [];
 
                     return new RedisCluster(
@@ -88,7 +88,7 @@ class Cluster extends Aggregate
      */
     protected function getDefaultConnectionInitializer()
     {
-        return static function ($parameters, $options, $option) {
+        return static function ($parameters, $options, $option): \Predis\Connection\Cluster\PredisCluster {
             $optionsParameters = $options->parameters ?? [];
 
             return new PredisCluster(new Parameters($optionsParameters));

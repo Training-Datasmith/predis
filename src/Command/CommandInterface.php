@@ -88,16 +88,11 @@ interface CommandInterface
 
     /**
      * Returns RESP-formatted representation of command.
-     *
-     * @return string
      */
     public function serializeCommand(): string;
 
     /**
      * Creates command object from given serialized representation.
-     *
-     * @param  string $serializedCommand
-     * @return static
      */
     public static function deserializeCommand(string $serializedCommand): CommandInterface;
 }

@@ -16,10 +16,7 @@ use Predis\Command\Command as RedisCommand;
 
 class FT_LIST extends RedisCommand
 {
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return 'FT._LIST';
     }

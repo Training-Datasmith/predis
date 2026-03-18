@@ -14,7 +14,7 @@ namespace Predis\Command\Redis;
 
 class BLMOVE extends LMOVE
 {
-    public function getId()
+    public function getId(): string
     {
         return 'BLMOVE';
     }

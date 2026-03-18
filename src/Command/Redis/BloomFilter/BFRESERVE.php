@@ -32,12 +32,12 @@ class BFRESERVE extends RedisCommand
 
     protected static $expansionArgumentPositionOffset = 3;
 
-    public function getId()
+    public function getId(): string
     {
         return 'BF.RESERVE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (array_key_exists(4, $arguments) && $arguments[4]) {
             $arguments[4] = 'NONSCALING';
@@ -47,7 +47,7 @@ class BFRESERVE extends RedisCommand
         $this->filterArguments();
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

@@ -70,7 +70,7 @@ abstract class CommunicationException extends PredisException
      *
      * @throws CommunicationException
      */
-    public static function handle(CommunicationException $exception)
+    public static function handle(CommunicationException $exception): void
     {
         if ($exception->shouldResetConnection()) {
             $connection = $exception->getConnection();

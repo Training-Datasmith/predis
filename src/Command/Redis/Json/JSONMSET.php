@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class JSONMSET extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'JSON.MSET';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             for ($i = 0, $l = count($arguments); $i < $l; $i += 3) {

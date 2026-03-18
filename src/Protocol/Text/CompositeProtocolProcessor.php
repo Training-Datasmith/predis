@@ -51,7 +51,7 @@ class CompositeProtocolProcessor implements ProtocolProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function write(CompositeConnectionInterface $connection, CommandInterface $command)
+    public function write(CompositeConnectionInterface $connection, CommandInterface $command): void
     {
         $connection->writeBuffer($this->serializer->serialize($command));
     }
@@ -69,7 +69,7 @@ class CompositeProtocolProcessor implements ProtocolProcessorInterface
      *
      * @param RequestSerializerInterface $serializer Request serializer.
      */
-    public function setRequestSerializer(RequestSerializerInterface $serializer)
+    public function setRequestSerializer(RequestSerializerInterface $serializer): void
     {
         $this->serializer = $serializer;
     }
@@ -89,7 +89,7 @@ class CompositeProtocolProcessor implements ProtocolProcessorInterface
      *
      * @param ResponseReaderInterface $reader Response reader.
      */
-    public function setResponseReader(ResponseReaderInterface $reader)
+    public function setResponseReader(ResponseReaderInterface $reader): void
     {
         $this->reader = $reader;
     }

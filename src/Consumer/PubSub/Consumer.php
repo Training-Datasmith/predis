@@ -72,8 +72,6 @@ class Consumer extends AbstractConsumer
 
     /**
      * Returns subscription context for current instance.
-     *
-     * @return SubscriptionContext
      */
     public function getSubscriptionContext(): SubscriptionContext
     {
@@ -88,7 +86,7 @@ class Consumer extends AbstractConsumer
      *
      * @throws NotSupportedException
      */
-    private function checkCapabilities(ClientInterface $client)
+    private function checkCapabilities(ClientInterface $client): void
     {
         $commands = ['publish', 'spublish', 'subscribe', 'ssubscribe', 'unsubscribe', 'sunsubscribe', 'psubscribe', 'punsubscribe'];
 
@@ -104,7 +102,7 @@ class Consumer extends AbstractConsumer
      *
      * @param string $subscribeAction Type of subscription.
      */
-    private function genericSubscribeInit($subscribeAction)
+    private function genericSubscribeInit(string $subscribeAction): void
     {
         if (isset($this->options[$subscribeAction])) {
             $this->$subscribeAction($this->options[$subscribeAction]);
@@ -114,7 +112,7 @@ class Consumer extends AbstractConsumer
     /**
      * {@inheritdoc}
      */
-    protected function writeRequest($method, $arguments)
+    protected function writeRequest($method, array $arguments)
     {
         $this->client->getConnection()->writeRequest(
             $this->client->createCommand($method,
@@ -135,10 +133,8 @@ class Consumer extends AbstractConsumer
      * Checks if the specified flag is valid based on the state of the consumer.
      *
      * @param int $value Flag.
-     *
-     * @return bool
      */
-    protected function isFlagSet($value)
+    protected function isFlagSet($value): bool
     {
         return ($this->statusFlags & $value) === $value;
     }
@@ -148,7 +144,7 @@ class Consumer extends AbstractConsumer
      *
      * @param string ...$channels One or more channel names.
      */
-    public function subscribe(string ...$channels)
+    public function subscribe(string ...$channels): void
     {
         $this->writeRequest(self::SUBSCRIBE, func_get_args());
         $this->statusFlags |= self::STATUS_SUBSCRIBED;
@@ -156,10 +152,8 @@ class Consumer extends AbstractConsumer
 
     /**
      * Subscribes to the specified shard channels.
-     *
-     * @param string ...$channels
      */
-    public function ssubscribe(string ...$channels)
+    public function ssubscribe(string ...$channels): void
     {
         $this->writeRequest(self::SSUBSCRIBE, func_get_args());
         $this->statusFlags |= self::STATUS_SSUBSCRIBED;
@@ -170,17 +164,15 @@ class Consumer extends AbstractConsumer
      *
      * @param string ...$channel One or more channel names.
      */
-    public function unsubscribe(...$channel)
+    public function unsubscribe(...$channel): void
     {
         $this->writeRequest(self::UNSUBSCRIBE, func_get_args());
     }
 
     /**
      * Unsubscribes from the specified shard channels.
-     *
-     * @param string ...$channels
      */
-    public function sunsubscribe(string ...$channels)
+    public function sunsubscribe(string ...$channels): void
     {
         $this->writeRequest(self::SUNSUBSCRIBE, func_get_args());
     }
@@ -190,7 +182,7 @@ class Consumer extends AbstractConsumer
      *
      * @param string ...$pattern One or more channel name patterns.
      */
-    public function psubscribe(...$pattern)
+    public function psubscribe(...$pattern): void
     {
         $this->writeRequest(self::PSUBSCRIBE, func_get_args());
         $this->statusFlags |= self::STATUS_PSUBSCRIBED;
@@ -201,7 +193,7 @@ class Consumer extends AbstractConsumer
      *
      * @param string ...$pattern One or more channel name patterns.
      */
-    public function punsubscribe(...$pattern)
+    public function punsubscribe(...$pattern): void
     {
         $this->writeRequest(self::PUNSUBSCRIBE, func_get_args());
     }
@@ -212,7 +204,7 @@ class Consumer extends AbstractConsumer
      *
      * @param string $payload Optional PING payload.
      */
-    public function ping($payload = null)
+    public function ping($payload = null): void
     {
         $this->writeRequest('PING', [$payload]);
     }
@@ -259,10 +251,8 @@ class Consumer extends AbstractConsumer
 
     /**
      * Checks if the consumer is still in a valid state to continue.
-     *
-     * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         $isValid = $this->isFlagSet(self::STATUS_VALID);
         $subscriptionFlags = self::STATUS_SUBSCRIBED | self::STATUS_PSUBSCRIBED | self::STATUS_SSUBSCRIBED;
@@ -342,7 +332,6 @@ class Consumer extends AbstractConsumer
      * Set subscription context depends on connection.
      *
      * @param  NodeConnectionInterface $connection
-     * @return void
      */
     private function setSubscriptionContext(ConnectionInterface $connection): void
     {

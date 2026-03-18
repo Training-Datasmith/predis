@@ -31,10 +31,6 @@ abstract class AbstractBy implements ByInterface
      */
     abstract public function toArray(): array;
 
-    /**
-     * @param  string $unit
-     * @return void
-     */
     protected function setUnit(string $unit): void
     {
         if (!in_array($unit, self::$unitEnum, true)) {

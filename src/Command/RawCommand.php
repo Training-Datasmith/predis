@@ -50,7 +50,7 @@ final class RawCommand implements CommandInterface
      *
      * @return CommandInterface
      */
-    public static function create($commandID, ...$args)
+    public static function create($commandID, ...$args): self
     {
         $arguments = func_get_args();
 
@@ -68,7 +68,7 @@ final class RawCommand implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->arguments = $arguments;
         unset($this->slot);
@@ -77,7 +77,7 @@ final class RawCommand implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function setRawArguments(array $arguments)
+    public function setRawArguments(array $arguments): void
     {
         $this->setArguments($arguments);
     }
@@ -103,7 +103,7 @@ final class RawCommand implements CommandInterface
     /**
      * {@inheritdoc}
      */
-    public function setSlot($slot)
+    public function setSlot($slot): void
     {
         $this->slot = $slot;
     }
@@ -168,7 +168,7 @@ final class RawCommand implements CommandInterface
             // Fetch module configuration to resolve namespace.
             $moduleConfiguration = array_filter(
                 ClientConfiguration::getModules(),
-                static function ($module) use ($commandIdArray) {
+                static function (array $module) use ($commandIdArray): bool {
                     return $module['commandPrefix'] === $commandIdArray[0];
                 }
             );

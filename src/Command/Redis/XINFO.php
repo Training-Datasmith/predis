@@ -18,12 +18,12 @@ use Predis\Command\Redis\Utils\CommandUtility;
 
 class XINFO extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'XINFO';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if ($arguments[0] === 'STREAM') {
             $this->setStreamArguments($arguments);
@@ -32,10 +32,6 @@ class XINFO extends RedisCommand
         }
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
     private function setStreamArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], $arguments[1]];
@@ -47,7 +43,7 @@ class XINFO extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    public function parseResponse($data)
+    public function parseResponse($data): array
     {
         if ($this->getArgument(0) === 'STREAM') {
             return $this->parseStreamResponse($data);
@@ -69,14 +65,14 @@ class XINFO extends RedisCommand
         }
 
         if (isset($result['groups']) && is_array($result['groups'])) {
-            $result['groups'] = array_map(static function ($group) {
+            $result['groups'] = array_map(static function (array $group): array {
                 if ($group === array_values($group)) {
                     $group = CommandUtility::arrayToDictionary($group, null, false);
                 }
                 if (isset($group['consumers'])) {
                     $group['consumers'] = array_map(static function ($consumer) {
                         if ($consumer === array_values($consumer)) {
-                            $consumer = CommandUtility::arrayToDictionary($consumer, null, false);
+                            return CommandUtility::arrayToDictionary($consumer, null, false);
                         }
 
                         return $consumer;
@@ -100,7 +96,7 @@ class XINFO extends RedisCommand
         return $result;
     }
 
-    private function parseDict($data): array
+    private function parseDict(array $data): array
     {
         if ($data !== array_values($data)) {
             return $data; // Relay

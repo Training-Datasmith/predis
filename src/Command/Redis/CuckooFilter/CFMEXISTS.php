@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class CFMEXISTS extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'CF.MEXISTS';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

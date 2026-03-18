@@ -39,7 +39,7 @@ class ProcessorChain implements ArrayAccess, ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function add(ProcessorInterface $processor)
+    public function add(ProcessorInterface $processor): void
     {
         $this->processors[] = $processor;
     }
@@ -47,7 +47,7 @@ class ProcessorChain implements ArrayAccess, ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function remove(ProcessorInterface $processor)
+    public function remove(ProcessorInterface $processor): void
     {
         if (false !== $index = array_search($processor, $this->processors, true)) {
             unset($this[$index]);
@@ -57,7 +57,7 @@ class ProcessorChain implements ArrayAccess, ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process(CommandInterface $command)
+    public function process(CommandInterface $command): void
     {
         for ($i = 0; $i < $count = count($this->processors); ++$i) {
             $this->processors[$i]->process($command);
@@ -77,17 +77,15 @@ class ProcessorChain implements ArrayAccess, ProcessorInterface
      *
      * @return Traversable<int, ProcessorInterface>
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new ArrayIterator($this->processors);
     }
 
     /**
      * Returns the number of command processors in the chain.
-     *
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->processors);
     }
@@ -115,10 +113,9 @@ class ProcessorChain implements ArrayAccess, ProcessorInterface
     /**
      * @param  int                $index
      * @param  ProcessorInterface $processor
-     * @return void
      */
     #[ReturnTypeWillChange]
-    public function offsetSet($index, $processor)
+    public function offsetSet($index, $processor): void
     {
         if (!$processor instanceof ProcessorInterface) {
             throw new InvalidArgumentException(
@@ -131,10 +128,9 @@ class ProcessorChain implements ArrayAccess, ProcessorInterface
 
     /**
      * @param  int  $index
-     * @return void
      */
     #[ReturnTypeWillChange]
-    public function offsetUnset($index)
+    public function offsetUnset($index): void
     {
         unset($this->processors[$index]);
         $this->processors = array_values($this->processors);

@@ -19,15 +19,12 @@ interface StrategyInterface
 {
     /**
      * Initialize transaction context.
-     *
-     * @return bool
      */
     public function initializeTransaction(): bool;
 
     /**
      * Executes a given command in a transaction context.
      *
-     * @param  CommandInterface     $command
      * @return mixed
      * @throws TransactionException
      */
@@ -51,7 +48,6 @@ interface StrategyInterface
     /**
      * Enable WATCH for given keys.
      *
-     * @param  array                $keys
      * @return mixed
      * @throws TransactionException
      */

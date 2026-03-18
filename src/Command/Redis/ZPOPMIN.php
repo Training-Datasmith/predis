@@ -22,15 +22,16 @@ class ZPOPMIN extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZPOPMIN';
     }
 
     /**
      * {@inheritdoc}
+     * @return mixed[]
      */
-    public function parseResponse($data)
+    public function parseResponse($data): array
     {
         $result = [];
 
@@ -64,7 +65,7 @@ class ZPOPMIN extends RedisCommand
         return $parsedData;
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

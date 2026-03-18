@@ -28,9 +28,6 @@ class KNNVectorSearchConfig extends BaseVectorSearchConfig
 
     /**
      * The number of nearest neighbors to find. Defaults to 10 on server side.
-     *
-     * @param  int  $k
-     * @return self
      */
     public function k(int $k): self
     {
@@ -42,7 +39,6 @@ class KNNVectorSearchConfig extends BaseVectorSearchConfig
     /**
      * The HNSW `ef_runtime` parameter for tuning the accuracy/speed trade-off.
      *
-     * @param  int   $ef
      * @return $this
      */
     public function ef(int $ef): self

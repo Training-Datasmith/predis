@@ -88,7 +88,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
      *
      * @param bool $value Enable or disable auto discovery.
      */
-    public function setAutoDiscovery($value)
+    public function setAutoDiscovery($value): void
     {
         if (!$this->connectionFactory) {
             throw new ClientException('Automatic discovery requires a connection factory');
@@ -103,7 +103,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
      *
      * @param FactoryInterface $connectionFactory Connection factory instance.
      */
-    public function setConnectionFactory(FactoryInterface $connectionFactory)
+    public function setConnectionFactory(FactoryInterface $connectionFactory): void
     {
         $this->connectionFactory = $connectionFactory;
     }
@@ -119,7 +119,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * {@inheritdoc}
      */
-    public function add(NodeConnectionInterface $connection)
+    public function add(NodeConnectionInterface $connection): void
     {
         $parameters = $connection->getParameters();
 
@@ -142,7 +142,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * {@inheritdoc}
      */
-    public function remove(NodeConnectionInterface $connection)
+    public function remove(NodeConnectionInterface $connection): bool
     {
         if ($connection === $this->master) {
             $this->master = null;
@@ -220,7 +220,8 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     {
         if ($role === 'master') {
             return $this->getMaster();
-        } elseif ($role === 'slave') {
+        }
+        if ($role === 'slave') {
             return $this->pickSlave();
         }
 
@@ -232,7 +233,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
      *
      * @param NodeConnectionInterface $connection Connection instance in the pool.
      */
-    public function switchTo(NodeConnectionInterface $connection)
+    public function switchTo(NodeConnectionInterface $connection): void
     {
         if ($connection && $connection === $this->current) {
             return;
@@ -248,7 +249,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * {@inheritdoc}
      */
-    public function switchToMaster()
+    public function switchToMaster(): void
     {
         if (!$connection = $this->getConnectionByRole('master')) {
             throw new InvalidArgumentException('Invalid connection or connection not found.');
@@ -260,7 +261,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * {@inheritdoc}
      */
-    public function switchToSlave()
+    public function switchToSlave(): void
     {
         if (!$connection = $this->getConnectionByRole('slave')) {
             throw new InvalidArgumentException('Invalid connection or connection not found.');
@@ -334,15 +335,15 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * {@inheritdoc}
      */
-    public function isConnected()
+    public function isConnected(): bool
     {
-        return $this->current ? $this->current->isConnected() : false;
+        return $this->current && $this->current->isConnected();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function connect()
+    public function connect(): void
     {
         if (!$this->current) {
             if (!$this->current = $this->pickSlave()) {
@@ -358,7 +359,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * {@inheritdoc}
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         foreach ($this->pool as $connection) {
             $connection->disconnect();
@@ -369,10 +370,8 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
      * Handles response from INFO.
      *
      * @param string $response
-     *
-     * @return array
      */
-    private function handleInfoResponse($response)
+    private function handleInfoResponse($response): array
     {
         $info = [];
 
@@ -391,7 +390,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * Fetches the replication configuration from one of the servers.
      */
-    public function discover()
+    public function discover(): void
     {
         if (!$this->connectionFactory) {
             throw new ClientException('Discovery requires a connection factory');
@@ -480,7 +479,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
      * @return mixed
      * @throws Throwable
      */
-    private function retryCommandOnFailure(CommandInterface $command, $method)
+    private function retryCommandOnFailure(CommandInterface $command, string $method)
     {
         $parameters = $this->getParameters();
 
@@ -492,7 +491,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
                 function () use ($command, $method) {
                     return $this->executeCommandInternal($command, $method);
                 },
-                function (Throwable $exception) {
+                function (Throwable $exception): void {
                     $this->onFailCallback($exception);
                 }
             );
@@ -521,8 +520,6 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * Executes command against valid connection.
      *
-     * @param  CommandInterface    $command
-     * @param  string              $method
      * @return mixed
      * @throws ConnectionException
      */
@@ -541,7 +538,7 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * {@inheritdoc}
      */
-    public function writeRequest(CommandInterface $command)
+    public function writeRequest(CommandInterface $command): void
     {
         $this->retryCommandOnFailure($command, __FUNCTION__);
     }
@@ -591,11 +588,9 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * Handle connection exception.
      *
-     * @param  ConnectionException                 $exception
-     * @return void
      * @throws ClientException|ConnectionException
      */
-    private function onConnectionExceptionCallback(ConnectionException $exception)
+    private function onConnectionExceptionCallback(ConnectionException $exception): void
     {
         $connection = $exception->getConnection();
         $connection->disconnect();
@@ -609,11 +604,13 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
         // Otherwise remove the failing slave and attempt to execute
         // the command again on one of the remaining slaves...
         $this->remove($connection);
-
         // ... that is, unless we have no more connections to use.
         if (!$this->slaves && !$this->master) {
             throw $exception;
-        } elseif ($this->autoDiscovery) {
+        }
+
+        // ... that is, unless we have no more connections to use.
+        if ($this->autoDiscovery) {
             $this->discover();
         }
     }
@@ -621,11 +618,9 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     /**
      * Exception handling callback.
      *
-     * @param  Throwable $exception
-     * @return void
      * @throws Throwable
      */
-    private function onFailCallback(Throwable $exception)
+    private function onFailCallback(Throwable $exception): void
     {
         if ($exception instanceof ConnectionException) {
             $this->onConnectionExceptionCallback($exception);
@@ -653,12 +648,10 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     }
 
     /**
-     * @param  MissingMasterException $exception
-     * @return void
      * @throws ClientException
      * @throws MissingMasterException
      */
-    private function onMissingMasterException(MissingMasterException $exception)
+    private function onMissingMasterException(MissingMasterException $exception): void
     {
         if ($this->autoDiscovery) {
             $this->discover();

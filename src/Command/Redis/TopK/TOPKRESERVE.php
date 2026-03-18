@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TOPKRESERVE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TOPK.RESERVE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         switch (count($arguments)) {
             case 3:
@@ -45,7 +45,7 @@ class TOPKRESERVE extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

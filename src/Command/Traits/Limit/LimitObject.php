@@ -16,7 +16,7 @@ use Predis\Command\Argument\Server\LimitInterface;
 
 trait LimitObject
 {
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentPositionOffset = $this->getLimitArgumentPositionOffset($arguments);
 

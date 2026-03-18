@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TOPKLIST extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TOPK.LIST';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (!empty($arguments[1])) {
             $arguments[1] = 'WITHCOUNT';
@@ -64,8 +64,6 @@ class TOPKLIST extends RedisCommand
 
     /**
      * Checks for the presence of the WITHCOUNT modifier.
-     *
-     * @return bool
      */
     private function isWithCountModifier(): bool
     {
@@ -75,7 +73,7 @@ class TOPKLIST extends RedisCommand
         return is_string($lastArgument) && strtoupper($lastArgument) === 'WITHCOUNT';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

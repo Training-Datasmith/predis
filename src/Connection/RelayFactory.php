@@ -78,7 +78,7 @@ class RelayFactory extends Factory
     /**
      * Checks if the Relay extension is loaded in PHP.
      */
-    private function assertExtensions()
+    private function assertExtensions(): void
     {
         if (!extension_loaded('relay')) {
             throw new NotSupportedException(
@@ -89,10 +89,8 @@ class RelayFactory extends Factory
 
     /**
      * Creates a new instance of the client.
-     *
-     * @return Relay
      */
-    private function createClient(ParametersInterface $parameters)
+    private function createClient(ParametersInterface $parameters): \Relay\Relay
     {
         $client = new Relay();
 

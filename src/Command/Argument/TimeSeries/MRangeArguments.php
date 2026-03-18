@@ -17,7 +17,6 @@ class MRangeArguments extends RangeArguments
     /**
      * Filters time series based on their labels and label values.
      *
-     * @param  string ...$filterExpressions
      * @return $this
      */
     public function filter(string ...$filterExpressions): self
@@ -31,8 +30,6 @@ class MRangeArguments extends RangeArguments
      * Splits time series into groups, each group contains time series that share the same
      * value for the provided label name, then aggregates results in each group.
      *
-     * @param  string $label
-     * @param  string $reducer
      * @return $this
      */
     public function groupBy(string $label, string $reducer): self

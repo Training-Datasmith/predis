@@ -22,12 +22,12 @@ class BRPOPLPUSH extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'BRPOPLPUSH';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixSkippingLastArgument($prefix);
     }

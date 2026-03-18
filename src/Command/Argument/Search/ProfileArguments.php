@@ -60,7 +60,6 @@ class ProfileArguments implements ArrayableArgument
     /**
      * Is query string, as if sent to FT.SEARCH.
      *
-     * @param  string $query
      * @return $this
      */
     public function query(string $query): self

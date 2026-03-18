@@ -22,7 +22,7 @@ class XTRIM extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'XTRIM';
     }
@@ -30,7 +30,7 @@ class XTRIM extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $args = [];
         $options = $arguments[3] ?? [];
@@ -56,7 +56,7 @@ class XTRIM extends RedisCommand
         parent::setArguments($args);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

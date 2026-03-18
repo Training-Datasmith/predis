@@ -25,12 +25,12 @@ class VADD extends RedisCommand
     /**
      * {@inheritDoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'VADD';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0]];
 

@@ -48,8 +48,6 @@ abstract class Factory implements FactoryInterface
      * @codeCoverageIgnore
      *
      * @param string $commandID Command ID
-     *
-     * @return string|null
      */
     public function getCommandClass(string $commandID): ?string
     {
@@ -133,8 +131,6 @@ abstract class Factory implements FactoryInterface
 
     /**
      * Returns the current command processor.
-     *
-     * @return ProcessorInterface|null
      */
     public function getProcessor(): ?ProcessorInterface
     {

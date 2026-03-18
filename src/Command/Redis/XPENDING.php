@@ -74,7 +74,7 @@ class XPENDING extends RedisCommand
         return $this->parseResponse($data);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

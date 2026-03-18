@@ -31,10 +31,6 @@ class ContainerFactory
 
     /**
      * Creates container command.
-     *
-     * @param  ClientInterface    $client
-     * @param  string             $containerCommandID
-     * @return ContainerInterface
      */
     public static function create(ClientInterface $client, string $containerCommandID): ContainerInterface
     {
@@ -62,10 +58,6 @@ class ContainerFactory
         throw new UnexpectedValueException("Given container command '{$containerCommandID}' is not supported.");
     }
 
-    /**
-     * @param  string      $commandID
-     * @return string|null
-     */
     private static function resolveCommandModuleByPrefix(string $commandID): ?string
     {
         $modules = ClientConfiguration::getModules();

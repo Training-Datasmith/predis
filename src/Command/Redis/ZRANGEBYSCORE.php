@@ -20,7 +20,7 @@ class ZRANGEBYSCORE extends ZRANGE
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZRANGEBYSCORE';
     }
@@ -28,7 +28,7 @@ class ZRANGEBYSCORE extends ZRANGE
     /**
      * {@inheritdoc}
      */
-    protected function prepareOptions($options)
+    protected function prepareOptions($options): array
     {
         $opts = array_change_key_case($options, CASE_UPPER);
         $finalizedOpts = [];
@@ -47,7 +47,7 @@ class ZRANGEBYSCORE extends ZRANGE
     /**
      * {@inheritdoc}
      */
-    protected function withScores()
+    protected function withScores(): bool
     {
         $arguments = $this->getArguments();
 

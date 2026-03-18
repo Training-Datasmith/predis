@@ -20,7 +20,7 @@ class ZREVRANGEBYLEX extends ZRANGEBYLEX
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZREVRANGEBYLEX';
     }

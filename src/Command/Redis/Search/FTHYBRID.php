@@ -17,15 +17,12 @@ use Predis\Command\Redis\Utils\CommandUtility;
 
 class FTHYBRID extends RedisCommand
 {
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return 'FT.HYBRID';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$index, $query] = $arguments;
 
@@ -35,7 +32,10 @@ class FTHYBRID extends RedisCommand
         ));
     }
 
-    public function parseResponse($data)
+    /**
+     * @return mixed[]
+     */
+    public function parseResponse($data): array
     {
         $response = CommandUtility::arrayToDictionary($data, null, false);
 
@@ -46,7 +46,7 @@ class FTHYBRID extends RedisCommand
         return $response;
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

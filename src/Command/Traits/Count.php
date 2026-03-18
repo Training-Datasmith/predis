@@ -23,7 +23,7 @@ trait Count
     private $countModifier = 'COUNT';
     private $anyModifier = 'ANY';
 
-    public function setArguments(array $arguments, bool $any = false)
+    public function setArguments(array $arguments, bool $any = false): void
     {
         $argumentsLength = count($arguments);
 

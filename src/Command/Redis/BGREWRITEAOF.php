@@ -22,7 +22,7 @@ class BGREWRITEAOF extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'BGREWRITEAOF';
     }
@@ -30,7 +30,7 @@ class BGREWRITEAOF extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parseResponse($data): bool
     {
         return $data == 'Background append only file rewriting started';
     }

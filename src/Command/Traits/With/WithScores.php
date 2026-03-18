@@ -21,7 +21,7 @@ use Predis\Command\Command;
  */
 trait WithScores
 {
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $withScores = array_pop($arguments);
 
@@ -36,8 +36,6 @@ trait WithScores
 
     /**
      * Checks for the presence of the WITHSCORES modifier.
-     *
-     * @return bool
      */
     private function isWithScoreModifier(): bool
     {
@@ -47,7 +45,7 @@ trait WithScores
         return is_string($lastArgument) && strtoupper($lastArgument) === 'WITHSCORES';
     }
 
-    public function parseResponse($data)
+    public function parseResponse(array $data): array
     {
         if ($this->isWithScoreModifier()) {
             $result = [];

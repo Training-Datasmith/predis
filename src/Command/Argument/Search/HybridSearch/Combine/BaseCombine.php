@@ -27,7 +27,6 @@ abstract class BaseCombine implements ArrayableArgument
     protected $as = [];
 
     /**
-     * @param  string $alias
      * @return $this
      */
     public function as(string $alias): self

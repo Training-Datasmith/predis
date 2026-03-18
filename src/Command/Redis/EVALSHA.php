@@ -20,7 +20,7 @@ class EVALSHA extends EVAL_
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'EVALSHA';
     }

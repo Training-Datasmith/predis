@@ -89,7 +89,7 @@ class MultiExec implements ClientContextInterface
      *
      * @throws NotSupportedException
      */
-    private function assertClient(ClientInterface $client)
+    private function assertClient(ClientInterface $client): void
     {
         if (!$client->getCommandFactory()->supports('MULTI', 'EXEC', 'DISCARD')) {
             throw new NotSupportedException(
@@ -240,10 +240,8 @@ class MultiExec implements ClientContextInterface
 
     /**
      * Finalizes the transaction by executing MULTI on the server.
-     *
-     * @return MultiExec
      */
-    public function multi()
+    public function multi(): self
     {
         if ($this->state->check(MultiExecState::INITIALIZED | MultiExecState::CAS)) {
             $this->state->unflag(MultiExecState::CAS);
@@ -258,10 +256,9 @@ class MultiExec implements ClientContextInterface
     /**
      * Executes UNWATCH.
      *
-     * @return MultiExec
      * @throws NotSupportedException
      */
-    public function unwatch()
+    public function unwatch(): self
     {
         if (!$this->client->getCommandFactory()->supports('UNWATCH')) {
             throw new NotSupportedException(
@@ -278,10 +275,8 @@ class MultiExec implements ClientContextInterface
     /**
      * Resets the transaction by UNWATCH-ing the keys that are being WATCHed and
      * DISCARD-ing pending commands that have been already sent to the server.
-     *
-     * @return MultiExec
      */
-    public function discard()
+    public function discard(): self
     {
         if ($this->state->isInitialized()) {
             if ($this->state->isCAS()) {
@@ -315,7 +310,7 @@ class MultiExec implements ClientContextInterface
      * @throws InvalidArgumentException
      * @throws ClientException
      */
-    private function checkBeforeExecution($callable)
+    private function checkBeforeExecution($callable): void
     {
         if ($this->state->isExecuting()) {
             throw new ClientException(
@@ -444,9 +439,7 @@ class MultiExec implements ClientContextInterface
 
         try {
             call_user_func($callable, $this);
-        } catch (CommunicationException $exception) {
-            // NOOP
-        } catch (ServerException $exception) {
+        } catch (CommunicationException|ServerException $exception) {
             // NOOP
         } catch (Exception $exception) {
             $this->discard();
@@ -464,7 +457,7 @@ class MultiExec implements ClientContextInterface
      *
      * @param string $message Error message.
      */
-    private function onProtocolError($message)
+    private function onProtocolError(string $message): void
     {
         // Since a MULTI/EXEC block cannot be initialized when using aggregate
         // connections we can safely assume that Predis\Client::getConnection()

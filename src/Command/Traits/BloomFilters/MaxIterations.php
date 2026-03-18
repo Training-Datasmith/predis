@@ -22,7 +22,7 @@ trait MaxIterations
 {
     private static $maxIterationsModifier = 'MAXITERATIONS';
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
 

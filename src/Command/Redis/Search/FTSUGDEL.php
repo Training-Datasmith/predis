@@ -21,7 +21,7 @@ use Predis\Command\Command as RedisCommand;
  */
 class FTSUGDEL extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.SUGDEL';
     }

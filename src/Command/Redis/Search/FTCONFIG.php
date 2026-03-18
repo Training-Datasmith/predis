@@ -27,7 +27,7 @@ use Predis\Command\Redis\CONFIG;
  */
 class FTCONFIG extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.CONFIG';
     }

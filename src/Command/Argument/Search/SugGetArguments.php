@@ -29,7 +29,6 @@ class SugGetArguments extends CommonArguments
     /**
      * Limits the results to a maximum of num (default: 5).
      *
-     * @param  int   $num
      * @return $this
      */
     public function max(int $num): self

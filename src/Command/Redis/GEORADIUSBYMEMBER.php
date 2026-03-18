@@ -25,7 +25,7 @@ class GEORADIUSBYMEMBER extends GEORADIUS
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'GEORADIUSBYMEMBER';
     }

@@ -33,9 +33,6 @@ class DropArguments implements ArrayableArgument
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return $this->arguments;

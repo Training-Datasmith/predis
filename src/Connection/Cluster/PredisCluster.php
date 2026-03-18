@@ -57,7 +57,6 @@ class PredisCluster extends AbstractAggregateConnection implements ClusterInterf
     private $connectionParameters;
 
     /**
-     * @param ParametersInterface    $parameters
      * @param StrategyInterface|null $strategy   Optional cluster strategy.
      */
     public function __construct(ParametersInterface $parameters, ?StrategyInterface $strategy = null)
@@ -70,7 +69,7 @@ class PredisCluster extends AbstractAggregateConnection implements ClusterInterf
     /**
      * {@inheritdoc}
      */
-    public function isConnected()
+    public function isConnected(): bool
     {
         foreach ($this->pool as $connection) {
             if ($connection->isConnected()) {
@@ -84,7 +83,7 @@ class PredisCluster extends AbstractAggregateConnection implements ClusterInterf
     /**
      * {@inheritdoc}
      */
-    public function connect()
+    public function connect(): void
     {
         foreach ($this->pool as $connection) {
             $connection->connect();
@@ -108,7 +107,7 @@ class PredisCluster extends AbstractAggregateConnection implements ClusterInterf
     /**
      * {@inheritdoc}
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         foreach ($this->pool as $connection) {
             $connection->disconnect();
@@ -118,7 +117,7 @@ class PredisCluster extends AbstractAggregateConnection implements ClusterInterf
     /**
      * {@inheritdoc}
      */
-    public function add(NodeConnectionInterface $connection)
+    public function add(NodeConnectionInterface $connection): void
     {
         $parameters = $connection->getParameters();
 
@@ -134,7 +133,7 @@ class PredisCluster extends AbstractAggregateConnection implements ClusterInterf
     /**
      * {@inheritdoc}
      */
-    public function remove(NodeConnectionInterface $connection)
+    public function remove(NodeConnectionInterface $connection): bool
     {
         if (false !== $id = array_search($connection, $this->pool, true)) {
             unset($this->pool[$id]);
@@ -241,7 +240,7 @@ class PredisCluster extends AbstractAggregateConnection implements ClusterInterf
     /**
      * {@inheritdoc}
      */
-    public function writeRequest(CommandInterface $command)
+    public function writeRequest(CommandInterface $command): void
     {
         $this->getConnectionByCommand($command)->writeRequest($command);
     }

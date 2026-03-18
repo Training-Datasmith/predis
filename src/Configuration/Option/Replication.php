@@ -67,7 +67,7 @@ class Replication extends Aggregate
         switch ($description) {
             case 'sentinel':
             case 'redis-sentinel':
-                return static function ($parameters, $options) {
+                return static function ($parameters, $options): \Predis\Connection\Replication\SentinelReplication {
                     return new SentinelReplication($options->service, $parameters, $options->connections);
                 };
 
@@ -90,7 +90,7 @@ class Replication extends Aggregate
      */
     protected function getDefaultConnectionInitializer()
     {
-        return static function ($parameters, $options) {
+        return static function ($parameters, $options): \Predis\Connection\Replication\MasterSlaveReplication {
             $connection = new MasterSlaveReplication();
 
             if ($options->autodiscovery) {
@@ -105,7 +105,7 @@ class Replication extends Aggregate
     /**
      * {@inheritdoc}
      */
-    public static function aggregate(OptionsInterface $options, AggregateConnectionInterface $connection, array $nodes)
+    public static function aggregate(OptionsInterface $options, AggregateConnectionInterface $connection, array $nodes): void
     {
         if (!$connection instanceof SentinelReplication) {
             parent::aggregate($options, $connection, $nodes);

@@ -68,7 +68,7 @@ class Aggregate implements OptionInterface
      */
     protected function getConnectionInitializer(OptionsInterface $options, callable $callable)
     {
-        return function ($parameters = null, $autoaggregate = false) use ($callable, $options) {
+        return function ($parameters = null, $autoaggregate = false) use ($callable, $options): \Predis\Connection\AggregateConnectionInterface {
             $connection = call_user_func_array($callable, [&$parameters, $options, $this]);
 
             if (!$connection instanceof AggregateConnectionInterface) {
@@ -95,7 +95,7 @@ class Aggregate implements OptionInterface
      * @param AggregateConnectionInterface $connection Target aggregate connection
      * @param array                        $nodes      List of nodes to be added to the target aggregate connection
      */
-    public static function aggregate(OptionsInterface $options, AggregateConnectionInterface $connection, array $nodes)
+    public static function aggregate(OptionsInterface $options, AggregateConnectionInterface $connection, array $nodes): void
     {
         $connections = $options->connections;
 

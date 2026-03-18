@@ -77,7 +77,7 @@ abstract class NonClusterConnectionStrategy implements StrategyInterface
         return $retry->callWithRetry(
             function () use ($command) {
                 return $this->connection->executeCommand($command);
-            }, function (CommunicationException $e) {
+            }, function (CommunicationException $e): void {
                 $this->onFailCallback($e);
             }
         );
@@ -121,7 +121,7 @@ abstract class NonClusterConnectionStrategy implements StrategyInterface
         return $retry->callWithRetry(
             function () {
                 return $this->connection->executeCommand(new UNWATCH());
-            }, function (CommunicationException $e) {
+            }, function (CommunicationException $e): void {
                 $this->onFailCallback($e);
             }
         );
@@ -138,8 +138,6 @@ abstract class NonClusterConnectionStrategy implements StrategyInterface
     /**
      * Executes a Redis command bypassing the transaction logic.
      *
-     * @param  CommandInterface          $command
-     * @return BypassTransactionResponse
      * @throws ServerException|Throwable
      */
     protected function executeBypassingTransaction(CommandInterface $command): BypassTransactionResponse
@@ -150,7 +148,7 @@ abstract class NonClusterConnectionStrategy implements StrategyInterface
             $response = $retry->callWithRetry(
                 function () use ($command) {
                     return $this->connection->executeCommand($command);
-                }, function (CommunicationException $e) {
+                }, function (CommunicationException $e): void {
                     $this->onFailCallback($e);
                 }
             );
@@ -179,11 +177,8 @@ abstract class NonClusterConnectionStrategy implements StrategyInterface
 
     /**
      * Handle communication exception.
-     *
-     * @param  CommunicationException $e
-     * @return void
      */
-    private function onFailCallback(CommunicationException $e)
+    private function onFailCallback(CommunicationException $e): void
     {
         $connection = $e->getConnection();
 

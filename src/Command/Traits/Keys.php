@@ -20,7 +20,7 @@ use UnexpectedValueException;
  */
 trait Keys
 {
-    public function setArguments(array $arguments, bool $withNumkeys = true)
+    public function setArguments(array $arguments, bool $withNumkeys = true): void
     {
         $argumentsLength = count($arguments);
 

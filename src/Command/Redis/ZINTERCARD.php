@@ -34,12 +34,12 @@ class ZINTERCARD extends RedisCommand
     protected static $keysArgumentPositionOffset = 0;
     protected static $limitArgumentPositionOffset = 1;
 
-    public function getId()
+    public function getId(): string
     {
         return 'ZINTERCARD';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setLimit($arguments);
         $arguments = $this->getArguments();

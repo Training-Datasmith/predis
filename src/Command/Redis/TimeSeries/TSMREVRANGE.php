@@ -19,7 +19,7 @@ namespace Predis\Command\Redis\TimeSeries;
  */
 class TSMREVRANGE extends TSMRANGE
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TS.MREVRANGE';
     }

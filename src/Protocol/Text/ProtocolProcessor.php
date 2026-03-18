@@ -40,7 +40,7 @@ class ProtocolProcessor implements ProtocolProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function write(CompositeConnectionInterface $connection, CommandInterface $command)
+    public function write(CompositeConnectionInterface $connection, CommandInterface $command): void
     {
         $request = $this->serializer->serialize($command);
         $connection->writeBuffer($request);
@@ -113,7 +113,7 @@ class ProtocolProcessor implements ProtocolProcessorInterface
      *
      * @param bool $value Enable or disable streamable multibulk responses.
      */
-    public function useIterableMultibulk($value)
+    public function useIterableMultibulk($value): void
     {
         $this->mbiterable = (bool) $value;
     }

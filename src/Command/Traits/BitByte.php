@@ -19,7 +19,7 @@ trait BitByte
         'byte' => 'BYTE',
     ];
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $value = array_pop($arguments);
 

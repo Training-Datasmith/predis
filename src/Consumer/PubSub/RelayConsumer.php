@@ -25,7 +25,7 @@ class RelayConsumer extends Consumer
      * @param string   ...$channel One or more channel names.
      * @param callable $callback   The message callback.
      */
-    public function subscribe(string ...$channel) // @phpstan-ignore-line
+    public function subscribe(string ...$channel): void // @phpstan-ignore-line
     {
         $channels = func_get_args();
         $callback = array_pop($channels);
@@ -34,7 +34,7 @@ class RelayConsumer extends Consumer
 
         $command = $this->client->createCommand('subscribe', [
             $channels,
-            static function ($relay, $channel, $message) use ($callback) {
+            static function ($relay, $channel, $message) use ($callback): void {
                 $callback((object) [
                     'kind' => is_null($message) ? self::SUBSCRIBE : self::MESSAGE,
                     'channel' => $channel,
@@ -54,7 +54,7 @@ class RelayConsumer extends Consumer
      * @param string   ...$pattern One or more channel name patterns.
      * @param callable $callback   The message callback.
      */
-    public function psubscribe(...$pattern) // @phpstan-ignore-line
+    public function psubscribe(...$pattern): void // @phpstan-ignore-line
     {
         $patterns = func_get_args();
         $callback = array_pop($patterns);
@@ -63,7 +63,7 @@ class RelayConsumer extends Consumer
 
         $command = $this->client->createCommand('psubscribe', [
             $patterns,
-            static function ($relay, $pattern, $channel, $message) use ($callback) {
+            static function ($relay, $pattern, $channel, $message) use ($callback): void {
                 $callback((object) [
                     'kind' => is_null($message) ? self::PSUBSCRIBE : self::PMESSAGE,
                     'pattern' => $pattern,

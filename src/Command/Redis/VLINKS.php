@@ -22,19 +22,12 @@ class VLINKS extends RedisCommand
      */
     private $withScores = false;
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return 'VLINKS';
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $lastArg = array_pop($arguments);
 
@@ -50,7 +43,6 @@ class VLINKS extends RedisCommand
 
     /**
      * @param             $data
-     * @return array|null
      */
     public function parseResponse($data): ?array
     {
@@ -58,7 +50,7 @@ class VLINKS extends RedisCommand
             if ($this->withScores) {
                 foreach ($data as $key => $value) {
                     if ($value === array_values($value)) {
-                        $data[$key] = CommandUtility::arrayToDictionary($value, static function ($key, $value) {
+                        $data[$key] = CommandUtility::arrayToDictionary($value, static function ($key, $value): array {
                             return [$key, (float) $value];
                         });
                     } else {

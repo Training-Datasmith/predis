@@ -90,7 +90,8 @@ class Client implements ClientInterface, IteratorAggregate
     {
         if (is_array($options)) {
             return new Options($options);
-        } elseif ($options instanceof OptionsInterface) {
+        }
+        if ($options instanceof OptionsInterface) {
             return $options;
         }
         throw new InvalidArgumentException('Invalid type for client options');
@@ -133,11 +134,14 @@ class Client implements ClientInterface, IteratorAggregate
         if (is_array($parameters)) {
             if (!isset($parameters[0])) {
                 return $options->connections->create($parameters);
-            } elseif ($options->defined('cluster') && $initializer = $options->cluster) {
+            }
+            if ($options->defined('cluster') && $initializer = $options->cluster) {
                 return $initializer($parameters, true);
-            } elseif ($options->defined('replication') && $initializer = $options->replication) {
+            }
+            if ($options->defined('replication') && $initializer = $options->replication) {
                 return $initializer($parameters, true);
-            } elseif ($options->defined('aggregate') && $initializer = $options->aggregate) {
+            }
+            if ($options->defined('aggregate') && $initializer = $options->aggregate) {
                 return $initializer($parameters, false);
             }
             throw new InvalidArgumentException(
@@ -204,7 +208,7 @@ class Client implements ClientInterface, IteratorAggregate
      *
      * @return ClientInterface
      */
-    public function getClientBy($selector, $value)
+    public function getClientBy($selector, $value): self
     {
         $selector = strtolower($selector);
 
@@ -227,7 +231,7 @@ class Client implements ClientInterface, IteratorAggregate
     /**
      * Opens the underlying connection and connects to the server.
      */
-    public function connect()
+    public function connect(): void
     {
         $this->connection->connect();
     }
@@ -235,7 +239,7 @@ class Client implements ClientInterface, IteratorAggregate
     /**
      * Closes the underlying connection and disconnects from the server.
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         $this->connection->disconnect();
     }
@@ -246,7 +250,7 @@ class Client implements ClientInterface, IteratorAggregate
      * This is the same as `Client::disconnect()` as it does not actually send
      * the `QUIT` command to Redis, but simply closes the connection.
      */
-    public function quit()
+    public function quit(): void
     {
         $this->disconnect();
     }
@@ -341,13 +345,12 @@ class Client implements ClientInterface, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function createCommand($commandID, $arguments = [])
+    public function createCommand($commandID, $arguments = []): \Predis\Command\CommandInterface
     {
         return $this->commands->create($commandID, $arguments);
     }
 
     /**
-     * @param  string             $name
      * @return ContainerInterface
      */
     public function __get(string $name)
@@ -356,7 +359,6 @@ class Client implements ClientInterface, IteratorAggregate
     }
 
     /**
-     * @param  string $name
      * @param  mixed  $value
      * @return mixed
      */
@@ -366,7 +368,6 @@ class Client implements ClientInterface, IteratorAggregate
     }
 
     /**
-     * @param  string $name
      * @return mixed
      */
     public function __isset(string $name)
@@ -389,7 +390,7 @@ class Client implements ClientInterface, IteratorAggregate
                 function () use ($command) {
                     return $this->connection->executeCommand($command);
                 },
-                function () {
+                function (): void {
                     $this->connection->disconnect();
                 }
             );
@@ -397,7 +398,7 @@ class Client implements ClientInterface, IteratorAggregate
 
         if ($response instanceof ResponseInterface) {
             if ($response instanceof ErrorResponseInterface) {
-                $response = $this->onErrorResponse($command, $response);
+                return $this->onErrorResponse($command, $response);
             }
 
             return $response;
@@ -425,7 +426,7 @@ class Client implements ClientInterface, IteratorAggregate
             $response = $this->executeCommand($command->getEvalCommand());
 
             if (!$response instanceof ResponseInterface) {
-                $response = $command->parseResponse($response);
+                return $command->parseResponse($response);
             }
 
             return $response;
@@ -449,7 +450,7 @@ class Client implements ClientInterface, IteratorAggregate
      *
      * @return mixed
      */
-    private function sharedContextFactory($initializer, $argv = null)
+    private function sharedContextFactory(string $initializer, $argv = null)
     {
         switch (count($argv)) {
             case 0:
@@ -572,7 +573,6 @@ class Client implements ClientInterface, IteratorAggregate
      * Creates new push notifications consumer.
      *
      * @param  callable|null $preLoopCallback Callback that should be called on client before enter a loop.
-     * @return PushConsumer
      */
     public function push(?callable $preLoopCallback = null): PushConsumer
     {
@@ -610,10 +610,8 @@ class Client implements ClientInterface, IteratorAggregate
 
     /**
      * Creates a new monitor consumer and returns it.
-     *
-     * @return MonitorConsumer
      */
-    public function monitor()
+    public function monitor(): \Predis\Monitor\Consumer
     {
         return new MonitorConsumer($this);
     }

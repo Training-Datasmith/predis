@@ -20,7 +20,7 @@ class ZREVRANGEBYSCORE extends ZRANGEBYSCORE
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZREVRANGEBYSCORE';
     }

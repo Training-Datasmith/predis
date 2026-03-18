@@ -25,7 +25,7 @@ class RequestSerializer implements RequestSerializerInterface
     /**
      * {@inheritdoc}
      */
-    public function serialize(CommandInterface $command)
+    public function serialize(CommandInterface $command): string
     {
         $commandID = $command->getId();
         $arguments = $command->getArguments();

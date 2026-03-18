@@ -21,12 +21,12 @@ use Predis\Command\Command as RedisCommand;
  */
 class FCALL_RO extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FCALL_RO';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = array_merge([$arguments[0], count($arguments[1])], $arguments[1]);
 

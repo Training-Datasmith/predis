@@ -22,7 +22,7 @@ use Predis\Command\Command as RedisCommand;
  */
 class WAITAOF extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'WAITAOF';
     }

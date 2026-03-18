@@ -22,7 +22,7 @@ class WATCH extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'WATCH';
     }
@@ -30,7 +30,7 @@ class WATCH extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (isset($arguments[0]) && is_array($arguments[0])) {
             $arguments = $arguments[0];
@@ -39,7 +39,7 @@ class WATCH extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForAllArguments($prefix);
     }

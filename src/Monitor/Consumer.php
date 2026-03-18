@@ -55,7 +55,7 @@ class Consumer implements Iterator
      *
      * @throws NotSupportedException
      */
-    private function assertClient(ClientInterface $client)
+    private function assertClient(ClientInterface $client): void
     {
         if ($client->getConnection() instanceof ClusterInterface) {
             throw new NotSupportedException(
@@ -83,17 +83,14 @@ class Consumer implements Iterator
      * Stops the consumer. Internally this is done by disconnecting from server
      * since there is no way to terminate the stream initialized by MONITOR.
      */
-    public function stop()
+    public function stop(): void
     {
         $this->client->disconnect();
         $this->valid = false;
     }
 
-    /**
-     * @return void
-     */
     #[ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         // NOOP
     }
@@ -118,11 +115,8 @@ class Consumer implements Iterator
         return $this->position;
     }
 
-    /**
-     * @return void
-     */
     #[ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
         ++$this->position;
     }
@@ -150,7 +144,7 @@ class Consumer implements Iterator
         $client = null;
         $event = $this->client->getConnection()->read();
 
-        $callback = static function ($matches) use (&$database, &$client) {
+        $callback = static function ($matches) use (&$database, &$client): string {
             if (2 === $count = count($matches)) {
                 // Redis <= 2.4
                 $database = (int) $matches[1];

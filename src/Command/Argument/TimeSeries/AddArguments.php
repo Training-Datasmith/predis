@@ -18,7 +18,6 @@ class AddArguments extends CommonArguments
      * Is overwrite key and database configuration for DUPLICATE_POLICY,
      * the policy for handling samples with identical timestamps.
      *
-     * @param  string $policy
      * @return $this
      */
     public function onDuplicate(string $policy = self::POLICY_BLOCK): self

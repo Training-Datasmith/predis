@@ -29,9 +29,6 @@ class UnexpectedTypeException extends UnexpectedValueException
         parent::__construct($message, $code, $previous);
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;

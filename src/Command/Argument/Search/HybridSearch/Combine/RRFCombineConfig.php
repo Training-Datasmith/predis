@@ -27,7 +27,6 @@ class RRFCombineConfig extends BaseCombine
     /**
      * The number of top results from each search type to consider for fusion. Defaults to 50.
      *
-     * @param  int   $window
      * @return $this
      */
     public function window(int $window): self
@@ -40,7 +39,6 @@ class RRFCombineConfig extends BaseCombine
     /**
      * The RRF ranking constant. A smaller value gives more weight to top-ranked items. Defaults to 60.
      *
-     * @param  int   $constant
      * @return $this
      */
     public function rrfConstant(int $constant): self

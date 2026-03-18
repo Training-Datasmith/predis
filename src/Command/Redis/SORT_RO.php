@@ -44,12 +44,12 @@ class SORT_RO extends RedisCommand
     protected static $getArgumentPositionOffset = 3;
     protected static $sortArgumentPositionOffset = 4;
 
-    public function getId()
+    public function getId(): string
     {
         return 'SORT_RO';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $alpha = array_pop($arguments);
 

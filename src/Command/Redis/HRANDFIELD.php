@@ -27,7 +27,7 @@ class HRANDFIELD extends RedisCommand
 {
     use WithValues;
 
-    public function getId()
+    public function getId(): string
     {
         return 'HRANDFIELD';
     }
@@ -44,7 +44,7 @@ class HRANDFIELD extends RedisCommand
         // flatten Relay (RESP3) maps
         $return = [];
 
-        array_walk_recursive($data, static function ($value) use (&$return) {
+        array_walk_recursive($data, static function ($value) use (&$return): void {
             $return[] = $value;
         });
 

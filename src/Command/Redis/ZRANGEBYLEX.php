@@ -20,15 +20,16 @@ class ZRANGEBYLEX extends ZRANGE
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZRANGEBYLEX';
     }
 
     /**
      * {@inheritdoc}
+     * @return list<mixed>
      */
-    protected function prepareOptions($options)
+    protected function prepareOptions($options): array
     {
         $opts = array_change_key_case($options, CASE_UPPER);
         $finalizedOpts = [];
@@ -47,7 +48,7 @@ class ZRANGEBYLEX extends ZRANGE
     /**
      * {@inheritdoc}
      */
-    protected function withScores()
+    protected function withScores(): bool
     {
         return false;
     }

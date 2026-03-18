@@ -22,12 +22,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class BFMADD extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'BF.MADD';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

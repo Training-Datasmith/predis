@@ -127,11 +127,8 @@ class ListKey implements Iterator
         $this->current = array_shift($this->elements);
     }
 
-    /**
-     * @return void
-     */
     #[ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         $this->reset();
         $this->next();
@@ -155,11 +152,8 @@ class ListKey implements Iterator
         return $this->position;
     }
 
-    /**
-     * @return void
-     */
     #[ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
         if (!$this->elements && $this->fetchmore) {
             $this->fetch();

@@ -22,7 +22,7 @@ class ZADD extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZADD';
     }
@@ -30,7 +30,7 @@ class ZADD extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (is_array(end($arguments))) {
             foreach (array_pop($arguments) as $member => $score) {
@@ -42,7 +42,7 @@ class ZADD extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

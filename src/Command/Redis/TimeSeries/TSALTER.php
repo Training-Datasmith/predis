@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TSALTER extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TS.ALTER';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$key] = $arguments;
         $commandArguments = (!empty($arguments[1])) ? $arguments[1]->toArray() : [];
@@ -37,7 +37,7 @@ class TSALTER extends RedisCommand
         ));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

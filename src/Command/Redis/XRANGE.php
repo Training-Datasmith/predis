@@ -22,7 +22,7 @@ class XRANGE extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'XRANGE';
     }
@@ -30,7 +30,7 @@ class XRANGE extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) === 4) {
             $arguments[] = $arguments[3];
@@ -42,8 +42,9 @@ class XRANGE extends RedisCommand
 
     /**
      * {@inheritdoc}
+     * @return mixed[][]
      */
-    public function parseResponse($data)
+    public function parseResponse($data): array
     {
         $result = [];
         foreach ($data as $entry) {
@@ -65,7 +66,7 @@ class XRANGE extends RedisCommand
         return $this->parseResponse($data);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

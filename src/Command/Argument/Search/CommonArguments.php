@@ -24,7 +24,6 @@ class CommonArguments implements ArrayableArgument
     /**
      * Adds default language for documents within an index.
      *
-     * @param  string $defaultLanguage
      * @return $this
      */
     public function language(string $defaultLanguage = 'english'): self
@@ -40,7 +39,6 @@ class CommonArguments implements ArrayableArgument
      * If not specified, the query will execute under the default dialect version
      * set during module initial loading or via FT.CONFIG SET command.
      *
-     * @param  string $dialect
      * @return $this
      */
     public function dialect(string $dialect): self
@@ -66,7 +64,6 @@ class CommonArguments implements ArrayableArgument
     /**
      * Adds an arbitrary, binary safe payload that is exposed to custom scoring functions.
      *
-     * @param  string $payload
      * @return $this
      */
     public function payload(string $payload): self
@@ -116,7 +113,6 @@ class CommonArguments implements ArrayableArgument
     /**
      * Overrides the timeout parameter of the module.
      *
-     * @param  int   $timeout
      * @return $this
      */
     public function timeout(int $timeout): self
@@ -130,8 +126,6 @@ class CommonArguments implements ArrayableArgument
     /**
      * Adds an arbitrary, binary safe payload that is exposed to custom scoring functions.
      *
-     * @param  int   $offset
-     * @param  int   $num
      * @return $this
      */
     public function limit(int $offset, int $num): self
@@ -144,7 +138,6 @@ class CommonArguments implements ArrayableArgument
     /**
      * Adds filter expression into index.
      *
-     * @param  string $filter
      * @return $this
      */
     public function filter(string $filter): self
@@ -160,7 +153,6 @@ class CommonArguments implements ArrayableArgument
      *
      * Example: ['name1', 'value1', 'name2', 'value2'...]
      *
-     * @param  array $nameValuesDictionary
      * @return $this
      */
     public function params(array $nameValuesDictionary): self

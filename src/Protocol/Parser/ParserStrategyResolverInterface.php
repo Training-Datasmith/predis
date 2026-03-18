@@ -18,9 +18,6 @@ interface ParserStrategyResolverInterface
 {
     /**
      * Resolves parser strategy according given protocol version.
-     *
-     * @param  int                     $protocolVersion
-     * @return ParserStrategyInterface
      */
     public function resolve(int $protocolVersion): ParserStrategyInterface;
 }

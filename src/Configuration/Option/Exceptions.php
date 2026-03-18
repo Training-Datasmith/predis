@@ -24,7 +24,7 @@ class Exceptions implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function filter(OptionsInterface $options, $value)
+    public function filter(OptionsInterface $options, $value): bool
     {
         return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
@@ -32,7 +32,7 @@ class Exceptions implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options)
+    public function getDefault(OptionsInterface $options): bool
     {
         return true;
     }

@@ -25,7 +25,7 @@ abstract class BZPOPBase extends RedisCommand
 
     abstract public function getId(): string;
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setKeys($arguments, false);
     }

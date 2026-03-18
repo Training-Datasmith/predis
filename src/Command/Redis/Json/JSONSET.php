@@ -28,18 +28,18 @@ class JSONSET extends RedisCommand
 
     protected static $nxXxArgumentPositionOffset = 3;
 
-    public function getId()
+    public function getId(): string
     {
         return 'JSON.SET';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setSubcommand($arguments);
         $this->filterArguments();
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

@@ -38,7 +38,7 @@ class KeyPrefixProcessor implements ProcessorInterface
      *
      * @param string $prefix Prefix for the keys.
      */
-    public function setPrefix($prefix)
+    public function setPrefix($prefix): void
     {
         $this->prefix = $prefix;
     }
@@ -56,7 +56,7 @@ class KeyPrefixProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process(CommandInterface $command)
+    public function process(CommandInterface $command): void
     {
         if ($command instanceof PrefixableCommandInterface) {
             $command->prefixKeys($this->prefix);
@@ -81,7 +81,7 @@ class KeyPrefixProcessor implements ProcessorInterface
      *
      * @throws InvalidArgumentException
      */
-    public function setCommandHandler($commandID, $callback = null)
+    public function setCommandHandler($commandID, $callback = null): void
     {
         $commandID = strtoupper($commandID);
 
@@ -103,7 +103,7 @@ class KeyPrefixProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getPrefix();
     }

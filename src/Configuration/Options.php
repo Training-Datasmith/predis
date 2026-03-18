@@ -65,7 +65,7 @@ class Options implements OptionsInterface
     /**
      * {@inheritdoc}
      */
-    public function defined($option)
+    public function defined($option): bool
     {
         return
             array_key_exists($option, $this->options)

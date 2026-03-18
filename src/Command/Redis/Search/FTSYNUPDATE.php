@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class FTSYNUPDATE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.SYNUPDATE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$index, $synonymGroupId] = $arguments;
         $commandArguments = [];
@@ -44,7 +44,7 @@ class FTSYNUPDATE extends RedisCommand
         ));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

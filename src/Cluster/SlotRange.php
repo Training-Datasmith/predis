@@ -61,10 +61,8 @@ class SlotRange implements Countable
      *
      * @param int $first
      * @param int $last
-     *
-     * @return bool
      */
-    public static function isValidRange($first, $last)
+    public static function isValidRange($first, $last): bool
     {
         return $first >= 0x0000 && $first <= self::MAX_SLOTS && $last >= 0x0000 && $last <= self::MAX_SLOTS && $first <= $last;
     }
@@ -102,11 +100,9 @@ class SlotRange implements Countable
     /**
      * Checks if the specific slot is contained in this range.
      *
-     * @param int $slot
      *
-     * @return bool
      */
-    public function hasSlot(int $slot)
+    public function hasSlot(int $slot): bool
     {
         return $this->start <= $slot && $this->end >= $slot;
     }
@@ -123,8 +119,6 @@ class SlotRange implements Countable
 
     /**
      * Returns the number of slots in this range.
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -134,9 +128,7 @@ class SlotRange implements Countable
     /**
      * Checks if this range has an intersection with the given slot range.
      *
-     * @param SlotRange $slotRange
      *
-     * @return bool
      */
     public function hasIntersectionWith(SlotRange $slotRange): bool
     {

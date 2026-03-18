@@ -33,11 +33,8 @@ abstract class MultiBulkIterator implements Iterator, Countable, ResponseInterfa
     protected $position;
     protected $size;
 
-    /**
-     * @return void
-     */
     #[ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         // NOOP
     }
@@ -60,11 +57,8 @@ abstract class MultiBulkIterator implements Iterator, Countable, ResponseInterfa
         return $this->position;
     }
 
-    /**
-     * @return void
-     */
     #[ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
         if (++$this->position < $this->size) {
             $this->current = $this->getValue();

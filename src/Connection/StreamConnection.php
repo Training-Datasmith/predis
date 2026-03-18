@@ -52,10 +52,6 @@ class StreamConnection extends AbstractConnection
      */
     protected $streamFactory;
 
-    /**
-     * @param ParametersInterface         $parameters
-     * @param StreamFactoryInterface|null $factory
-     */
     public function __construct(ParametersInterface $parameters, ?StreamFactoryInterface $factory = null)
     {
         parent::__construct($parameters);
@@ -87,7 +83,7 @@ class StreamConnection extends AbstractConnection
     /**
      * {@inheritdoc}
      */
-    public function connect()
+    public function connect(): void
     {
         if (parent::connect() && $this->initCommands) {
             $responses = $this->sendPipeline($this->initCommands);
@@ -133,7 +129,7 @@ class StreamConnection extends AbstractConnection
     /**
      * {@inheritdoc}
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         if ($this->isConnected()) {
             $this->getResource()->close();
@@ -259,7 +255,7 @@ class StreamConnection extends AbstractConnection
     /**
      * {@inheritdoc}
      */
-    public function writeRequest(CommandInterface $command)
+    public function writeRequest(CommandInterface $command): void
     {
         $buffer = $command->serializeCommand();
         $this->write($buffer);
@@ -276,9 +272,6 @@ class StreamConnection extends AbstractConnection
     /**
      * Reads given resource split on chunks with given size.
      *
-     * @param  StreamInterface        $stream
-     * @param  int                    $chunkSize
-     * @return string
      * @throws CommunicationException
      */
     private function readByChunks(StreamInterface $stream, int $chunkSize): string
@@ -304,8 +297,6 @@ class StreamConnection extends AbstractConnection
      * Handle response from on-connect command.
      *
      * @param                         $response
-     * @param  CommandInterface       $command
-     * @return void
      * @throws CommunicationException
      */
     private function handleOnConnectResponse($response, CommandInterface $command): void
@@ -330,9 +321,6 @@ class StreamConnection extends AbstractConnection
     /**
      * Handle server errors.
      *
-     * @param  ErrorResponseInterface $error
-     * @param  CommandInterface       $failedCommand
-     * @return void
      * @throws CommunicationException
      */
     private function handleError(ErrorResponseInterface $error, CommandInterface $failedCommand): void
@@ -369,7 +357,6 @@ class StreamConnection extends AbstractConnection
      * Handles stream-related exceptions.
      *
      * @param  RuntimeException                        $e
-     * @param  string|null                             $message
      * @throws RuntimeException|CommunicationException
      */
     protected function onStreamError($e, ?string $message = null)

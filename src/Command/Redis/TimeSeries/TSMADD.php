@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TSMADD extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TS.MADD';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             for ($i = 0, $l = count($arguments); $i < $l; $i += 3) {

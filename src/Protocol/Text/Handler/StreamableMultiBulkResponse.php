@@ -31,7 +31,7 @@ class StreamableMultiBulkResponse implements ResponseHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(CompositeConnectionInterface $connection, $payload)
+    public function handle(CompositeConnectionInterface $connection, $payload): \Predis\Response\Iterator\MultiBulk
     {
         $length = (int) $payload;
 

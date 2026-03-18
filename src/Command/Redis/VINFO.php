@@ -17,9 +17,6 @@ use Predis\Command\Redis\Utils\CommandUtility;
 
 class VINFO extends RedisCommand
 {
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return 'VINFO';
@@ -27,7 +24,6 @@ class VINFO extends RedisCommand
 
     /**
      * @param             $data
-     * @return array|null
      */
     public function parseResponse($data): ?array
     {

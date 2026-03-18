@@ -17,7 +17,7 @@ use Predis\Command\Argument\Geospatial\ByInterface;
 
 trait GeoBy
 {
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentPositionOffset = $this->getByArgumentPositionOffset($arguments);
 

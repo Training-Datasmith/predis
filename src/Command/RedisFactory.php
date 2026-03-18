@@ -31,9 +31,9 @@ class RedisFactory extends Factory
     public function __construct()
     {
         $this->commands = [
-            'ECHO' => 'Predis\Command\Redis\ECHO_',
-            'EVAL' => 'Predis\Command\Redis\EVAL_',
-            'OBJECT' => 'Predis\Command\Redis\OBJECT_',
+            'ECHO' => \Predis\Command\Redis\ECHO_::class,
+            'EVAL' => \Predis\Command\Redis\EVAL_::class,
+            'OBJECT' => \Predis\Command\Redis\OBJECT_::class,
             // Class name corresponds to PHP reserved word "function", added mapping to bypass restrictions
             'FUNCTION' => FUNCTIONS::class,
         ];

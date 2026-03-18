@@ -52,7 +52,7 @@ class CompositeStreamConnection extends StreamConnection implements CompositeCon
     /**
      * {@inheritdoc}
      */
-    public function writeBuffer($buffer)
+    public function writeBuffer($buffer): void
     {
         $this->write($buffer);
     }
@@ -60,7 +60,7 @@ class CompositeStreamConnection extends StreamConnection implements CompositeCon
     /**
      * {@inheritdoc}
      */
-    public function readBuffer($length)
+    public function readBuffer($length): string
     {
         if ($length <= 0) {
             throw new InvalidArgumentException('Length parameter must be greater than 0.');
@@ -89,7 +89,7 @@ class CompositeStreamConnection extends StreamConnection implements CompositeCon
     /**
      * {@inheritdoc}
      */
-    public function readLine()
+    public function readLine(): string
     {
         $value = '';
         $stream = $this->getResource();
@@ -114,7 +114,7 @@ class CompositeStreamConnection extends StreamConnection implements CompositeCon
     /**
      * {@inheritdoc}
      */
-    public function writeRequest(CommandInterface $command)
+    public function writeRequest(CommandInterface $command): void
     {
         $this->protocol->write($this, $command);
     }

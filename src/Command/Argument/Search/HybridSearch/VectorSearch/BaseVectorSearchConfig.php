@@ -45,7 +45,6 @@ abstract class BaseVectorSearchConfig implements ArrayableArgument
      *
      * @param  string $field The vector field name to search against. Must start with "@".
      * @param  string $value Name of the parameter to use in the query. Must start with "$".
-     * @return self
      */
     public function vector(string $field, string $value): self
     {
@@ -55,7 +54,6 @@ abstract class BaseVectorSearchConfig implements ArrayableArgument
     }
 
     /**
-     * @param  string $expression
      * @return $this
      */
     public function filter(string $expression): self
@@ -66,7 +64,6 @@ abstract class BaseVectorSearchConfig implements ArrayableArgument
     }
 
     /**
-     * @param  string $alias
      * @return $this
      */
     public function as(string $alias): self

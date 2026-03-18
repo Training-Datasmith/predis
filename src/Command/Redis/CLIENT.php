@@ -25,12 +25,12 @@ class CLIENT extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'CLIENT';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         switch ($arguments[0]) {
             case 'LIST':
@@ -123,10 +123,8 @@ class CLIENT extends RedisCommand
      * Parses the response to CLIENT LIST and returns a structured list.
      *
      * @param string $data Response buffer.
-     *
-     * @return array
      */
-    protected function parseClientList($data)
+    protected function parseClientList($data): array
     {
         $clients = [];
 

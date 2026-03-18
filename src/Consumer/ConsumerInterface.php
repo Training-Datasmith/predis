@@ -18,23 +18,15 @@ use ReturnTypeWillChange;
 
 interface ConsumerInterface extends Iterator
 {
-    /**
-     * @param ClientInterface $client
-     */
     public function __construct(ClientInterface $client);
 
     /**
      * Stops consumer loop, with optional client disconnection.
-     *
-     * @param  bool $drop
-     * @return bool
      */
     public function stop(bool $drop = false): bool;
 
     /**
      * Returns consumer client instance.
-     *
-     * @return ClientInterface
      */
     public function getClient(): ClientInterface;
 

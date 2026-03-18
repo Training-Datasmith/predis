@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class SSUBSCRIBE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'SSUBSCRIBE';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForAllArguments($prefix);
     }

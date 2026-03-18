@@ -25,7 +25,7 @@ trait ByLexByScore
         'byscore' => 'BYSCORE',
     ];
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) <= static::$byLexByScoreArgumentPositionOffset || false === $arguments[static::$byLexByScoreArgumentPositionOffset]) {
             parent::setArguments($arguments);

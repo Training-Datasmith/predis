@@ -27,7 +27,6 @@ class LinearCombineConfig extends BaseCombine
     /**
      * The weight for the text score (a value between 0 and 1).
      *
-     * @param  float $alpha
      * @return $this
      */
     public function alpha(float $alpha): self
@@ -40,7 +39,6 @@ class LinearCombineConfig extends BaseCombine
     /**
      * The weight for the vector score (a value between 0 and 1).
      *
-     * @param  float $beta
      * @return $this
      */
     public function beta(float $beta): self

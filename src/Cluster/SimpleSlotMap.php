@@ -32,10 +32,8 @@ class SimpleSlotMap implements ArrayAccess, IteratorAggregate, Countable
      * Checks if the given slot is valid.
      *
      * @param int $slot Slot index.
-     *
-     * @return bool
      */
-    public static function isValid($slot)
+    public static function isValid($slot): bool
     {
         return $slot >= 0x0000 && $slot <= 0x3FFF;
     }
@@ -45,10 +43,8 @@ class SimpleSlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @param int $first Initial slot of the range.
      * @param int $last  Last slot of the range.
-     *
-     * @return bool
      */
-    public static function isValidRange($first, $last)
+    public static function isValidRange($first, $last): bool
     {
         return $first >= 0x0000 && $first <= 0x3FFF && $last >= 0x0000 && $last <= 0x3FFF && $first <= $last;
     }
@@ -56,17 +52,15 @@ class SimpleSlotMap implements ArrayAccess, IteratorAggregate, Countable
     /**
      * Resets the slot map.
      */
-    public function reset()
+    public function reset(): void
     {
         $this->slots = [];
     }
 
     /**
      * Checks if the slot map is empty.
-     *
-     * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return empty($this->slots);
     }
@@ -85,10 +79,8 @@ class SimpleSlotMap implements ArrayAccess, IteratorAggregate, Countable
 
     /**
      * Returns the list of unique nodes in the slot map.
-     *
-     * @return array
      */
-    public function getNodes()
+    public function getNodes(): array
     {
         return array_keys(array_flip($this->slots));
     }
@@ -102,7 +94,7 @@ class SimpleSlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @throws OutOfBoundsException
      */
-    public function setSlots($first, $last, $connection)
+    public function setSlots($first, $last, $connection): void
     {
         if (!static::isValidRange($first, $last)) {
             throw new OutOfBoundsException("Invalid slot range $first-$last for `$connection`");
@@ -116,10 +108,8 @@ class SimpleSlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @param int $first Initial slot of the range.
      * @param int $last  Last slot of the range.
-     *
-     * @return array
      */
-    public function getSlots($first, $last)
+    public function getSlots($first, $last): array
     {
         if (!static::isValidRange($first, $last)) {
             throw new OutOfBoundsException("Invalid slot range $first-$last");
@@ -159,11 +149,9 @@ class SimpleSlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @param int                            $slot       Slot index.
      * @param NodeConnectionInterface|string $connection ID or connection instance.
-     *
-     * @return void
      */
     #[ReturnTypeWillChange]
-    public function offsetSet($slot, $connection)
+    public function offsetSet($slot, $connection): void
     {
         if (!static::isValid($slot)) {
             throw new OutOfBoundsException("Invalid slot $slot for `$connection`");
@@ -176,11 +164,9 @@ class SimpleSlotMap implements ArrayAccess, IteratorAggregate, Countable
      * Returns the node assigned to the specified slot.
      *
      * @param int $slot Slot index.
-     *
-     * @return void
      */
     #[ReturnTypeWillChange]
-    public function offsetUnset($slot)
+    public function offsetUnset($slot): void
     {
         unset($this->slots[$slot]);
     }

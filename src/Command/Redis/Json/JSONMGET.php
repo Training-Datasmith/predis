@@ -16,12 +16,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
 
 class JSONMGET extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'JSON.MGET';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $unpackedArguments = [];
 
@@ -34,7 +34,7 @@ class JSONMGET extends RedisCommand
         parent::setArguments($unpackedArguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixSkippingLastArgument($prefix);
     }

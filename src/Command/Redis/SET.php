@@ -22,12 +22,12 @@ class SET extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'SET';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         foreach ($arguments as $index => $value) {
             if ($index < 2) {
@@ -42,7 +42,7 @@ class SET extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

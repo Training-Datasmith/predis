@@ -47,18 +47,18 @@ class HSETEX extends RedisCommand
         self::SET_FXX => 'FXX',
     ];
 
-    public function getId()
+    public function getId(): string
     {
         return 'HSETEX';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0]];
         $flatArray = [];
 
         // Convert key => value, into key, value
-        array_walk($arguments[1], static function ($value, $key) use (&$flatArray) {
+        array_walk($arguments[1], static function ($value, $key) use (&$flatArray): void {
             array_push($flatArray, $key, $value);
         });
 

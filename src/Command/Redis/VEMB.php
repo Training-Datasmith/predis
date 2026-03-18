@@ -21,19 +21,12 @@ class VEMB extends RedisCommand
      */
     private $isRaw = false;
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return 'VEMB';
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], $arguments[1]];
 
@@ -49,10 +42,10 @@ class VEMB extends RedisCommand
      * @param                            $data
      * @return array|float[]|string|null
      */
-    public function parseResponse($data)
+    public function parseResponse($data): array
     {
         if (!$this->isRaw) {
-            return array_map(static function ($value) { return (float) $value; }, $data);
+            return array_map(static function ($value): float { return (float) $value; }, $data);
         }
 
         $parsedData = [];

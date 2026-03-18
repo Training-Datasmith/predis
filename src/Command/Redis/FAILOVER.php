@@ -28,12 +28,12 @@ class FAILOVER extends RedisCommand
     protected static $toArgumentPositionOffset = 0;
     protected static $timeoutArgumentPositionOffset = 2;
 
-    public function getId()
+    public function getId(): string
     {
         return 'FAILOVER';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (array_key_exists(1, $arguments) && false !== $arguments[1]) {
             $arguments[1] = 'ABORT';

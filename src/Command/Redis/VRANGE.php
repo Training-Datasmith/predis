@@ -16,19 +16,15 @@ use Predis\Command\PrefixableCommand as RedisCommand;
 
 class VRANGE extends RedisCommand
 {
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return 'VRANGE';
     }
 
     /**
      * @param       $prefix
-     * @return void
      */
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

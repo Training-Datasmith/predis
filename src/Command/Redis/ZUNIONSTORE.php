@@ -39,7 +39,7 @@ class ZUNIONSTORE extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZUNIONSTORE';
     }
@@ -47,7 +47,7 @@ class ZUNIONSTORE extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         // support old `$options` array for backwards compatibility
         if (!isset($arguments[3]) && (isset($arguments[2]['weights']) || isset($arguments[2]['aggregate']))) {
@@ -65,7 +65,7 @@ class ZUNIONSTORE extends RedisCommand
         $this->setKeys($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             $arguments[0] = "$prefix{$arguments[0]}";

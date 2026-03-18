@@ -31,11 +31,11 @@ class Factory implements FactoryInterface
     private $upstreamDriver;
 
     protected $schemes = [
-        'tcp' => 'Predis\Connection\StreamConnection',
-        'unix' => 'Predis\Connection\StreamConnection',
-        'tls' => 'Predis\Connection\StreamConnection',
-        'redis' => 'Predis\Connection\StreamConnection',
-        'rediss' => 'Predis\Connection\StreamConnection',
+        'tcp' => \Predis\Connection\StreamConnection::class,
+        'unix' => \Predis\Connection\StreamConnection::class,
+        'tls' => \Predis\Connection\StreamConnection::class,
+        'redis' => \Predis\Connection\StreamConnection::class,
+        'rediss' => \Predis\Connection\StreamConnection::class,
     ];
 
     /**
@@ -56,7 +56,7 @@ class Factory implements FactoryInterface
 
         $class = new ReflectionClass($initializer);
 
-        if (!$class->isSubclassOf('Predis\Connection\NodeConnectionInterface')) {
+        if (!$class->isSubclassOf(\Predis\Connection\NodeConnectionInterface::class)) {
             throw new InvalidArgumentException(
                 'A connection initializer must be a valid connection class or a callable object.'
             );
@@ -68,7 +68,7 @@ class Factory implements FactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function define($scheme, $initializer)
+    public function define($scheme, $initializer): void
     {
         $this->schemes[$scheme] = $this->checkInitializer($initializer);
     }
@@ -76,7 +76,7 @@ class Factory implements FactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function undefine($scheme)
+    public function undefine($scheme): void
     {
         unset($this->schemes[$scheme]);
     }
@@ -123,7 +123,7 @@ class Factory implements FactoryInterface
      *
      * @param array $parameters Set of connection parameters.
      */
-    public function setDefaultParameters(array $parameters)
+    public function setDefaultParameters(array $parameters): void
     {
         $this->defaults = $parameters;
     }
@@ -150,8 +150,6 @@ class Factory implements FactoryInterface
 
     /**
      * Returns the configured upstream driver.
-     *
-     * @return string|null
      */
     public function getUpstreamDriver(): ?string
     {
@@ -165,7 +163,7 @@ class Factory implements FactoryInterface
      *
      * @return ParametersInterface
      */
-    protected function createParameters($parameters)
+    protected function createParameters($parameters): \Predis\Connection\Parameters
     {
         if (is_string($parameters)) {
             $parameters = Parameters::parse($parameters);
@@ -225,8 +223,6 @@ class Factory implements FactoryInterface
 
     /**
      * Builds the library name string for CLIENT SETINFO.
-     *
-     * @return string
      */
     protected function buildLibraryName(): string
     {

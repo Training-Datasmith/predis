@@ -82,7 +82,7 @@ class MultiBulkTuple extends MultiBulk implements OuterIterator
     /**
      * {@inheritdoc}
      */
-    protected function getValue()
+    protected function getValue(): array
     {
         $k = $this->iterator->current();
         $this->iterator->next();

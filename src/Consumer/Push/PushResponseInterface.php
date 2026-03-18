@@ -23,15 +23,11 @@ interface PushResponseInterface extends ResponseInterface
 
     /**
      * Returns PUSH notification data type.
-     *
-     * @return string
      */
     public function getDataType(): string;
 
     /**
      * Returns PUSH notification payload.
-     *
-     * @return array
      */
     public function getPayload(): array;
 }

@@ -99,8 +99,6 @@ class DispatcherLoop extends AbstractDispatcherLoop
 
     /**
      * Return the prefix used for keys.
-     *
-     * @return string
      */
     protected function getPrefixKeys(): string
     {

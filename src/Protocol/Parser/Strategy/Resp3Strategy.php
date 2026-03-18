@@ -47,8 +47,6 @@ class Resp3Strategy extends Resp2Strategy
 
     /**
      * Parse null RESP3 type.
-     *
-     * @return null
      */
     protected function parseNull(string $string)
     {
@@ -57,9 +55,6 @@ class Resp3Strategy extends Resp2Strategy
 
     /**
      * Parse double RESP3 type.
-     *
-     * @param  string $string
-     * @return float
      */
     protected function parseDouble(string $string): float
     {
@@ -72,9 +67,6 @@ class Resp3Strategy extends Resp2Strategy
 
     /**
      * Parse boolean RESP3 type.
-     *
-     * @param  string $string
-     * @return bool
      */
     protected function parseBoolean(string $string): bool
     {
@@ -83,9 +75,6 @@ class Resp3Strategy extends Resp2Strategy
 
     /**
      * Parse blob error RESP3 type.
-     *
-     * @param  string $string
-     * @return array
      */
     protected function parseBlobError(string $string): array
     {
@@ -97,9 +86,6 @@ class Resp3Strategy extends Resp2Strategy
 
     /**
      * Parse verbatim string RESP3 type.
-     *
-     * @param  string $string
-     * @return array
      */
     protected function parseVerbatimString(string $string): array
     {
@@ -114,7 +100,6 @@ class Resp3Strategy extends Resp2Strategy
      * Parse big number RESP3 type.
      * Depends on PHP environment returns float on numbers that reaches max integer limit.
      *
-     * @param  string    $string
      * @return int|float
      */
     protected function parseBigNumber(string $string)
@@ -128,9 +113,6 @@ class Resp3Strategy extends Resp2Strategy
 
     /**
      * Parse map RESP3 type.
-     *
-     * @param  string $string
-     * @return array
      */
     protected function parseMap(string $string): array
     {
@@ -142,9 +124,6 @@ class Resp3Strategy extends Resp2Strategy
 
     /**
      * Parse set RESP3 type.
-     *
-     * @param  string $string
-     * @return array
      */
     protected function parseSet(string $string): array
     {
@@ -156,9 +135,6 @@ class Resp3Strategy extends Resp2Strategy
 
     /**
      * Parse push RESP3 type.
-     *
-     * @param  string $string
-     * @return array
      */
     protected function parsePush(string $string): array
     {

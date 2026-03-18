@@ -21,12 +21,12 @@ use Predis\Command\Command as RedisCommand;
  */
 class TSMRANGE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TS.MRANGE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$fromTimestamp, $toTimestamp] = $arguments;
         $commandArguments = $arguments[2]->toArray();

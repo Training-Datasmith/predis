@@ -22,7 +22,7 @@ class SENTINEL extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'SENTINEL';
     }
@@ -49,10 +49,8 @@ class SENTINEL extends RedisCommand
      * Returns a processed response to SENTINEL MASTERS or SENTINEL SLAVES.
      *
      * @param array $servers List of Redis servers.
-     *
-     * @return array
      */
-    protected static function processMastersOrSlaves(array $servers)
+    protected static function processMastersOrSlaves(array $servers): array
     {
         foreach ($servers as $idx => $node) {
             $processed = [];

@@ -40,9 +40,6 @@ class SpellcheckArguments extends CommonArguments
     /**
      * Specifies an inclusion (INCLUDE) or exclusion (EXCLUDE) of a custom dictionary named {dict}.
      *
-     * @param  string $dictionary
-     * @param  string $modifier
-     * @param  string ...$terms
      * @return $this
      */
     public function terms(string $dictionary, string $modifier = 'INCLUDE', string ...$terms): self

@@ -62,12 +62,10 @@ class Parameters implements ParametersInterface
      * Filters parameters removing entries with NULL or 0-length string values.
      *
      * @param array $parameters Array of parameters to be filtered
-     *
-     * @return array
      */
-    protected function filter(array $parameters)
+    protected function filter(array $parameters): array
     {
-        return array_filter($parameters, static function ($value) {
+        return array_filter($parameters, static function ($value): bool {
             return $value !== null && $value !== '';
         });
     }
@@ -77,10 +75,8 @@ class Parameters implements ParametersInterface
      * form of an URI string or a named array.
      *
      * @param array|string $parameters Set of connection parameters.
-     *
-     * @return Parameters
      */
-    public static function create($parameters)
+    public static function create($parameters): self
     {
         if (is_string($parameters)) {
             $parameters = static::parse($parameters);
@@ -180,7 +176,7 @@ class Parameters implements ParametersInterface
         }
     }
 
-    public function __set($parameter, $value)
+    public function __set(string $parameter, $value)
     {
         $this->parameters[$parameter] = $value;
     }
@@ -196,7 +192,7 @@ class Parameters implements ParametersInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         if ($this->scheme === 'unix') {
             return "$this->scheme:$this->path";
@@ -211,8 +207,6 @@ class Parameters implements ParametersInterface
 
     /**
      * Returns if retries is disabled.
-     *
-     * @return bool
      */
     public function isDisabledRetry(): bool
     {

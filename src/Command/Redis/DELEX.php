@@ -19,7 +19,7 @@ class DELEX extends PrefixableCommand
     /**
      * {@inheritDoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'DELEX';
     }
@@ -27,7 +27,7 @@ class DELEX extends PrefixableCommand
     /**
      * {@inheritDoc}
      */
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

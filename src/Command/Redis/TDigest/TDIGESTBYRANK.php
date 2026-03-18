@@ -21,7 +21,7 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TDIGESTBYRANK extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TDIGEST.BYRANK';
     }
@@ -53,7 +53,7 @@ class TDIGESTBYRANK extends RedisCommand
         }, $data);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

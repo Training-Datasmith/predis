@@ -32,12 +32,14 @@ class Commands implements OptionInterface
         if (is_callable($value)) {
             $value = call_user_func($value, $options);
         }
-
         if ($value instanceof FactoryInterface) {
             return $value;
-        } elseif (is_array($value)) {
+        }
+        if (is_array($value)) {
             return $this->createFactoryByArray($options, $value);
-        } elseif (is_string($value)) {
+        }
+
+        if (is_string($value)) {
             return $this->createFactoryByString($options, $value);
         }
         throw new InvalidArgumentException(sprintf(
@@ -132,7 +134,7 @@ class Commands implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options)
+    public function getDefault(OptionsInterface $options): \Predis\Command\RedisFactory
     {
         $commands = new RedisFactory();
 

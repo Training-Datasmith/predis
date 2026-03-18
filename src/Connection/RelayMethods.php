@@ -29,7 +29,6 @@ trait RelayMethods
      * Registers a new `invalidated` event listener.
      *
      * @param  callable    $callback
-     * @param  string|null $pattern
      * @return bool
      */
     public function onInvalidated(?callable $callback, ?string $pattern = null)
@@ -125,8 +124,6 @@ trait RelayMethods
      * When given an endpoint and database index, only that database
      * for that connection will be flushed.
      *
-     * @param  ?string $endpointId
-     * @param  ?int    $db
      * @return bool
      */
     public function flushMemory(?string $endpointId = null, ?int $db = null)

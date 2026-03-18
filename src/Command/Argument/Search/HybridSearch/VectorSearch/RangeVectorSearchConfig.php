@@ -29,7 +29,6 @@ class RangeVectorSearchConfig extends BaseVectorSearchConfig
     /**
      * The search radius/threshold. Finds all vectors within this distance.
      *
-     * @param  int   $radius
      * @return $this
      */
     public function radius(int $radius): self
@@ -40,7 +39,6 @@ class RangeVectorSearchConfig extends BaseVectorSearchConfig
     }
 
     /**
-     * @param  float $epsilon
      * @return $this
      */
     public function epsilon(float $epsilon): self

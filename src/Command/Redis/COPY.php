@@ -32,12 +32,12 @@ class COPY extends RedisCommand
 
     protected static $dbArgumentPositionOffset = 2;
 
-    public function getId()
+    public function getId(): string
     {
         return 'COPY';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setDB($arguments);
         $arguments = $this->getArguments();

@@ -19,7 +19,6 @@ use Predis\Consumer\AbstractConsumer;
 class Consumer extends AbstractConsumer
 {
     /**
-     * @param ClientInterface $client
      * @param callable|null   $preLoopCallback Callback that should be called on client before enter a loop.
      */
     public function __construct(ClientInterface $client, ?callable $preLoopCallback = null)
@@ -31,9 +30,6 @@ class Consumer extends AbstractConsumer
         }
     }
 
-    /**
-     * @return PushResponseInterface|null
-     */
     public function current(): ?PushResponseInterface
     {
         return parent::current();
@@ -41,8 +37,6 @@ class Consumer extends AbstractConsumer
 
     /**
      * Reads line from connection and returns push response or null on any other type.
-     *
-     * @return PushResponseInterface|null
      */
     protected function getValue(): ?PushResponseInterface
     {

@@ -22,7 +22,7 @@ class PUBSUB extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'PUBSUB';
     }
@@ -45,10 +45,8 @@ class PUBSUB extends RedisCommand
      * Returns the processed response to PUBSUB NUMSUB.
      *
      * @param array $channels List of channels
-     *
-     * @return array
      */
-    protected static function processNumsub(array $channels)
+    protected static function processNumsub(array $channels): array
     {
         $processed = [];
         $count = count($channels);

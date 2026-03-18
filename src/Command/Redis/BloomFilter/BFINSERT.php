@@ -43,17 +43,17 @@ class BFINSERT extends RedisCommand
     protected static $noCreateArgumentPositionOffset = 4;
     protected static $itemsArgumentPositionOffset = 6;
 
-    public function getId()
+    public function getId(): string
     {
         return 'BF.INSERT';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setNoCreate($arguments);
         $arguments = $this->getArguments();

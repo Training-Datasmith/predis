@@ -52,7 +52,7 @@ class Atomic extends Pipeline
         $connection = $this->getClient()->getConnection();
 
         if (!$connection instanceof NodeConnectionInterface) {
-            $class = __CLASS__;
+            $class = self::class;
 
             throw new ClientException("The class '$class' does not support aggregate connections.");
         }
@@ -62,16 +62,17 @@ class Atomic extends Pipeline
 
     /**
      * {@inheritdoc}
+     * @return mixed[]
      */
-    protected function executePipeline(ConnectionInterface $connection, SplQueue $commands)
+    protected function executePipeline(ConnectionInterface $connection, SplQueue $commands): array
     {
         $commandFactory = $this->getClient()->getCommandFactory();
         $retry = $connection->getParameters()->retry;
         $this->executeCommandWithRetry($connection, $commandFactory->create('multi'));
 
-        $retry->callWithRetry(function () use ($connection, $commands) {
+        $retry->callWithRetry(function () use ($connection, $commands): void {
             $this->queuePipeline($connection, $commands);
-        }, static function (Throwable $exception) {
+        }, static function (Throwable $exception): void {
             if ($exception instanceof CommunicationException) {
                 $exception->getConnection()->disconnect();
             }
@@ -122,8 +123,6 @@ class Atomic extends Pipeline
     }
 
     /**
-     * @param  ConnectionInterface $connection
-     * @param  SplQueue            $commands
      * @return void
      * @throws Throwable
      */
@@ -143,7 +142,6 @@ class Atomic extends Pipeline
     }
 
     /**
-     * @param  ConnectionInterface $connection
      * @param  Command             $command
      * @return mixed
      * @throws Throwable
@@ -154,7 +152,7 @@ class Atomic extends Pipeline
 
         return $retry->callWithRetry(static function () use ($connection, $command) {
             return $connection->executeCommand($command);
-        }, static function (Throwable $e) {
+        }, static function (Throwable $e): void {
             if ($e instanceof CommunicationException) {
                 $e->getConnection()->disconnect();
             }

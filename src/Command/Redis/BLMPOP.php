@@ -18,7 +18,7 @@ class BLMPOP extends LMPOP
     protected static $leftRightArgumentPositionOffset = 2;
     protected static $countArgumentPositionOffset = 3;
 
-    public function getId()
+    public function getId(): string
     {
         return 'BLMPOP';
     }

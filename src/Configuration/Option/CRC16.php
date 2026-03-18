@@ -30,7 +30,7 @@ class CRC16 implements OptionInterface
      *
      * @return callable
      */
-    protected function getHashGeneratorByDescription(OptionsInterface $options, $description)
+    protected function getHashGeneratorByDescription(OptionsInterface $options, $description): \Predis\Cluster\Hash\CRC16
     {
         if ($description === 'predis') {
             return new Hash\CRC16();
@@ -48,10 +48,11 @@ class CRC16 implements OptionInterface
         if (is_callable($value)) {
             $value = call_user_func($value, $options);
         }
-
         if (is_string($value)) {
             return $this->getHashGeneratorByDescription($options, $value);
-        } elseif ($value instanceof Hash\HashGeneratorInterface) {
+        }
+
+        if ($value instanceof Hash\HashGeneratorInterface) {
             return $value;
         }
         $class = get_class($this);
@@ -61,7 +62,7 @@ class CRC16 implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options)
+    public function getDefault(OptionsInterface $options): \Predis\Cluster\Hash\CRC16
     {
         return new Hash\CRC16();
     }

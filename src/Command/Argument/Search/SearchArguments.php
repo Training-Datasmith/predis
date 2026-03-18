@@ -88,7 +88,6 @@ class SearchArguments extends CommonArguments
     /**
      * Limits the result to a given set of keys specified in the list.
      *
-     * @param  array $keys
      * @return $this
      */
     public function inKeys(array $keys): self
@@ -103,7 +102,6 @@ class SearchArguments extends CommonArguments
     /**
      * Filters the results to those appearing only in specific attributes of the document, like title or URL.
      *
-     * @param  array $fields
      * @return $this
      */
     public function inFields(array $fields): self
@@ -127,7 +125,6 @@ class SearchArguments extends CommonArguments
      *
      * Example: 'identifier', true, 'property' => 'identifier' AS 'property'
      *
-     * @param  int         $count
      * @param  string|bool ...$identifier
      * @return $this
      */
@@ -151,10 +148,6 @@ class SearchArguments extends CommonArguments
     /**
      * Returns only the sections of the attribute that contain the matched text.
      *
-     * @param  array  $fields
-     * @param  int    $frags
-     * @param  int    $len
-     * @param  string $separator
      * @return $this
      */
     public function summarize(array $fields = [], int $frags = 0, int $len = 0, string $separator = ''): self
@@ -188,9 +181,6 @@ class SearchArguments extends CommonArguments
     /**
      * Formats occurrences of matched text.
      *
-     * @param  array  $fields
-     * @param  string $openTag
-     * @param  string $closeTag
      * @return $this
      */
     public function highlight(array $fields = [], string $openTag = '', string $closeTag = ''): self
@@ -214,7 +204,6 @@ class SearchArguments extends CommonArguments
      * Allows a maximum of N intervening number of unmatched offsets between phrase terms.
      * In other words, the slop for exact phrases is 0.
      *
-     * @param  int   $slop
      * @return $this
      */
     public function slop(int $slop): self
@@ -241,7 +230,6 @@ class SearchArguments extends CommonArguments
     /**
      * Uses a custom query expander instead of the stemmer.
      *
-     * @param  string $expander
      * @return $this
      */
     public function expander(string $expander): self
@@ -255,7 +243,6 @@ class SearchArguments extends CommonArguments
     /**
      * Uses a custom scoring function you define.
      *
-     * @param  string $scorer
      * @return $this
      */
     public function scorer(string $scorer): self
@@ -285,8 +272,6 @@ class SearchArguments extends CommonArguments
      * Attributes needed for SORTBY should be declared as SORTABLE in the index, in order to be available with very low latency.
      * Note that this adds memory overhead.
      *
-     * @param  string $sortAttribute
-     * @param  string $orderBy
      * @return $this
      */
     public function sortBy(string $sortAttribute, string $orderBy = 'asc'): self

@@ -48,7 +48,7 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
      * @param mixed $node   Node object.
      * @param int   $weight Weight for the node.
      */
-    public function add($node, $weight = null)
+    public function add($node, $weight = null): void
     {
         // In case of collisions in the hashes of the nodes, the node added
         // last wins, thus the order in which nodes are added is significant.
@@ -63,7 +63,7 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function remove($node)
+    public function remove($node): void
     {
         // A node is removed by resetting the ring so that it's recreated from
         // scratch, in order to reassign possible hashes with collisions to the
@@ -82,7 +82,7 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
     /**
      * Resets the distributor.
      */
-    private function reset()
+    private function reset(): void
     {
         unset(
             $this->ring,
@@ -93,10 +93,8 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
 
     /**
      * Returns the initialization status of the distributor.
-     *
-     * @return bool
      */
-    private function isInitialized()
+    private function isInitialized(): bool
     {
         return isset($this->ringKeys);
     }
@@ -120,7 +118,7 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
     /**
      * Initializes the distributor.
      */
-    private function initialize()
+    private function initialize(): void
     {
         if ($this->isInitialized()) {
             return;
@@ -153,7 +151,7 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
      * @param int   $replicas    Number of replicas in the ring.
      * @param float $weightRatio Weight ratio for the node.
      */
-    protected function addNodeToRing(&$ring, $node, $totalNodes, $replicas, $weightRatio)
+    protected function addNodeToRing(array &$ring, array $node, $totalNodes, $replicas, $weightRatio)
     {
         $nodeObject = $node['object'];
         $nodeHash = $this->getNodeHash($nodeObject);
@@ -180,7 +178,7 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function hash($value)
+    public function hash($value): int
     {
         return crc32($value);
     }
@@ -261,7 +259,7 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function getHashGenerator()
+    public function getHashGenerator(): self
     {
         return $this;
     }

@@ -20,7 +20,7 @@ namespace Predis\Command\Redis;
  */
 class EVALSHA_RO extends EVAL_RO
 {
-    public function getId()
+    public function getId(): string
     {
         return 'EVALSHA_RO';
     }

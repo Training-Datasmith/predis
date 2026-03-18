@@ -21,7 +21,7 @@ trait ByArgument
 {
     private $byModifier = 'BY';
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
 

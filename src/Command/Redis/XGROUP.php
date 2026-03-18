@@ -22,12 +22,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class XGROUP extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'XGROUP';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         switch ($arguments[0]) {
             case 'CREATE':
@@ -45,10 +45,6 @@ class XGROUP extends RedisCommand
         }
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
     private function setCreateArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], $arguments[1], $arguments[2], $arguments[3]];
@@ -64,10 +60,6 @@ class XGROUP extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
     private function setSetIdArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], $arguments[1], $arguments[2], $arguments[3]];
@@ -79,7 +71,7 @@ class XGROUP extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $arguments = $this->getArguments();
         $arguments[1] = $prefix . $arguments[1];

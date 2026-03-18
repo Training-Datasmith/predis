@@ -47,7 +47,7 @@ class Handler implements SessionHandlerInterface
     /**
      * Registers this instance as the current session handler.
      */
-    public function register()
+    public function register(): void
     {
         session_set_save_handler($this, true);
     }

@@ -87,7 +87,7 @@ class Pipeline implements ClientContextInterface
      *
      * @return $this
      */
-    public function executeCommand(CommandInterface $command)
+    public function executeCommand(CommandInterface $command): self
     {
         $this->recordCommand($command);
 
@@ -142,10 +142,10 @@ class Pipeline implements ClientContextInterface
         $backupQueue = $this->createDeepCloneQueue($commands);
 
         return $retry->callWithRetry(
-            function () use ($connection, &$commands) {
+            function () use ($connection, &$commands): array {
                 return $this->executePipelineInternal($connection, $commands);
             },
-            function (Throwable $e) use (&$commands, $backupQueue, $connection) {
+            function (Throwable $e) use (&$commands, $backupQueue, $connection): void {
                 if (!$e instanceof CommunicationException) {
                     throw $e;
                 }
@@ -165,9 +165,6 @@ class Pipeline implements ClientContextInterface
     }
 
     /**
-     * @param  ConnectionInterface $connection
-     * @param  SplQueue            $commands
-     * @return array
      * @throws ServerException
      * @throws Throwable
      */
@@ -212,9 +209,6 @@ class Pipeline implements ClientContextInterface
 
     /**
      * Creates a deep copy of commands queue for backup.
-     *
-     * @param  SplQueue $queue
-     * @return SplQueue
      */
     private function createDeepCloneQueue(SplQueue $queue): SplQueue
     {
@@ -230,8 +224,6 @@ class Pipeline implements ClientContextInterface
     /**
      * Writes pipelined commands to single node connection.
      *
-     * @param  ConnectionInterface $connection
-     * @param  SplQueue            $commands
      * @return void
      * @throws Throwable
      */
@@ -249,14 +241,12 @@ class Pipeline implements ClientContextInterface
     /**
      * Writes pipelined commands to multi node connection.
      *
-     * @param  AggregateConnectionInterface $connection
-     * @param  SplQueue                     $commands
      * @return void
      * @throws Throwable
      */
     protected function writeToMultiNode(AggregateConnectionInterface $connection, SplQueue $commands)
     {
-        $retry = $connection->getParameters()->retry;
+        $connection->getParameters()->retry;
 
         foreach ($commands as $command) {
             $nodeConnection = $connection->getConnectionByCommand($command);
@@ -271,7 +261,7 @@ class Pipeline implements ClientContextInterface
      *
      * @return $this
      */
-    public function flushPipeline($send = true)
+    public function flushPipeline($send = true): self
     {
         if ($send && !$this->pipeline->isEmpty()) {
             $responses = $this->executePipeline($this->getConnection(), $this->pipeline);
@@ -290,7 +280,7 @@ class Pipeline implements ClientContextInterface
      *
      * @throws ClientException
      */
-    private function setRunning($bool)
+    private function setRunning(bool $bool): void
     {
         if ($bool && $this->running) {
             throw new ClientException('The current pipeline context is already being executed.');
@@ -338,10 +328,8 @@ class Pipeline implements ClientContextInterface
 
     /**
      * Returns if the pipeline should throw exceptions on server errors.
-     *
-     * @return bool
      */
-    protected function throwServerExceptions()
+    protected function throwServerExceptions(): bool
     {
         return (bool) $this->client->getOptions()->exceptions;
     }
@@ -359,11 +347,9 @@ class Pipeline implements ClientContextInterface
     /**
      * Handle aggregate connection exception.
      *
-     * @param  AggregateConnectionInterface $connection
      * @param  CommunicationException       $e
-     * @return void
      */
-    private function onAggregateConnectionFailCallback(AggregateConnectionInterface $connection, Throwable $e)
+    private function onAggregateConnectionFailCallback(AggregateConnectionInterface $connection, Throwable $e): void
     {
         if ($e instanceof ConnectionException) {
             $nodeConnection = $e->getConnection();

@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TDIGESTCREATE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TDIGEST.CREATE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (!empty($arguments[1])) {
             $arguments[2] = $arguments[1];
@@ -38,7 +38,7 @@ class TDIGESTCREATE extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

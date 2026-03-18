@@ -55,7 +55,7 @@ class CRC16 implements HashGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function hash($value)
+    public function hash($value): int
     {
         // CRC-CCITT-16 algorithm
         $crc = 0;

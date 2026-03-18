@@ -85,7 +85,7 @@ abstract class AbstractConsumer implements ConsumerInterface
     /**
      * {@inheritDoc}
      */
-    public function next()
+    public function next(): void
     {
         if ($this->valid()) {
             ++$this->position;
@@ -105,7 +105,7 @@ abstract class AbstractConsumer implements ConsumerInterface
      * {@inheritDoc}
      */
     #[ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         // NOOP
     }

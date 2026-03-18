@@ -21,16 +21,12 @@ class HOTKEYS extends RedisCommand
     /**
      * {@inheritDoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'HOTKEYS';
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         switch ($arguments[0]) {
             case 'START':
@@ -54,11 +50,7 @@ class HOTKEYS extends RedisCommand
         return $data;
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
-    private function setStartArguments(array $arguments)
+    private function setStartArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0]];
 

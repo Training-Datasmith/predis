@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TSCREATERULE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TS.CREATERULE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$sourceKey, $destKey, $aggregator, $bucketDuration] = $arguments;
         $processedArguments = [$sourceKey, $destKey, 'AGGREGATION', $aggregator, $bucketDuration];
@@ -38,7 +38,7 @@ class TSCREATERULE extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             $arguments[0] = $prefix . $arguments[0];

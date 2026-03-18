@@ -20,7 +20,7 @@ class MSETNX extends MSET
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'MSETNX';
     }

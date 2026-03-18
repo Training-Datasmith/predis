@@ -22,7 +22,7 @@ class SLAVEOF extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'SLAVEOF';
     }
@@ -30,7 +30,7 @@ class SLAVEOF extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) === 0 || $arguments[0] === 'NO ONE') {
             $arguments = ['NO', 'ONE'];

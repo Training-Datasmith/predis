@@ -19,12 +19,6 @@ class VectorField extends AbstractField
      */
     protected $fieldArguments = [];
 
-    /**
-     * @param string $fieldName
-     * @param string $algorithm
-     * @param array  $attributeNameValueDictionary
-     * @param string $alias
-     */
     public function __construct(
         string $fieldName,
         string $algorithm,

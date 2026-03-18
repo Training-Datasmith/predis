@@ -22,12 +22,12 @@ use Predis\Command\Command as RedisCommand;
  */
 class FUNCTIONS extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FUNCTION';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         switch ($arguments[0]) {
             case 'FLUSH':
@@ -53,10 +53,6 @@ class FUNCTIONS extends RedisCommand
         $this->filterArguments();
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
     private function setFlushArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0]];
@@ -68,10 +64,6 @@ class FUNCTIONS extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
     private function setListArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0]];
@@ -87,10 +79,6 @@ class FUNCTIONS extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
     private function setLoadArguments(array $arguments): void
     {
         if (count($arguments) <= 2) {
@@ -113,10 +101,6 @@ class FUNCTIONS extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
     private function setRestoreArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], $arguments[1]];

@@ -22,7 +22,7 @@ class SORT extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'SORT';
     }
@@ -30,7 +30,7 @@ class SORT extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) === 1) {
             parent::setArguments($arguments);
@@ -84,7 +84,7 @@ class SORT extends RedisCommand
         parent::setArguments($query);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             $arguments[0] = "$prefix{$arguments[0]}";

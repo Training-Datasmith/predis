@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class JSONARRPOP extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'JSON.ARRPOP';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

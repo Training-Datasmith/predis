@@ -14,7 +14,7 @@ namespace Predis\Command\Redis;
 
 class HPTTL extends HTTL
 {
-    public function getId()
+    public function getId(): string
     {
         return 'HPTTL';
     }

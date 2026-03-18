@@ -149,7 +149,6 @@ class HybridSearchQuery implements ArrayableArgument
     /**
      * The list of fields to return in the results.
      *
-     * @param  array $fields
      * @return $this
      */
     public function load(array $fields): self
@@ -160,7 +159,6 @@ class HybridSearchQuery implements ArrayableArgument
     }
 
     /**
-     * @param  array     $fields
      * @param  Reducer[] $reducers
      * @return $this
      */
@@ -213,7 +211,6 @@ class HybridSearchQuery implements ArrayableArgument
     /**
      * Final result filtering.
      *
-     * @param  string $expression
      * @return $this
      */
     public function filter(string $expression): self
@@ -224,8 +221,6 @@ class HybridSearchQuery implements ArrayableArgument
     }
 
     /**
-     * @param  int   $offset
-     * @param  int   $num
      * @return $this
      */
     public function limit(int $offset, int $num): self
@@ -238,7 +233,6 @@ class HybridSearchQuery implements ArrayableArgument
     /**
      * Binds values to named parameters in the query string.
      *
-     * @param  array $params
      * @return $this
      */
     public function params(array $params): self
@@ -270,8 +264,6 @@ class HybridSearchQuery implements ArrayableArgument
     }
 
     /**
-     * @param  int|null $readSize
-     * @param  int|null $idleTime
      * @return $this
      */
     public function withCursor(?int $readSize = null, ?int $idleTime = null): self

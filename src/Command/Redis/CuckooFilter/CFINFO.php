@@ -21,7 +21,7 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class CFINFO extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'CF.INFO';
     }
@@ -43,7 +43,7 @@ class CFINFO extends RedisCommand
         return $data;
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

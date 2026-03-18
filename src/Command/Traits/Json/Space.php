@@ -18,7 +18,7 @@ trait Space
 {
     private static $spaceModifier = 'SPACE';
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
 

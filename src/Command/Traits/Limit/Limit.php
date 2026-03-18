@@ -22,7 +22,7 @@ trait Limit
 {
     private static $limitModifier = 'LIMIT';
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
         $argumentsBefore = array_slice($arguments, 0, static::$limitArgumentPositionOffset);

@@ -24,12 +24,12 @@ class HEXPIRE extends RedisCommand
         'NX', 'XX', 'GT', 'LT',
     ];
 
-    public function getId()
+    public function getId(): string
     {
         return 'HEXPIRE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], $arguments[1]];
 
@@ -49,7 +49,7 @@ class HEXPIRE extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

@@ -82,10 +82,8 @@ class ReplicationStrategy
      * / slave replication context.
      *
      * @param CommandInterface $command Command instance.
-     *
-     * @return bool
      */
-    public function isDisallowedOperation(CommandInterface $command)
+    public function isDisallowedOperation(CommandInterface $command): bool
     {
         return isset($this->disallowed[$command->getId()]);
     }
@@ -95,10 +93,8 @@ class ReplicationStrategy
      * SET and INCRYBY modifiers in the arguments array of the command.
      *
      * @param CommandInterface $command Command instance.
-     *
-     * @return bool
      */
-    protected function isBitfieldReadOnly(CommandInterface $command)
+    protected function isBitfieldReadOnly(CommandInterface $command): bool
     {
         $arguments = $command->getArguments();
         $argc = count($arguments);
@@ -120,10 +116,8 @@ class ReplicationStrategy
      * arguments array of the specified command instance.
      *
      * @param CommandInterface $command Command instance.
-     *
-     * @return bool
      */
-    protected function isGeoradiusReadOnly(CommandInterface $command)
+    protected function isGeoradiusReadOnly(CommandInterface $command): bool
     {
         $arguments = $command->getArguments();
         $argc = count($arguments);
@@ -151,7 +145,7 @@ class ReplicationStrategy
      * @param string $commandID Command ID.
      * @param mixed  $readonly  A boolean value or a callable object.
      */
-    public function setCommandReadOnly($commandID, $readonly = true)
+    public function setCommandReadOnly($commandID, $readonly = true): void
     {
         $commandID = strtoupper($commandID);
 
@@ -172,7 +166,7 @@ class ReplicationStrategy
      * @param string $script   Body of the Lua script.
      * @param mixed  $readonly A boolean value or a callable object.
      */
-    public function setScriptReadOnly($script, $readonly = true)
+    public function setScriptReadOnly($script, $readonly = true): void
     {
         $sha1 = sha1($script);
 
@@ -185,10 +179,8 @@ class ReplicationStrategy
 
     /**
      * Returns the default list of disallowed commands.
-     *
-     * @return array
      */
-    protected function getDisallowedOperations()
+    protected function getDisallowedOperations(): array
     {
         return [
             'SHUTDOWN' => true,
@@ -207,10 +199,8 @@ class ReplicationStrategy
 
     /**
      * Returns the default list of commands performing read-only operations.
-     *
-     * @return array
      */
-    protected function getReadOnlyOperations()
+    protected function getReadOnlyOperations(): array
     {
         return [
             'EXISTS' => true,
@@ -281,8 +271,6 @@ class ReplicationStrategy
     /**
      * Disables reads to slaves when using
      * a replication topology.
-     *
-     * @return self
      */
     public function disableLoadBalancing(): self
     {

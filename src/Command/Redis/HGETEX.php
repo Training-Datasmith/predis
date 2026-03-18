@@ -35,12 +35,12 @@ class HGETEX extends RedisCommand
         self::PERSIST => 'PERSIST',
     ];
 
-    public function getId()
+    public function getId(): string
     {
         return 'HGETEX';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0]];
 

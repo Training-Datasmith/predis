@@ -106,7 +106,7 @@ abstract class AbstractConnection implements NodeConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         unset($this->resource);
     }
@@ -114,7 +114,7 @@ abstract class AbstractConnection implements NodeConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function addConnectCommand(CommandInterface $command)
+    public function addConnectCommand(CommandInterface $command): void
     {
         $this->initCommands[] = $command;
     }
@@ -162,8 +162,6 @@ abstract class AbstractConnection implements NodeConnectionInterface
     /**
      * Helper method to handle timeout errors.
      *
-     * @param  int                    $code
-     * @return void
      * @throws CommunicationException
      */
     protected function onTimeoutError(int $code = 0): void
@@ -233,7 +231,7 @@ abstract class AbstractConnection implements NodeConnectionInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         if (!isset($this->cachedId)) {
             $this->cachedId = $this->getIdentifier();
@@ -252,8 +250,6 @@ abstract class AbstractConnection implements NodeConnectionInterface
 
     /**
      * Set parser strategy for given connection.
-     *
-     * @return void
      */
     protected function setParserStrategy(): void
     {

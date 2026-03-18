@@ -38,12 +38,12 @@ class JSONGET extends RedisCommand
     protected static $newlineArgumentPositionOffset = 2;
     protected static $spaceArgumentPositionOffset = 3;
 
-    public function getId()
+    public function getId(): string
     {
         return 'JSON.GET';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setSpace($arguments);
         $arguments = $this->getArguments();
@@ -55,7 +55,7 @@ class JSONGET extends RedisCommand
         $this->filterArguments();
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

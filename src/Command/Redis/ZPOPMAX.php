@@ -22,15 +22,16 @@ class ZPOPMAX extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'ZPOPMAX';
     }
 
     /**
      * {@inheritdoc}
+     * @return mixed[]
      */
-    public function parseResponse($data)
+    public function parseResponse($data): array
     {
         $result = [];
 
@@ -64,7 +65,7 @@ class ZPOPMAX extends RedisCommand
         return $parsedData;
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

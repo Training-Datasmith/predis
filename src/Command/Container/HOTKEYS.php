@@ -24,9 +24,6 @@ class HOTKEYS extends AbstractContainer
     public const CPU = 'CPU';
     public const NET = 'NET';
 
-    /**
-     * @return string
-     */
     public function getContainerCommandId(): string
     {
         return 'HOTKEYS';

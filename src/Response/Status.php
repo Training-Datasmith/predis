@@ -32,10 +32,8 @@ class Status implements ResponseInterface
 
     /**
      * Converts the response object to its string representation.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->payload;
     }
@@ -65,11 +63,7 @@ class Status implements ResponseInterface
         switch ($payload) {
             case 'OK':
             case 'QUEUED':
-                if (isset(self::$$payload)) {
-                    return self::$$payload;
-                }
-
-                return self::$$payload = new self($payload);
+                return self::$$payload ?? self::$$payload = new self($payload);
 
             default:
                 return new self($payload);

@@ -23,12 +23,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class CMSMERGE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'CMS.MERGE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = array_merge([$arguments[0], count($arguments[1])], $arguments[1]);
 
@@ -40,7 +40,7 @@ class CMSMERGE extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             $arguments[0] = $prefix . $arguments[0];

@@ -20,7 +20,7 @@ use UnexpectedValueException;
  */
 trait Rev
 {
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) <= static::$revArgumentPositionOffset || false === $arguments[static::$revArgumentPositionOffset]) {
             parent::setArguments($arguments);

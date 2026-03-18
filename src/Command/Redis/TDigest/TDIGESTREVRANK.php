@@ -23,12 +23,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TDIGESTREVRANK extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TDIGEST.REVRANK';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

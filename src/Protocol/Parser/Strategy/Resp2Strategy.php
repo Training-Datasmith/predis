@@ -67,7 +67,6 @@ class Resp2Strategy implements ParserStrategyInterface
     /**
      * Parse simple string RESP type.
      *
-     * @param  string                $string
      * @return StatusResponse|string
      */
     protected function parseSimpleString(string $string)
@@ -81,9 +80,6 @@ class Resp2Strategy implements ParserStrategyInterface
 
     /**
      * Parse error RESP type.
-     *
-     * @param  string         $string
-     * @return ErrorInterface
      */
     protected function parseError(string $string): ErrorInterface
     {
@@ -92,9 +88,6 @@ class Resp2Strategy implements ParserStrategyInterface
 
     /**
      * Parse integer RESP type.
-     *
-     * @param  string $string
-     * @return int
      */
     protected function parseInteger(string $string): int
     {
@@ -104,7 +97,6 @@ class Resp2Strategy implements ParserStrategyInterface
     /**
      * Parse array RESP type.
      *
-     * @param  string $string
      * @return array
      */
     protected function parseArray(string $string): ?array
@@ -124,7 +116,6 @@ class Resp2Strategy implements ParserStrategyInterface
     /**
      * Parse bulk string RESP type.
      *
-     * @param  string $string
      * @return array
      */
     protected function parseBulkString(string $string): ?array

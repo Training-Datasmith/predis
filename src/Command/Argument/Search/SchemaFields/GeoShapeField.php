@@ -17,10 +17,7 @@ class GeoShapeField extends AbstractField
     public const COORD_FLAT = 'FLAT';
 
     /**
-     * @param string      $identifier
-     * @param string      $alias
      * @param bool|string $sortable
-     * @param bool        $noIndex
      * @param string|null $coordSystem Constants that represents available systems available on a class level.
      */
     public function __construct(

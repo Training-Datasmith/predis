@@ -21,12 +21,12 @@ use Predis\Command\Command as RedisCommand;
  */
 class LCS extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'LCS';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (isset($arguments[2]) && $arguments[2]) {
             $arguments[2] = 'LEN';

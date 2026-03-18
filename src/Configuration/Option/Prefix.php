@@ -42,7 +42,7 @@ class Prefix implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options)
+    public function getDefault(OptionsInterface $options): void
     {
         // NOOP
     }

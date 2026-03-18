@@ -20,12 +20,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class XREADGROUP extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'XREADGROUP';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = ['GROUP', $arguments[0], $arguments[1]];
 
@@ -63,7 +63,7 @@ class XREADGROUP extends RedisCommand
         return $result;
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $arguments = $this->getArguments();
         $keyIdsStartingIndex = array_search('STREAMS', $arguments) + 1;

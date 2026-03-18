@@ -18,16 +18,12 @@ interface ContainerInterface
      * Creates Redis container command with subcommand as virtual method name
      * and sends a request to the server.
      *
-     * @param  string $subcommandID
-     * @param  array  $arguments
      * @return mixed
      */
     public function __call(string $subcommandID, array $arguments);
 
     /**
      * Returns containerCommandId of specific container command.
-     *
-     * @return string
      */
     public function getContainerCommandId(): string;
 }

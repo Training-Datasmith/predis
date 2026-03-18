@@ -33,12 +33,12 @@ class CFRESERVE extends RedisCommand
     protected static $maxIterationsArgumentPositionOffset = 3;
     protected static $expansionArgumentPositionOffset = 4;
 
-    public function getId()
+    public function getId(): string
     {
         return 'CF.RESERVE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setExpansion($arguments);
         $arguments = $this->getArguments();
@@ -50,7 +50,7 @@ class CFRESERVE extends RedisCommand
         $this->filterArguments();
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

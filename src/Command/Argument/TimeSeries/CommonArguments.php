@@ -35,7 +35,6 @@ class CommonArguments implements ArrayableArgument
     /**
      * Is maximum age for samples compared to the highest reported timestamp, in milliseconds.
      *
-     * @param  int   $retentionPeriod
      * @return $this
      */
     public function retentionMsecs(int $retentionPeriod): self
@@ -66,7 +65,6 @@ class CommonArguments implements ArrayableArgument
     /**
      * Is initial allocation size, in bytes, for the data part of each new chunk.
      *
-     * @param  int   $size
      * @return $this
      */
     public function chunkSize(int $size): self
@@ -79,7 +77,6 @@ class CommonArguments implements ArrayableArgument
     /**
      * Is policy for handling insertion of multiple samples with identical timestamps.
      *
-     * @param  string $policy
      * @return $this
      */
     public function duplicatePolicy(string $policy = self::POLICY_BLOCK): self
@@ -105,7 +102,6 @@ class CommonArguments implements ArrayableArgument
     /**
      * Specifies the series samples encoding format.
      *
-     * @param  string $encoding
      * @return $this
      */
     public function encoding(string $encoding = self::ENCODING_COMPRESSED): self

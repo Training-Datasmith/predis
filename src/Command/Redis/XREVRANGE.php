@@ -20,7 +20,7 @@ class XREVRANGE extends XRANGE
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'XREVRANGE';
     }

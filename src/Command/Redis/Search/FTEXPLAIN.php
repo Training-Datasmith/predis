@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class FTEXPLAIN extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.EXPLAIN';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         // If command already deserialized, bypass logic.
         if (in_array('DIALECT', $arguments)) {
@@ -50,7 +50,7 @@ class FTEXPLAIN extends RedisCommand
         ));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

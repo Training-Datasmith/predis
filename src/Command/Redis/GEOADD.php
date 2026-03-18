@@ -22,7 +22,7 @@ class GEOADD extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'GEOADD';
     }
@@ -30,7 +30,7 @@ class GEOADD extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) === 2 && is_array($arguments[1])) {
             foreach (array_pop($arguments) as $item) {
@@ -41,7 +41,7 @@ class GEOADD extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

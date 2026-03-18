@@ -16,25 +16,18 @@ use Predis\Command\Command as RedisCommand;
 
 class BITFIELD_RO extends RedisCommand
 {
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return 'BITFIELD_RO';
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0]];
 
         if (array_key_exists(1, $arguments) && is_array($arguments[1])) {
             // Convert encoding => offset, into GET, encoding, offset
-            array_walk($arguments[1], static function ($value, $key) use (&$processedArguments) {
+            array_walk($arguments[1], static function ($value, $key) use (&$processedArguments): void {
                 array_push($processedArguments, 'GET', $key, $value);
             });
         }

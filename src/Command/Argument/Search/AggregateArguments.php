@@ -15,14 +15,6 @@ namespace Predis\Command\Argument\Search;
 class AggregateArguments extends CommonArguments
 {
     /**
-     * @var string[]
-     */
-    private $sortingEnum = [
-        'asc' => 'ASC',
-        'desc' => 'DESC',
-    ];
-
-    /**
      * Loads document attributes from the source document.
      *
      * @param  string ...$fields Could be just '*' to load all fields
@@ -49,7 +41,6 @@ class AggregateArguments extends CommonArguments
     /**
      * Loads document attributes from the source document.
      *
-     * @param  string ...$properties
      * @return $this
      */
     public function groupBy(string ...$properties): self
@@ -70,7 +61,6 @@ class AggregateArguments extends CommonArguments
      *
      * Example: 'argument', true, 'name' => 'argument' AS 'name'
      *
-     * @param  string      $function
      * @param  string|bool ...$argument
      * @return $this
      */
@@ -99,7 +89,6 @@ class AggregateArguments extends CommonArguments
     /**
      * Sorts the pipeline up until the point of SORTBY, using a list of properties.
      *
-     * @param  int    $max
      * @param  string ...$properties Enumeration of properties, including sorting direction (ASC, DESC)
      * @return $this
      */
@@ -122,8 +111,6 @@ class AggregateArguments extends CommonArguments
      * Applies a 1-to-1 transformation on one or more properties and either stores the result
      * as a new property down the pipeline or replaces any property using this transformation.
      *
-     * @param  string $expression
-     * @param  string $as
      * @return $this
      */
     public function apply(string $expression, string $as = ''): self
@@ -140,8 +127,6 @@ class AggregateArguments extends CommonArguments
     /**
      * Scan part of the results with a quicker alternative than LIMIT.
      *
-     * @param  int   $readSize
-     * @param  int   $idleTime
      * @return $this
      */
     public function withCursor(int $readSize = 0, int $idleTime = 0): self

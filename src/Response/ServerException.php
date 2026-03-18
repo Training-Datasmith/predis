@@ -21,10 +21,8 @@ class ServerException extends PredisException implements ErrorInterface
 {
     /**
      * Gets the type of the error returned by Redis.
-     *
-     * @return string
      */
-    public function getErrorType()
+    public function getErrorType(): string
     {
         [$errorType] = explode(' ', $this->getMessage(), 2);
 
@@ -36,7 +34,7 @@ class ServerException extends PredisException implements ErrorInterface
      *
      * @return Error
      */
-    public function toErrorResponse()
+    public function toErrorResponse(): \Predis\Response\Error
     {
         return new Error($this->getMessage());
     }

@@ -46,12 +46,12 @@ class GEOSEARCHSTORE extends RedisCommand
     protected static $countArgumentPositionOffset = 5;
     protected static $storeDistArgumentPositionOffset = 7;
 
-    public function getId()
+    public function getId(): string
     {
         return 'GEOSEARCHSTORE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setStoreDist($arguments);
         $arguments = $this->getArguments();

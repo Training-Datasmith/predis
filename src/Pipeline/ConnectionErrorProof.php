@@ -40,7 +40,8 @@ class ConnectionErrorProof extends Pipeline
     {
         if ($connection instanceof NodeConnectionInterface) {
             return $this->executeSingleNode($connection, $commands);
-        } elseif ($connection instanceof ClusterInterface) {
+        }
+        if ($connection instanceof ClusterInterface) {
             return $this->executeCluster($connection, $commands);
         }
         $class = get_class($connection);
@@ -50,8 +51,9 @@ class ConnectionErrorProof extends Pipeline
 
     /**
      * {@inheritdoc}
+     * @return mixed[]
      */
-    protected function executeSingleNode(NodeConnectionInterface $connection, SplQueue $commands)
+    protected function executeSingleNode(NodeConnectionInterface $connection, SplQueue $commands): array
     {
         $responses = [];
         $sizeOfPipe = count($commands);
@@ -85,8 +87,9 @@ class ConnectionErrorProof extends Pipeline
 
     /**
      * {@inheritdoc}
+     * @return mixed[]
      */
-    protected function executeCluster(ClusterInterface $connection, SplQueue $commands)
+    protected function executeCluster(ClusterInterface $connection, SplQueue $commands): array
     {
         $responses = [];
         $sizeOfPipe = count($commands);

@@ -72,7 +72,7 @@ abstract class ScriptCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (($numkeys = $this->getKeysCount()) && $numkeys < 0) {
             $numkeys = count($arguments) + $numkeys;

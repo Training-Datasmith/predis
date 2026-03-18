@@ -16,12 +16,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
 
 class HTTL extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'HTTL';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], 'FIELDS', count($arguments[1])];
         $processedArguments = array_merge($processedArguments, $arguments[1]);
@@ -29,7 +29,7 @@ class HTTL extends RedisCommand
         parent::setArguments($processedArguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

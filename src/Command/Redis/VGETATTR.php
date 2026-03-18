@@ -21,19 +21,12 @@ class VGETATTR extends RedisCommand
      */
     private $asJson = false;
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return 'VGETATTR';
     }
 
-    /**
-     * @param  array $arguments
-     * @return void
-     */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $lastArg = array_pop($arguments);
 

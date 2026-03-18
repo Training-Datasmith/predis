@@ -22,17 +22,17 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class FTCREATE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.CREATE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$index, $schema] = $arguments;
         $commandArguments = (!empty($arguments[2])) ? $arguments[2]->toArray() : [];
 
-        $schema = array_reduce($schema, static function (array $carry, FieldInterface $field) {
+        $schema = array_reduce($schema, static function (array $carry, FieldInterface $field): array {
             return array_merge($carry, $field->toArray());
         }, []);
 
@@ -45,7 +45,7 @@ class FTCREATE extends RedisCommand
         ));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

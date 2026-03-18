@@ -19,15 +19,12 @@ class VSIM extends RedisCommand
 {
     private $withScores = false;
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return 'VSIM';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0]];
 
@@ -85,7 +82,7 @@ class VSIM extends RedisCommand
     {
         if ($this->withScores) {
             if ($data === array_values($data)) {
-                $data = CommandUtility::arrayToDictionary($data, static function ($key, $value) {
+                $data = CommandUtility::arrayToDictionary($data, static function ($key, $value): array {
                     return [$key, (float) $value];
                 });
             }

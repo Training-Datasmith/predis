@@ -16,12 +16,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
 
 class LMOVE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'LMOVE';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             $arguments[0] = $prefix . $arguments[0];

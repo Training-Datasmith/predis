@@ -38,12 +38,12 @@ class ZRANGESTORE extends RedisCommand
     protected static $revArgumentPositionOffset = 5;
     protected static $limitArgumentPositionOffset = 6;
 
-    public function getId()
+    public function getId(): string
     {
         return 'ZRANGESTORE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setByLexByScoreArgument($arguments);
         $arguments = $this->getArguments();

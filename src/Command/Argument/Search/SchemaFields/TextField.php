@@ -15,16 +15,7 @@ namespace Predis\Command\Argument\Search\SchemaFields;
 class TextField extends AbstractField
 {
     /**
-     * @param string      $identifier
-     * @param string      $alias
      * @param bool|string $sortable
-     * @param bool        $noIndex
-     * @param bool        $noStem
-     * @param string      $phonetic
-     * @param int         $weight
-     * @param bool        $withSuffixTrie
-     * @param bool        $allowsEmpty
-     * @param bool        $allowsMissing
      */
     public function __construct(
         string $identifier,

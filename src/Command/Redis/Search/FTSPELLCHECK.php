@@ -16,12 +16,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
 
 class FTSPELLCHECK extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.SPELLCHECK';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         // If command already deserialized, bypass logic.
         if (in_array('DIALECT', $arguments)) {
@@ -49,7 +49,7 @@ class FTSPELLCHECK extends RedisCommand
         ));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

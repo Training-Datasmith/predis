@@ -33,12 +33,12 @@ class ZDIFF extends RedisCommand
 
     protected static $keysArgumentPositionOffset = 0;
 
-    public function getId()
+    public function getId(): string
     {
         return 'ZDIFF';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $this->setKeys($arguments);
         $arguments = $this->getArguments();
@@ -48,9 +48,9 @@ class ZDIFF extends RedisCommand
 
     /**
      * @param                          $data
-     * @return array|mixed|string|null
+     * @return mixed[]
      */
-    public function parseResp3Response($data)
+    public function parseResp3Response($data): array
     {
         $parsedData = [];
 

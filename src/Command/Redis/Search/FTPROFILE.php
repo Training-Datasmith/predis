@@ -21,12 +21,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class FTPROFILE extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.PROFILE';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$index, $arguments] = $arguments;
 
@@ -36,7 +36,7 @@ class FTPROFILE extends RedisCommand
         ));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

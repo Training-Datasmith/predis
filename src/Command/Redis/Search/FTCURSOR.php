@@ -16,12 +16,12 @@ use Predis\Command\PrefixableCommand as RedisCommand;
 
 class FTCURSOR extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'FT.CURSOR';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         [$subcommand, $index, $cursorId] = $arguments;
         $commandArguments = (!empty($arguments[3])) ? $arguments[3]->toArray() : [];
@@ -32,7 +32,7 @@ class FTCURSOR extends RedisCommand
         ));
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

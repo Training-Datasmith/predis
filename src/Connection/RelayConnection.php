@@ -101,7 +101,7 @@ class RelayConnection extends AbstractConnection
     /**
      * {@inheritdoc}
      */
-    public function isConnected()
+    public function isConnected(): bool
     {
         return $this->client->isConnected();
     }
@@ -109,7 +109,7 @@ class RelayConnection extends AbstractConnection
     /**
      * {@inheritdoc}
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         if ($this->client->isConnected()) {
             $this->client->close();
@@ -119,7 +119,7 @@ class RelayConnection extends AbstractConnection
     /**
      * Checks if the Relay extension is loaded in PHP.
      */
-    private function assertExtensions()
+    private function assertExtensions(): void
     {
         if (!extension_loaded('relay')) {
             throw new NotSupportedException(
@@ -139,7 +139,6 @@ class RelayConnection extends AbstractConnection
     }
 
     /**
-     * @param  ParametersInterface $parameters
      * @param                      $address
      * @param                      $flags
      * @return Relay
@@ -240,9 +239,8 @@ class RelayConnection extends AbstractConnection
      * Applies the configured serializer and compression to given value.
      *
      * @param  mixed  $value
-     * @return string
      */
-    public function pack($value)
+    public function pack($value): string
     {
         return $this->client->_pack($value);
     }
@@ -367,7 +365,7 @@ class RelayConnection extends AbstractConnection
     /**
      * {@inheritdoc}
      */
-    public function connect()
+    public function connect(): void
     {
         if (parent::connect() && $this->initCommands) {
             foreach ($this->initCommands as $command) {
@@ -393,7 +391,7 @@ class RelayConnection extends AbstractConnection
     /**
      * {@inheritdoc}
      */
-    protected function assertParameters(ParametersInterface $parameters)
+    protected function assertParameters(ParametersInterface $parameters): ParametersInterface
     {
         if (!in_array($parameters->scheme, ['tcp', 'tls', 'unix', 'redis', 'rediss'])) {
             throw new InvalidArgumentException("Invalid scheme: '{$parameters->scheme}'.");

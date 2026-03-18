@@ -22,7 +22,7 @@ trait Capacity
 {
     private static $capacityModifier = 'CAPACITY';
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $argumentsLength = count($arguments);
 

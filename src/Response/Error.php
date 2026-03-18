@@ -39,7 +39,7 @@ class Error implements ErrorInterface
     /**
      * {@inheritdoc}
      */
-    public function getErrorType()
+    public function getErrorType(): string
     {
         [$errorType] = explode(' ', $this->getMessage(), 2);
 
@@ -48,10 +48,8 @@ class Error implements ErrorInterface
 
     /**
      * Converts the object to its string representation.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getMessage();
     }

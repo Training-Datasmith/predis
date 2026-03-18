@@ -22,7 +22,7 @@ use Predis\Command\Command as RedisCommand;
  */
 class ACL extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'ACL';
     }
@@ -43,7 +43,7 @@ class ACL extends RedisCommand
         // flatten Relay (RESP3) maps
         $return = [];
 
-        array_walk($data, static function ($value, $key) use (&$return) {
+        array_walk($data, static function ($value, $key) use (&$return): void {
             $return[] = $key;
             $return[] = $value;
         });

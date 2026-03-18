@@ -22,7 +22,7 @@ class BLPOP extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'BLPOP';
     }
@@ -30,7 +30,7 @@ class BLPOP extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (count($arguments) === 2 && is_array($arguments[0])) {
             [$arguments, $timeout] = $arguments;
@@ -40,7 +40,7 @@ class BLPOP extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixSkippingLastArgument($prefix);
     }

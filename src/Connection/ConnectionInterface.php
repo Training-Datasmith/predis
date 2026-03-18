@@ -56,9 +56,6 @@ interface ConnectionInterface
     /**
      * Performs a write operation over the stream of the buffer containing a
      * command serialized with the Redis wire protocol.
-     *
-     * @param  string $buffer
-     * @return void
      */
     public function write(string $buffer): void;
 

@@ -16,12 +16,12 @@ use Predis\Command\Command as RedisCommand;
 
 class HPERSIST extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'HPERSIST';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [$arguments[0], 'FIELDS', count($arguments[1])];
         $processedArguments = array_merge($processedArguments, $arguments[1]);

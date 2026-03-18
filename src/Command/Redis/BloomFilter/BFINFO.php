@@ -33,12 +33,12 @@ class BFINFO extends RedisCommand
         'expansion' => 'EXPANSION',
     ];
 
-    public function getId()
+    public function getId(): string
     {
         return 'BF.INFO';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (isset($arguments[1])) {
             $modifier = array_pop($arguments);
@@ -77,7 +77,7 @@ class BFINFO extends RedisCommand
         return $data;
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

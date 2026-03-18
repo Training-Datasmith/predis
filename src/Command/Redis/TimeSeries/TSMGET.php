@@ -16,12 +16,12 @@ use Predis\Command\Command as RedisCommand;
 
 class TSMGET extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TS.MGET';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [];
         $argumentsObject = array_shift($arguments);

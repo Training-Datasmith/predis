@@ -27,7 +27,7 @@ class EVAL_RO extends RedisCommand
 
     protected static $keysArgumentPositionOffset = 1;
 
-    public function getId()
+    public function getId(): string
     {
         return 'EVAL_RO';
     }

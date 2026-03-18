@@ -22,7 +22,7 @@ class PFCOUNT extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'PFCOUNT';
     }
@@ -30,14 +30,14 @@ class PFCOUNT extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $arguments = self::normalizeArguments($arguments);
 
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForAllArguments($prefix);
     }

@@ -24,7 +24,6 @@ class CursorArguments implements ArrayableArgument
     /**
      * Is number of results to read. This parameter overrides COUNT specified in FT.AGGREGATE.
      *
-     * @param  int   $readSize
      * @return $this
      */
     public function count(int $readSize): self

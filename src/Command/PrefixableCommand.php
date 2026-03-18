@@ -26,14 +26,11 @@ abstract class PrefixableCommand extends Command implements PrefixableCommandInt
 
     /**
      * Applies prefix for all arguments.
-     *
-     * @param  string $prefix
-     * @return void
      */
     public function applyPrefixForAllArguments(string $prefix): void
     {
         $this->setRawArguments(
-            array_map(static function ($key) use ($prefix) {
+            array_map(static function (string $key) use ($prefix): string {
                 return $prefix . $key;
             }, $this->getArguments())
         );
@@ -41,9 +38,6 @@ abstract class PrefixableCommand extends Command implements PrefixableCommandInt
 
     /**
      * Applies prefix for first argument.
-     *
-     * @param  string $prefix
-     * @return void
      */
     public function applyPrefixForFirstArgument(string $prefix): void
     {
@@ -54,9 +48,6 @@ abstract class PrefixableCommand extends Command implements PrefixableCommandInt
 
     /**
      * Applies prefix for interleaved arguments.
-     *
-     * @param  string $prefix
-     * @return void
      */
     public function applyPrefixForInterleavedArgument(string $prefix): void
     {
@@ -73,9 +64,6 @@ abstract class PrefixableCommand extends Command implements PrefixableCommandInt
 
     /**
      * Applies prefix for all keys except last one.
-     *
-     * @param  string $prefix
-     * @return void
      */
     public function applyPrefixSkippingLastArgument(string $prefix): void
     {
@@ -92,9 +80,6 @@ abstract class PrefixableCommand extends Command implements PrefixableCommandInt
 
     /**
      * Applies prefix for all keys except first one.
-     *
-     * @param  string $prefix
-     * @return void
      */
     public function applyPrefixSkippingFirstArgument(string $prefix): void
     {

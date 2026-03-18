@@ -19,7 +19,7 @@ use Predis\Command\Command;
  */
 trait Replace
 {
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $replace = array_pop($arguments);
 

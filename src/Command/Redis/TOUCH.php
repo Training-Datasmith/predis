@@ -22,7 +22,7 @@ class TOUCH extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'TOUCH';
     }
@@ -30,7 +30,7 @@ class TOUCH extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $arguments = self::normalizeArguments($arguments);
 

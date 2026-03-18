@@ -24,7 +24,6 @@ class RangeArguments extends CommonArguments
     /**
      * Filters samples by a list of specific timestamps.
      *
-     * @param  int   ...$ts
      * @return $this
      */
     public function filterByTs(int ...$ts): self
@@ -37,8 +36,6 @@ class RangeArguments extends CommonArguments
     /**
      * Filters samples by minimum and maximum values.
      *
-     * @param  int   $min
-     * @param  int   $max
      * @return $this
      */
     public function filterByValue(int $min, int $max): self
@@ -51,7 +48,6 @@ class RangeArguments extends CommonArguments
     /**
      * Limits the number of returned samples.
      *
-     * @param  int   $count
      * @return $this
      */
     public function count(int $count): self

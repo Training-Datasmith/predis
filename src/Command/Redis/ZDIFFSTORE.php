@@ -33,7 +33,7 @@ class ZDIFFSTORE extends RedisCommand
 
     public static $keysArgumentPositionOffset = 1;
 
-    public function getId()
+    public function getId(): string
     {
         return 'ZDIFFSTORE';
     }

@@ -22,7 +22,7 @@ class MIGRATE extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'MIGRATE';
     }
@@ -30,7 +30,7 @@ class MIGRATE extends RedisCommand
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         if (is_array(end($arguments))) {
             foreach (array_pop($arguments) as $modifier => $value) {
@@ -49,7 +49,7 @@ class MIGRATE extends RedisCommand
         parent::setArguments($arguments);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         if ($arguments = $this->getArguments()) {
             $arguments[2] = "$prefix{$arguments[2]}";

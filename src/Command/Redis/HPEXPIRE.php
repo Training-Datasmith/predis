@@ -14,7 +14,7 @@ namespace Predis\Command\Redis;
 
 class HPEXPIRE extends HEXPIRE
 {
-    public function getId()
+    public function getId(): string
     {
         return 'HPEXPIRE';
     }

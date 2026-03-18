@@ -29,12 +29,12 @@ class ZRANDMEMBER extends RedisCommand
 {
     use WithScores;
 
-    public function getId()
+    public function getId(): string
     {
         return 'ZRANDMEMBER';
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }

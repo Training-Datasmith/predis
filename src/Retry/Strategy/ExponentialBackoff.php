@@ -32,7 +32,6 @@ class ExponentialBackoff implements RetryStrategyInterface
     /**
      * @param int  $base       in micro seconds
      * @param int  $cap        in micro seconds
-     * @param bool $withJitter
      */
     public function __construct(int $base = self::DEFAULT_BASE, int $cap = self::DEFAULT_CAP, bool $withJitter = false)
     {
@@ -57,17 +56,11 @@ class ExponentialBackoff implements RetryStrategyInterface
         return $this->base * 2 ** $failures;
     }
 
-    /**
-     * @return int
-     */
     public function getBase(): int
     {
         return $this->base;
     }
 
-    /**
-     * @return int
-     */
     public function getCap(): int
     {
         return $this->cap;

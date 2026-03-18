@@ -20,16 +20,16 @@ class MSETEX extends PrefixableCommand
     /**
      * {@inheritDoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return 'MSETEX';
     }
 
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         $processedArguments = [count(array_keys($arguments[0]))];
 
-        array_walk($arguments[0], static function ($value, $key) use (&$processedArguments) {
+        array_walk($arguments[0], static function ($value, $key) use (&$processedArguments): void {
             array_push($processedArguments, $key, $value);
         });
 
@@ -63,7 +63,7 @@ class MSETEX extends PrefixableCommand
     /**
      * {@inheritDoc}
      */
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $arguments = $this->getArguments();
         $keysCount = $arguments[0];

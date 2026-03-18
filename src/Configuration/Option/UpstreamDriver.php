@@ -28,7 +28,7 @@ class UpstreamDriver implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function filter(OptionsInterface $options, $value)
+    public function filter(OptionsInterface $options, $value): string
     {
         if (is_string($value)) {
             return $value;
@@ -46,7 +46,7 @@ class UpstreamDriver implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options)
+    public function getDefault(OptionsInterface $options): string
     {
         return '';
     }

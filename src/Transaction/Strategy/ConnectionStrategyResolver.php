@@ -32,7 +32,6 @@ class ConnectionStrategyResolver implements StrategyResolverInterface
 
     /**
      * {@inheritDoc}
-     * @param MultiExecState $state
      */
     public function resolve(ConnectionInterface $connection, MultiExecState $state): StrategyInterface
     {

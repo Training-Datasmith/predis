@@ -23,7 +23,7 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  */
 class TDIGESTCDF extends RedisCommand
 {
-    public function getId()
+    public function getId(): string
     {
         return 'TDIGEST.CDF';
     }
@@ -55,7 +55,7 @@ class TDIGESTCDF extends RedisCommand
         }, $data);
     }
 
-    public function prefixKeys($prefix)
+    public function prefixKeys($prefix): void
     {
         $this->applyPrefixForFirstArgument($prefix);
     }
