@@ -315,7 +315,7 @@ class Pipeline implements ClientContextInterface
             }
 
             $this->flushPipeline();
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             // NOOP
         }
 

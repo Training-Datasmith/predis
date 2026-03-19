@@ -42,7 +42,7 @@ class Handler implements SessionHandlerInterface
         if (isset($options['gc_maxlifetime'])) {
             $this->ttl = (int) $options['gc_maxlifetime'];
         } else {
-            $this->ttl = ini_get('session.gc_maxlifetime');
+            $this->ttl = max(1440, (int) ini_get('session.gc_maxlifetime'));
         }
     }
 
