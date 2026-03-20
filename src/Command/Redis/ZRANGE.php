@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,123 +10,103 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see http://redis.io/commands/zrange
  */
-class ZRANGE extends RedisCommand
+class ZRANGE extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'ZRANGE';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if (count($arguments) === 4) {
-            $lastType = gettype($arguments[3]);
-
-            if ($lastType === 'string' && strtoupper($arguments[3]) === 'WITHSCORES') {
+            $last_type = gettype($arguments[3]);
+            if ($last_type === 'string' && strtoupper($arguments[3]) === 'WITHSCORES') {
                 // Used for compatibility with older versions
                 $arguments[3] = ['WITHSCORES' => true];
-                $lastType = 'array';
+                $last_type = 'array';
             }
-
-            if ($lastType === 'array') {
-                $options = $this->prepareOptions(array_pop($arguments));
+            if ($last_type === 'array') {
+                $options = $this->prepare_options(array_pop($arguments));
                 $arguments = array_merge($arguments, $options);
             }
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
-
     /**
      * Returns a list of options and modifiers compatible with Redis.
      *
      * @param array $options List of options.
      */
-    protected function prepareOptions($options): array
+    protected function prepare_options($options): array
     {
         $opts = array_change_key_case($options, CASE_UPPER);
-        $finalizedOpts = [];
-
+        $finalized_opts = [];
         if (!empty($opts['WITHSCORES'])) {
-            $finalizedOpts[] = 'WITHSCORES';
+            $finalized_opts[] = 'WITHSCORES';
         }
-
-        return $finalizedOpts;
+        return $finalized_opts;
     }
-
     /**
      * Checks for the presence of the WITHSCORES modifier.
      *
      * @return bool
      */
-    protected function withScores()
+    protected function with_scores()
     {
-        $arguments = $this->getArguments();
-
+        $arguments = $this->get_arguments();
         if (count($arguments) < 4) {
             return false;
         }
-
         return strtoupper($arguments[3]) === 'WITHSCORES';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
-        if ($this->withScores()) {
+        if ($this->with_scores()) {
             $result = [];
-
             for ($i = 0; $i < count($data); ++$i) {
                 if (is_array($data[$i])) {
-                    $result[$data[$i][0]] = $data[$i][1]; // Relay
+                    $result[$data[$i][0]] = $data[$i][1];
+                    // Relay
                 } else {
                     $result[$data[$i]] = $data[++$i];
                 }
             }
-
             return $result;
         }
-
         return $data;
     }
-
     /**
      * @param                          $data
      * @return array|mixed|string|null
      */
-    public function parseResp3Response($data)
+    public function parse_resp3response($data)
     {
         if (!is_array($data)) {
             return $data;
         }
-
-        $parsedData = [];
-
+        $parsed_data = [];
         foreach ($data as $element) {
-            $parsedData[] = $this->parseResponse($element);
+            $parsed_data[] = $this->parse_response($element);
         }
-
-        return $parsedData;
+        return $parsed_data;
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

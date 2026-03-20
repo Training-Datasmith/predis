@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,18 +10,16 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
+use Predis\Command\Prefixable_Command as RedisCommand;
 use Predis\Command\Traits\Aggregate;
 use Predis\Command\Traits\Keys;
 use Predis\Command\Traits\Weights;
-
 /**
  * @see http://redis.io/commands/zunionstore
  */
-class ZUNIONSTORE extends RedisCommand
+class ZUNIONSTORE extends Redis_Command
 {
     use Keys {
         Keys::setArguments as setKeys;
@@ -30,26 +27,23 @@ class ZUNIONSTORE extends RedisCommand
     use Weights {
         Weights::setArguments as setWeights;
     }
-    use Aggregate{
+    use Aggregate {
         Aggregate::setArguments as setAggregate;
     }
-
-    protected static $keysArgumentPositionOffset = 1;
-    protected static $weightsArgumentPositionOffset = 2;
-    protected static $aggregateArgumentPositionOffset = 3;
-
+    protected static $keys_argument_position_offset = 1;
+    protected static $weights_argument_position_offset = 2;
+    protected static $aggregate_argument_position_offset = 3;
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'ZUNIONSTORE';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         // support old `$options` array for backwards compatibility
         if (!isset($arguments[3]) && (isset($arguments[2]['weights']) || isset($arguments[2]['aggregate']))) {
@@ -57,27 +51,21 @@ class ZUNIONSTORE extends RedisCommand
             array_push($arguments, $options['weights'] ?? []);
             array_push($arguments, $options['aggregate'] ?? 'sum');
         }
-
-        $this->setAggregate($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setWeights($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setKeys($arguments);
+        $this->set_aggregate($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_weights($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_keys($arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        if ($arguments = $this->getArguments()) {
-            $arguments[0] = "$prefix{$arguments[0]}";
-            $length = ((int) $arguments[1]) + 2;
-
+        if ($arguments = $this->get_arguments()) {
+            $arguments[0] = "{$prefix}{$arguments[0]}";
+            $length = (int) $arguments[1] + 2;
             for ($i = 2; $i < $length; ++$i) {
-                $arguments[$i] = "$prefix{$arguments[$i]}";
+                $arguments[$i] = "{$prefix}{$arguments[$i]}";
             }
-
-            $this->setRawArguments($arguments);
+            $this->set_raw_arguments($arguments);
         }
     }
 }

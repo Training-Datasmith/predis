@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,45 +10,30 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use UnexpectedValueException;
-
 trait DB
 {
-    private $dbModifier = 'DB';
-
-    public function setArguments(array $arguments): void
+    private $db_modifier = 'DB';
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$dbArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$db_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        if (!is_numeric($arguments[static::$dbArgumentPositionOffset])) {
+        if (!is_numeric($arguments[static::$db_argument_position_offset])) {
             throw new UnexpectedValueException('DB argument should be a valid numeric value');
         }
-
-        if ($arguments[static::$dbArgumentPositionOffset] < 0) {
-            array_splice($arguments, static::$dbArgumentPositionOffset, 1);
-            parent::setArguments($arguments);
-
+        if ($arguments[static::$db_argument_position_offset] < 0) {
+            array_splice($arguments, static::$db_argument_position_offset, 1);
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$dbArgumentPositionOffset];
-        $argumentsBefore = array_slice($arguments, 0, static::$dbArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$dbArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [$this->dbModifier],
-            [$argument],
-            $argumentsAfter
-        ));
+        $argument = $arguments[static::$db_argument_position_offset];
+        $arguments_before = array_slice($arguments, 0, static::$db_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$db_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [$this->db_modifier], [$argument], $arguments_after));
     }
 }

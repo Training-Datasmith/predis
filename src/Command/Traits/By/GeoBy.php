@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,30 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\By;
 
 use InvalidArgumentException;
-use Predis\Command\Argument\Geospatial\ByInterface;
-
-trait GeoBy
+use Predis\Command\Argument\Geospatial\By_Interface;
+trait Geo_By
 {
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $argumentPositionOffset = $this->getByArgumentPositionOffset($arguments);
-
-        if (null === $argumentPositionOffset) {
+        $argument_position_offset = $this->get_by_argument_position_offset($arguments);
+        if (null === $argument_position_offset) {
             throw new InvalidArgumentException('Invalid BY argument value given');
         }
-
-        $byArgumentObject = $arguments[$argumentPositionOffset];
-        $argumentsBefore = array_slice($arguments, 0, $argumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, $argumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            $byArgumentObject->toArray(),
-            $argumentsAfter
-        ));
+        $by_argument_object = $arguments[$argument_position_offset];
+        $arguments_before = array_slice($arguments, 0, $argument_position_offset);
+        $arguments_after = array_slice($arguments, $argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, $by_argument_object->to_array(), $arguments_after));
     }
-
-    private function getByArgumentPositionOffset(array $arguments): ?int
+    private function get_by_argument_position_offset(array $arguments): ?int
     {
         foreach ($arguments as $i => $value) {
-            if ($value instanceof ByInterface) {
+            if ($value instanceof By_Interface) {
                 return $i;
             }
         }
-
         return null;
     }
 }

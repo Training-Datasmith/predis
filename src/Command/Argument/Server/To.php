@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,49 +10,40 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Server;
 
-use Predis\Command\Argument\ArrayableArgument;
-
-class To implements ArrayableArgument
+use Predis\Command\Argument\Arrayable_Argument;
+class To implements Arrayable_Argument
 {
     private const KEYWORD = 'TO';
     private const FORCE_KEYWORD = 'FORCE';
-
     /**
      * @var string
      */
     private $host;
-
     /**
      * @var int
      */
     private $port;
-
     /**
      * @var bool
      */
-    private $isForce;
-
-    public function __construct(string $host, int $port, bool $isForce = false)
+    private $is_force;
+    public function __construct(string $host, int $port, bool $is_force = false)
     {
         $this->host = $host;
         $this->port = $port;
-        $this->isForce = $isForce;
+        $this->is_force = $is_force;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         $arguments = [self::KEYWORD, $this->host, $this->port];
-
-        if ($this->isForce) {
+        if ($this->is_force) {
             $arguments[] = self::FORCE_KEYWORD;
         }
-
         return $arguments;
     }
 }

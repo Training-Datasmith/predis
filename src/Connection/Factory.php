@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,35 +10,24 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
 use InvalidArgumentException;
 use Predis\Client;
-use Predis\Command\RawCommand;
+use Predis\Command\Raw_Command;
 use ReflectionClass;
 use UnexpectedValueException;
-
 /**
  * Standard connection factory for creating connections to Redis nodes.
  */
-class Factory implements FactoryInterface
+class Factory implements Factory_Interface
 {
     private $defaults = [];
-
     /**
      * @var string|null
      */
-    private $upstreamDriver;
-
-    protected $schemes = [
-        'tcp' => \Predis\Connection\StreamConnection::class,
-        'unix' => \Predis\Connection\StreamConnection::class,
-        'tls' => \Predis\Connection\StreamConnection::class,
-        'redis' => \Predis\Connection\StreamConnection::class,
-        'rediss' => \Predis\Connection\StreamConnection::class,
-    ];
-
+    private $upstream_driver;
+    protected $schemes = ['tcp' => \Predis\Connection\Stream_Connection::class, 'unix' => \Predis\Connection\Stream_Connection::class, 'tls' => \Predis\Connection\Stream_Connection::class, 'redis' => \Predis\Connection\Stream_Connection::class, 'rediss' => \Predis\Connection\Stream_Connection::class];
     /**
      * Checks if the provided argument represents a valid connection class
      * implementing Predis\Connection\NodeConnectionInterface. Optionally,
@@ -50,31 +38,24 @@ class Factory implements FactoryInterface
      * @return mixed
      * @throws InvalidArgumentException
      */
-    protected function checkInitializer($initializer)
+    protected function check_initializer($initializer)
     {
         if (is_callable($initializer)) {
             return $initializer;
         }
-
         $class = new ReflectionClass($initializer);
-
-        if (!$class->isSubclassOf(\Predis\Connection\NodeConnectionInterface::class)) {
-            throw new InvalidArgumentException(
-                'A connection initializer must be a valid connection class or a callable object.'
-            );
+        if (!$class->is_subclass_of(\Predis\Connection\Node_Connection_Interface::class)) {
+            throw new InvalidArgumentException('A connection initializer must be a valid connection class or a callable object.');
         }
-
         return $initializer;
     }
-
     /**
      * {@inheritdoc}
      */
     public function define($scheme, $initializer): void
     {
-        $this->schemes[$scheme] = $this->checkInitializer($initializer);
+        $this->schemes[$scheme] = $this->check_initializer($initializer);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -82,41 +63,30 @@ class Factory implements FactoryInterface
     {
         unset($this->schemes[$scheme]);
     }
-
     /**
      * {@inheritdoc}
      */
     public function create($parameters)
     {
-        if (!$parameters instanceof ParametersInterface) {
-            $parameters = $this->createParameters($parameters);
+        if (!$parameters instanceof Parameters_Interface) {
+            $parameters = $this->create_parameters($parameters);
         }
-
         $scheme = $parameters->scheme;
-
         if (!isset($this->schemes[$scheme])) {
-            throw new InvalidArgumentException("Unknown connection scheme: '$scheme'.");
+            throw new InvalidArgumentException("Unknown connection scheme: '{$scheme}'.");
         }
-
         $initializer = $this->schemes[$scheme];
-
         if (is_callable($initializer)) {
             $connection = call_user_func($initializer, $parameters, $this);
         } else {
             $connection = new $initializer($parameters);
-            $this->prepareConnection($connection);
+            $this->prepare_connection($connection);
         }
-
-        if (!$connection instanceof NodeConnectionInterface) {
-            throw new UnexpectedValueException(
-                'Objects returned by connection initializers must implement ' .
-                "'Predis\Connection\NodeConnectionInterface'."
-            );
+        if (!$connection instanceof Node_Connection_Interface) {
+            throw new UnexpectedValueException('Objects returned by connection initializers must implement ' . "'Predis\\Connection\\NodeConnectionInterface'.");
         }
-
         return $connection;
     }
-
     /**
      * Assigns a default set of parameters applied to new connections.
      *
@@ -125,39 +95,35 @@ class Factory implements FactoryInterface
      *
      * @param array $parameters Set of connection parameters.
      */
-    public function setDefaultParameters(array $parameters): void
+    public function set_default_parameters(array $parameters): void
     {
         $this->defaults = $parameters;
     }
-
     /**
      * Returns the default set of parameters applied to new connections.
      *
      * @return array
      */
-    public function getDefaultParameters()
+    public function get_default_parameters()
     {
         return $this->defaults;
     }
-
     /**
      * Sets upstream driver information for CLIENT SETINFO.
      *
      * @param string $driver Upstream driver string (e.g., 'laravel_v11.0.0' or 'laravel_v11.0.0;my-app_v1.0.0').
      */
-    public function setUpstreamDriver(string $driver): void
+    public function set_upstream_driver(string $driver): void
     {
-        $this->upstreamDriver = $driver;
+        $this->upstream_driver = $driver;
     }
-
     /**
      * Returns the configured upstream driver.
      */
-    public function getUpstreamDriver(): ?string
+    public function get_upstream_driver(): ?string
     {
-        return $this->upstreamDriver;
+        return $this->upstream_driver;
     }
-
     /**
      * Creates a connection parameters instance from the supplied argument.
      *
@@ -165,69 +131,48 @@ class Factory implements FactoryInterface
      *
      * @return ParametersInterface
      */
-    protected function createParameters($parameters): \Predis\Connection\Parameters
+    protected function create_parameters($parameters): \Predis\Connection\Parameters
     {
         if (is_string($parameters)) {
             $parameters = Parameters::parse($parameters);
         } else {
             $parameters = $parameters ?: [];
         }
-
         if ($this->defaults) {
             $parameters += $this->defaults;
         }
-
         return new Parameters($parameters);
     }
-
     /**
      * Prepares a connection instance after its initialization.
      *
      * @param NodeConnectionInterface $connection Connection instance.
      */
-    protected function prepareConnection(NodeConnectionInterface $connection)
+    protected function prepare_connection(Node_Connection_Interface $connection)
     {
-        $parameters = $connection->getParameters();
-
+        $parameters = $connection->get_parameters();
         if (!empty($parameters->password)) {
-            $cmdAuthArgs = [$parameters->protocol, 'AUTH'];
-
+            $cmd_auth_args = [$parameters->protocol, 'AUTH'];
             if (empty($parameters->username)) {
                 $parameters->username = 'default';
             }
-
-            array_push($cmdAuthArgs, $parameters->username, $parameters->password);
-            array_push($cmdAuthArgs, 'SETNAME', 'predis');
-
-            $connection->addConnectCommand(
-                new RawCommand('HELLO', $cmdAuthArgs)
-            );
+            array_push($cmd_auth_args, $parameters->username, $parameters->password);
+            array_push($cmd_auth_args, 'SETNAME', 'predis');
+            $connection->add_connect_command(new Raw_Command('HELLO', $cmd_auth_args));
         } else {
-            $connection->addConnectCommand(
-                new RawCommand('HELLO', [$parameters->protocol ?? 2, 'SETNAME', 'predis'])
-            );
+            $connection->add_connect_command(new Raw_Command('HELLO', [$parameters->protocol ?? 2, 'SETNAME', 'predis']));
         }
-
-        $connection->addConnectCommand(
-            new RawCommand('CLIENT', ['SETINFO', 'LIB-NAME', $this->buildLibraryName()])
-        );
-
-        $connection->addConnectCommand(
-            new RawCommand('CLIENT', ['SETINFO', 'LIB-VER', Client::VERSION])
-        );
-
+        $connection->add_connect_command(new Raw_Command('CLIENT', ['SETINFO', 'LIB-NAME', $this->build_library_name()]));
+        $connection->add_connect_command(new Raw_Command('CLIENT', ['SETINFO', 'LIB-VER', Client::VERSION]));
         if (isset($parameters->database) && strlen($parameters->database)) {
-            $connection->addConnectCommand(
-                new RawCommand('SELECT', [$parameters->database])
-            );
+            $connection->add_connect_command(new Raw_Command('SELECT', [$parameters->database]));
         }
     }
-
     /**
      * Builds the library name string for CLIENT SETINFO.
      */
-    protected function buildLibraryName(): string
+    protected function build_library_name(): string
     {
-        return $this->upstreamDriver ? 'predis(' . $this->upstreamDriver . ')' : 'predis';
+        return $this->upstream_driver ? 'predis(' . $this->upstream_driver . ')' : 'predis';
     }
 }

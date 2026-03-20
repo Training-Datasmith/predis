@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,35 +10,29 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Hybrid_Search\Combine;
 
-namespace Predis\Command\Argument\Search\HybridSearch\Combine;
-
-use Predis\Command\Argument\ArrayableArgument;
-
-abstract class BaseCombine implements ArrayableArgument
+use Predis\Command\Argument\Arrayable_Argument;
+abstract class Base_Combine implements Arrayable_Argument
 {
     /**
      * @var array
      */
     protected $arguments = ['COMBINE'];
-
     /**
      * @var array
      */
     protected $as = [];
-
     /**
      * @return $this
      */
     public function as(string $alias): self
     {
         array_push($this->as, 'YIELD_SCORE_AS', $alias);
-
         return $this;
     }
-
     /**
      * {@inheritDoc}
      */
-    abstract public function toArray(): array;
+    abstract public function to_array(): array;
 }

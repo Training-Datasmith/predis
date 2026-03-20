@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,14 +10,12 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use Predis\Command\Traits\Keys;
 use Predis\Command\Traits\Limit\Limit;
-
-class SINTERCARD extends RedisCommand
+class SINTERCARD extends Redis_Command
 {
     use Keys {
         Keys::setArguments as setKeys;
@@ -26,20 +23,16 @@ class SINTERCARD extends RedisCommand
     use Limit {
         Limit::setArguments as setLimit;
     }
-
-    protected static $keysArgumentPositionOffset = 0;
-    protected static $limitArgumentPositionOffset = 1;
-
-    public function getId(): string
+    protected static $keys_argument_position_offset = 0;
+    protected static $limit_argument_position_offset = 1;
+    public function get_id(): string
     {
         return 'SINTERCARD';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $this->setLimit($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setKeys($arguments);
+        $this->set_limit($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_keys($arguments);
     }
 }

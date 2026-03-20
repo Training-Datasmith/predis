@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,36 +10,28 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Time_Series;
 
-namespace Predis\Command\Redis\TimeSeries;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/ts.info/
  *
  * Return information and statistics for a time series.
  */
-class TSINFO extends RedisCommand
+class TSINFO extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TS.INFO';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         [$key] = $arguments;
-        $commandArguments = (!empty($arguments[1])) ? $arguments[1]->toArray() : [];
-
-        parent::setArguments(array_merge(
-            [$key],
-            $commandArguments
-        ));
+        $command_arguments = !empty($arguments[1]) ? $arguments[1]->to_array() : [];
+        parent::set_arguments(array_merge([$key], $command_arguments));
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

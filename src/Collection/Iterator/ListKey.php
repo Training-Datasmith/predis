@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Collection\Iterator;
 
 use InvalidArgumentException;
 use Iterator;
-use Predis\ClientInterface;
-use Predis\NotSupportedException;
-use ReturnTypeWillChange;
-
+use Predis\Client_Interface;
+use Predis\Not_Supported_Exception;
+use Return_Type_Will_Change;
 /**
  * Abstracts the iteration of items stored in a list by leveraging the LRANGE
  * command wrapped in a fully-rewindable PHP iterator.
@@ -32,18 +29,16 @@ use ReturnTypeWillChange;
  *
  * @see http://redis.io/commands/lrange
  */
-class ListKey implements Iterator
+class List_Key implements Iterator
 {
     protected $client;
     protected $count;
     protected $key;
-
     protected $valid;
     protected $fetchmore;
     protected $elements;
     protected $position;
     protected $current;
-
     /**
      * @param ClientInterface $client Client connected to Redis.
      * @param string          $key    Redis list key.
@@ -51,21 +46,17 @@ class ListKey implements Iterator
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(ClientInterface $client, $key, $count = 10)
+    public function __construct(Client_Interface $client, $key, $count = 10)
     {
-        $this->requiredCommand($client, 'LRANGE');
-
-        if ((false === $count = filter_var($count, FILTER_VALIDATE_INT)) || $count < 0) {
+        $this->required_command($client, 'LRANGE');
+        if (false === ($count = filter_var($count, FILTER_VALIDATE_INT)) || $count < 0) {
             throw new InvalidArgumentException('The $count argument must be a positive integer.');
         }
-
         $this->client = $client;
         $this->key = $key;
         $this->count = $count;
-
         $this->reset();
     }
-
     /**
      * Ensures that the client instance supports the specified Redis command
      * required to fetch elements from the server to perform the iteration.
@@ -75,13 +66,12 @@ class ListKey implements Iterator
      *
      * @throws NotSupportedException
      */
-    protected function requiredCommand(ClientInterface $client, $commandID)
+    protected function required_command(Client_Interface $client, $command_id)
     {
-        if (!$client->getCommandFactory()->supports($commandID)) {
-            throw new NotSupportedException("'$commandID' is not supported by the current command factory.");
+        if (!$client->get_command_factory()->supports($command_id)) {
+            throw new Not_Supported_Exception("'{$command_id}' is not supported by the current command factory.");
         }
     }
-
     /**
      * Resets the inner state of the iterator.
      */
@@ -93,85 +83,74 @@ class ListKey implements Iterator
         $this->position = -1;
         $this->current = null;
     }
-
     /**
      * Fetches a new set of elements from the remote collection, effectively
      * advancing the iteration process.
      *
      * @return array
      */
-    protected function executeCommand()
+    protected function execute_command()
     {
         return $this->client->lrange($this->key, $this->position + 1, $this->position + $this->count);
     }
-
     /**
      * Populates the local buffer of elements fetched from the server during the
      * iteration.
      */
     protected function fetch()
     {
-        $elements = $this->executeCommand();
-
+        $elements = $this->execute_command();
         if (count($elements) < $this->count) {
             $this->fetchmore = false;
         }
-
         $this->elements = $elements;
     }
-
     /**
      * Extracts next values for key() and current().
      */
-    protected function extractNext()
+    protected function extract_next()
     {
         ++$this->position;
         $this->current = array_shift($this->elements);
     }
-
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function rewind(): void
     {
         $this->reset();
         $this->next();
     }
-
     /**
      * @return mixed
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function current()
     {
         return $this->current;
     }
-
     /**
      * @return int|null
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function key()
     {
         return $this->position;
     }
-
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function next(): void
     {
         if (!$this->elements && $this->fetchmore) {
             $this->fetch();
         }
-
         if ($this->elements) {
-            $this->extractNext();
+            $this->extract_next();
         } else {
             $this->valid = false;
         }
     }
-
     /**
      * @return bool
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function valid()
     {
         return $this->valid;

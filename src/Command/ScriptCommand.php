@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,7 +10,6 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command;
 
 /**
@@ -20,33 +18,30 @@ namespace Predis\Command;
  *
  * @see http://redis.io/commands/eval
  */
-abstract class ScriptCommand extends Command
+abstract class Script_Command extends Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function get_id()
     {
         return 'EVALSHA';
     }
-
     /**
      * Gets the body of a Lua script.
      *
      * @return string
      */
-    abstract public function getScript();
-
+    abstract public function get_script();
     /**
      * Calculates the SHA1 hash of the body of the script.
      *
      * @return string SHA1 hash.
      */
-    public function getScriptHash()
+    public function get_script_hash()
     {
-        return sha1($this->getScript());
+        return sha1($this->get_script());
     }
-
     /**
      * Specifies the number of arguments that should be considered as keys.
      *
@@ -56,55 +51,48 @@ abstract class ScriptCommand extends Command
      *
      * @return int
      */
-    protected function getKeysCount()
+    protected function get_keys_count()
     {
         return 0;
     }
-
     /**
      * Returns the elements from the arguments that are identified as keys.
      *
      * @return array
      */
-    public function getKeys()
+    public function get_keys()
     {
-        return array_slice($this->getArguments(), 2, $this->getKeysCount());
+        return array_slice($this->get_arguments(), 2, $this->get_keys_count());
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        if (($numkeys = $this->getKeysCount()) && $numkeys < 0) {
+        if (($numkeys = $this->get_keys_count()) && $numkeys < 0) {
             $numkeys = count($arguments) + $numkeys;
         }
-
-        $arguments = array_merge([$this->getScriptHash(), (int) $numkeys], $arguments);
-
-        parent::setArguments($arguments);
+        $arguments = array_merge([$this->get_script_hash(), (int) $numkeys], $arguments);
+        parent::set_arguments($arguments);
     }
-
     /**
      * Returns arguments for EVAL command.
      *
      * @return array
      */
-    public function getEvalArguments()
+    public function get_eval_arguments()
     {
-        $arguments = $this->getArguments();
-        $arguments[0] = $this->getScript();
-
+        $arguments = $this->get_arguments();
+        $arguments[0] = $this->get_script();
         return $arguments;
     }
-
     /**
      * Returns the equivalent EVAL command as a raw command instance.
      *
      * @return RawCommand
      */
-    public function getEvalCommand()
+    public function get_eval_command()
     {
-        return new RawCommand('EVAL', $this->getEvalArguments());
+        return new Raw_Command('EVAL', $this->get_eval_arguments());
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,87 +10,72 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
 use Predis\Command\Command;
-use Predis\Command\CommandInterface;
-
-abstract class AbstractAggregateConnection implements AggregateConnectionInterface
+use Predis\Command\Command_Interface;
+abstract class Abstract_Aggregate_Connection implements Aggregate_Connection_Interface
 {
     /**
      * {@inheritDoc}
      */
-    abstract public function add(NodeConnectionInterface $connection);
-
+    abstract public function add(Node_Connection_Interface $connection);
     /**
      * {@inheritDoc}
      */
-    abstract public function remove(NodeConnectionInterface $connection);
-
+    abstract public function remove(Node_Connection_Interface $connection);
     /**
      * {@inheritDoc}
      */
-    abstract public function getConnectionByCommand(CommandInterface $command);
-
+    abstract public function get_connection_by_command(Command_Interface $command);
     /**
      * {@inheritDoc}
      */
-    abstract public function getConnectionById($connectionID);
-
+    abstract public function get_connection_by_id($connection_id);
     /**
      * {@inheritDoc}
      */
     abstract public function connect();
-
     /**
      * {@inheritDoc}
      */
     abstract public function disconnect();
-
     /**
      * {@inheritDoc}
      */
-    abstract public function isConnected();
-
+    abstract public function is_connected();
     /**
      * {@inheritDoc}
      */
-    abstract public function writeRequest(CommandInterface $command);
-
+    abstract public function write_request(Command_Interface $command);
     /**
      * {@inheritDoc}
      */
-    abstract public function readResponse(CommandInterface $command);
-
+    abstract public function read_response(Command_Interface $command);
     /**
      * {@inheritDoc}
      */
-    abstract public function executeCommand(CommandInterface $command);
-
+    abstract public function execute_command(Command_Interface $command);
     /**
      * {@inheritDoc}
      */
-    abstract public function getParameters();
-
+    abstract public function get_parameters();
     /**
      * {@inheritDoc}
      */
     public function write(string $buffer): void
     {
-        $rawCommands = [];
-        $explodedBuffer = explode("\r\n", trim($buffer));
-
-        while (!empty($explodedBuffer)) {
-            $argsLen = (int) explode('*', $explodedBuffer[0])[1];
-            $cmdLen = ($argsLen * 2) + 1;
-            $rawCommands[] = array_splice($explodedBuffer, 0, $cmdLen);
+        $raw_commands = [];
+        $exploded_buffer = explode("\r\n", trim($buffer));
+        while (!empty($exploded_buffer)) {
+            $args_len = (int) explode('*', $exploded_buffer[0])[1];
+            $cmd_len = $args_len * 2 + 1;
+            $raw_commands[] = array_splice($exploded_buffer, 0, $cmd_len);
         }
-
-        foreach ($rawCommands as $command) {
+        foreach ($raw_commands as $command) {
             $command = implode("\r\n", $command) . "\r\n";
-            $commandObj = Command::deserializeCommand($command);
-            $this->getConnectionByCommand($commandObj)->write($command);
+            $command_obj = Command::deserialize_command($command);
+            $this->get_connection_by_command($command_obj)->write($command);
         }
     }
 }

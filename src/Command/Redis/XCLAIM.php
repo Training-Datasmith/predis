@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,81 +10,65 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-use Predis\Command\Redis\Utils\CommandUtility;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
+use Predis\Command\Redis\Utils\Command_Utility;
 /**
  * @see http://redis.io/commands/xclaim
  */
-class XCLAIM extends RedisCommand
+class XCLAIM extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XCLAIM';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if (count($arguments) < 5) {
             return;
         }
-
-        $processedArguments = array_slice($arguments, 0, 4);
+        $processed_arguments = array_slice($arguments, 0, 4);
         $ids = $arguments[4];
-        $processedArguments = array_merge($processedArguments, is_array($ids) ? $ids : [$ids]);
-
+        $processed_arguments = array_merge($processed_arguments, is_array($ids) ? $ids : [$ids]);
         if (array_key_exists(5, $arguments) && null !== $arguments[5]) {
-            array_push($processedArguments, 'IDLE', $arguments[5]);
+            array_push($processed_arguments, 'IDLE', $arguments[5]);
         }
-
         if (array_key_exists(6, $arguments) && null !== $arguments[6]) {
-            array_push($processedArguments, 'TIME', $arguments[6]);
+            array_push($processed_arguments, 'TIME', $arguments[6]);
         }
-
         if (array_key_exists(7, $arguments) && null !== $arguments[7]) {
-            array_push($processedArguments, 'RETRYCOUNT', $arguments[7]);
+            array_push($processed_arguments, 'RETRYCOUNT', $arguments[7]);
         }
-
         if (array_key_exists(8, $arguments) && false !== $arguments[8]) {
-            $processedArguments[] = 'FORCE';
+            $processed_arguments[] = 'FORCE';
         }
-
         if (array_key_exists(9, $arguments) && false !== $arguments[9]) {
-            $processedArguments[] = 'JUSTID';
+            $processed_arguments[] = 'JUSTID';
         }
-
         if (array_key_exists(10, $arguments) && false !== $arguments[10]) {
-            array_push($processedArguments, 'LASTID', $arguments[10]);
+            array_push($processed_arguments, 'LASTID', $arguments[10]);
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function parseResponse($data): array
+    public function parse_response($data): array
     {
         // JUSTID format
         if (isset($data[0]) && !is_array($data[0])) {
             return $data;
         }
-
         $result = [];
-        foreach ($data as [$id, $kvDict]) {
-            $result[$id] = CommandUtility::arrayToDictionary($kvDict);
+        foreach ($data as [$id, $kv_dict]) {
+            $result[$id] = Command_Utility::array_to_dictionary($kv_dict);
         }
-
         return $result;
     }
-
-    public function parseResp3Response($data): array
+    public function parse_resp3response($data): array
     {
-        return $this->parseResponse($data);
+        return $this->parse_response($data);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

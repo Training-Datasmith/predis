@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,35 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Consumer\Push;
 
-use Predis\ClientInterface;
-use Predis\Connection\NodeConnectionInterface;
-use Predis\Consumer\AbstractConsumer;
-
-class Consumer extends AbstractConsumer
+use Predis\Client_Interface;
+use Predis\Connection\Node_Connection_Interface;
+use Predis\Consumer\Abstract_Consumer;
+class Consumer extends Abstract_Consumer
 {
     /**
      * @param callable|null   $preLoopCallback Callback that should be called on client before enter a loop.
      */
-    public function __construct(ClientInterface $client, ?callable $preLoopCallback = null)
+    public function __construct(Client_Interface $client, ?callable $pre_loop_callback = null)
     {
         parent::__construct($client);
-
-        if (null !== $preLoopCallback) {
-            $preLoopCallback($this->client);
+        if (null !== $pre_loop_callback) {
+            $pre_loop_callback($this->client);
         }
     }
-
-    public function current(): ?PushResponseInterface
+    public function current(): ?Push_Response_Interface
     {
         return parent::current();
     }
-
     /**
      * Reads line from connection and returns push response or null on any other type.
      */
-    protected function getValue(): ?PushResponseInterface
+    protected function get_value(): ?Push_Response_Interface
     {
         /** @var NodeConnectionInterface $connection */
-        $connection = $this->client->getConnection();
+        $connection = $this->client->get_connection();
         $response = $connection->read();
-
-        return ($response instanceof PushResponse) ? $response : null;
+        return $response instanceof Push_Response ? $response : null;
     }
 }

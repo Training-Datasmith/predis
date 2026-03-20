@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,26 +10,22 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\With;
 
 use Predis\Command\Command;
-
 /**
  * @mixin Command
  */
-trait WithValues
+trait With_Values
 {
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $withValues = array_pop($arguments);
-
-        if (is_bool($withValues) && $withValues) {
+        $with_values = array_pop($arguments);
+        if (is_bool($with_values) && $with_values) {
             $arguments[] = 'WITHVALUES';
-        } elseif (!is_bool($withValues)) {
-            $arguments[] = $withValues;
+        } elseif (!is_bool($with_values)) {
+            $arguments[] = $with_values;
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
 }

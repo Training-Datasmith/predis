@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,40 +10,27 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\To;
 
 use Predis\Command\Argument\Server\To;
-
-trait ServerTo
+trait Server_To
 {
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$toArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$to_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
         /** @var To|null $toArgument */
-        $toArgument = $arguments[static::$toArgumentPositionOffset];
-
-        if (null === $toArgument) {
-            array_splice($arguments, static::$toArgumentPositionOffset, 1, [false]);
-            parent::setArguments($arguments);
-
+        $to_argument = $arguments[static::$to_argument_position_offset];
+        if (null === $to_argument) {
+            array_splice($arguments, static::$to_argument_position_offset, 1, [false]);
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$toArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$toArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            $toArgument->toArray(),
-            $argumentsAfter
-        ));
+        $arguments_before = array_slice($arguments, 0, static::$to_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$to_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, $to_argument->to_array(), $arguments_after));
     }
 }

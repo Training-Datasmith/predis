@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Top_K;
 
-namespace Predis\Command\Redis\TopK;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/topk.add/
  *
@@ -24,15 +21,14 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  * If an item enters the Top-K list, the item which is expelled is returned.
  * This allows dynamic heavy-hitter detection of items being entered or expelled from Top-K list.
  */
-class TOPKADD extends RedisCommand
+class TOPKADD extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TOPK.ADD';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

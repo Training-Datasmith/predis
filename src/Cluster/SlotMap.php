@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,7 +10,6 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Cluster;
 
 use ArrayAccess;
@@ -19,32 +17,29 @@ use ArrayIterator;
 use Countable;
 use IteratorAggregate;
 use OutOfBoundsException;
-use Predis\Connection\NodeConnectionInterface;
-use ReturnTypeWillChange;
+use Predis\Connection\Node_Connection_Interface;
+use Return_Type_Will_Change;
 use Traversable;
-
 /**
  * Compact slot map for redis-cluster.
  */
-class SlotMap implements ArrayAccess, IteratorAggregate, Countable
+class Slot_Map implements ArrayAccess, IteratorAggregate, Countable
 {
     /**
      * Slot ranges list.
      *
      * @var SlotRange[]
      */
-    private $slotRanges = [];
-
+    private $slot_ranges = [];
     /**
      * Checks if the given slot is valid.
      *
      * @param int $slot Slot index.
      */
-    public static function isValid($slot): bool
+    public static function is_valid($slot): bool
     {
-        return $slot >= 0 && $slot <= SlotRange::MAX_SLOTS;
+        return $slot >= 0 && $slot <= Slot_Range::MAX_SLOTS;
     }
-
     /**
      * Checks if the given slot range is valid.
      *
@@ -53,27 +48,24 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @return bool
      */
-    public static function isValidRange($first, $last)
+    public static function is_valid_range($first, $last)
     {
-        return SlotRange::isValidRange($first, $last);
+        return Slot_Range::is_valid_range($first, $last);
     }
-
     /**
      * Resets the slot map.
      */
     public function reset(): void
     {
-        $this->slotRanges = [];
+        $this->slot_ranges = [];
     }
-
     /**
      * Checks if the slot map is empty.
      */
-    public function isEmpty(): bool
+    public function is_empty(): bool
     {
-        return empty($this->slotRanges);
+        return empty($this->slot_ranges);
     }
-
     /**
      * Returns the current slot map as a dictionary of $slot => $node.
      *
@@ -81,40 +73,30 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @return array
      */
-    public function toArray()
+    public function to_array()
     {
-        return array_reduce(
-            $this->slotRanges,
-            static function (array $carry, \Predis\Cluster\SlotRange $slotRange): array {
-                return $carry + $slotRange->toArray();
-            },
-            []
-        );
+        return array_reduce($this->slot_ranges, static function (array $carry, \Predis\Cluster\Slot_Range $slot_range): array {
+            return $carry + $slot_range->to_array();
+        }, []);
     }
-
     /**
      * Returns the list of unique nodes in the slot map.
      */
-    public function getNodes(): array
+    public function get_nodes(): array
     {
-        return array_unique(array_map(
-            static function (\Predis\Cluster\SlotRange $slotRange) {
-                return $slotRange->getConnection();
-            },
-            $this->slotRanges
-        ));
+        return array_unique(array_map(static function (\Predis\Cluster\Slot_Range $slot_range) {
+            return $slot_range->get_connection();
+        }, $this->slot_ranges));
     }
-
     /**
      * Returns the list of slot ranges.
      *
      * @return SlotRange[]
      */
-    public function getSlotRanges()
+    public function get_slot_ranges()
     {
-        return $this->slotRanges;
+        return $this->slot_ranges;
     }
-
     /**
      * Assigns the specified slot range to a node.
      *
@@ -124,39 +106,26 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @throws OutOfBoundsException
      */
-    public function setSlots($first, $last, $connection): void
+    public function set_slots($first, $last, $connection): void
     {
-        if (!static::isValidRange($first, $last)) {
-            throw new OutOfBoundsException("Invalid slot range $first-$last for `$connection`");
+        if (!static::is_valid_range($first, $last)) {
+            throw new OutOfBoundsException("Invalid slot range {$first}-{$last} for `{$connection}`");
         }
-
-        $targetSlotRange = new SlotRange($first, $last, (string) $connection);
-
+        $target_slot_range = new Slot_Range($first, $last, (string) $connection);
         // Get gaps of slot ranges list.
-        $gaps = $this->getGaps($this->slotRanges);
-
-        $results = $this->slotRanges;
-
+        $gaps = $this->get_gaps($this->slot_ranges);
+        $results = $this->slot_ranges;
         foreach ($gaps as $gap) {
-            if (!$gap->hasIntersectionWith($targetSlotRange)) {
+            if (!$gap->has_intersection_with($target_slot_range)) {
                 continue;
             }
-
             // Get intersection of the gap and target slot range.
-            $results[] = new SlotRange(
-                max($gap->getStart(), $targetSlotRange->getStart()),
-                min($gap->getEnd(), $targetSlotRange->getEnd()),
-                $targetSlotRange->getConnection()
-            );
+            $results[] = new Slot_Range(max($gap->get_start(), $target_slot_range->get_start()), min($gap->get_end(), $target_slot_range->get_end()), $target_slot_range->get_connection());
         }
-
-        $this->sortSlotRanges($results);
-
-        $results = $this->compactSlotRanges($results);
-
-        $this->slotRanges = $results;
+        $this->sort_slot_ranges($results);
+        $results = $this->compact_slot_ranges($results);
+        $this->slot_ranges = $results;
     }
-
     /**
      * Returns the specified slot range.
      *
@@ -165,36 +134,23 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @return array<int, string>
      */
-    public function getSlots($first, $last)
+    public function get_slots($first, $last)
     {
-        if (!static::isValidRange($first, $last)) {
-            throw new OutOfBoundsException("Invalid slot range $first-$last");
+        if (!static::is_valid_range($first, $last)) {
+            throw new OutOfBoundsException("Invalid slot range {$first}-{$last}");
         }
-
-        $placeHolder = new NullSlotRange($first, $last);
-
+        $place_holder = new Null_Slot_Range($first, $last);
         $intersections = [];
-        foreach ($this->slotRanges as $slotRange) {
-            if (!$placeHolder->hasIntersectionWith($slotRange)) {
+        foreach ($this->slot_ranges as $slot_range) {
+            if (!$place_holder->has_intersection_with($slot_range)) {
                 continue;
             }
-
-            $intersections[] = new SlotRange(
-                max($placeHolder->getStart(), $slotRange->getStart()),
-                min($placeHolder->getEnd(), $slotRange->getEnd()),
-                $slotRange->getConnection()
-            );
+            $intersections[] = new Slot_Range(max($place_holder->get_start(), $slot_range->get_start()), min($place_holder->get_end(), $slot_range->get_end()), $slot_range->get_connection());
         }
-
-        return array_reduce(
-            $intersections,
-            static function (array $carry, \Predis\Cluster\SlotRange $slotRange): array {
-                return $carry + $slotRange->toArray();
-            },
-            []
-        );
+        return array_reduce($intersections, static function (array $carry, \Predis\Cluster\Slot_Range $slot_range): array {
+            return $carry + $slot_range->to_array();
+        }, []);
     }
-
     /**
      * Checks if the specified slot is assigned.
      *
@@ -202,12 +158,11 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @return bool
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function offsetExists($slot)
     {
-        return $this->findRangeBySlot($slot) !== false;
+        return $this->find_range_by_slot($slot) !== false;
     }
-
     /**
      * Returns the node assigned to the specified slot.
      *
@@ -215,88 +170,74 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @return string|null
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function offsetGet($slot)
     {
-        $found = $this->findRangeBySlot($slot);
-
-        return $found ? $found->getConnection() : null;
+        $found = $this->find_range_by_slot($slot);
+        return $found ? $found->get_connection() : null;
     }
-
     /**
      * Assigns the specified slot to a node.
      *
      * @param int                            $slot       Slot index.
      * @param NodeConnectionInterface|string $connection ID or connection instance.
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function offsetSet($slot, $connection): void
     {
-        if (!static::isValid($slot)) {
-            throw new OutOfBoundsException("Invalid slot $slot for `$connection`");
+        if (!static::is_valid($slot)) {
+            throw new OutOfBoundsException("Invalid slot {$slot} for `{$connection}`");
         }
-
         $this->offsetUnset($slot);
-        $this->setSlots($slot, $slot, $connection);
+        $this->set_slots($slot, $slot, $connection);
     }
-
     /**
      * Returns the node assigned to the specified slot.
      *
      * @param int $slot Slot index.
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function offsetUnset($slot): void
     {
-        if (!static::isValid($slot)) {
-            throw new OutOfBoundsException("Invalid slot $slot");
+        if (!static::is_valid($slot)) {
+            throw new OutOfBoundsException("Invalid slot {$slot}");
         }
-
         $results = [];
-        foreach ($this->slotRanges as $slotRange) {
-            if (!$slotRange->hasSlot($slot)) {
-                $results[] = $slotRange;
+        foreach ($this->slot_ranges as $slot_range) {
+            if (!$slot_range->has_slot($slot)) {
+                $results[] = $slot_range;
             }
-
-            if (static::isValidRange($slotRange->getStart(), $slot - 1)) {
-                $results[] = new SlotRange($slotRange->getStart(), $slot - 1, $slotRange->getConnection());
+            if (static::is_valid_range($slot_range->get_start(), $slot - 1)) {
+                $results[] = new Slot_Range($slot_range->get_start(), $slot - 1, $slot_range->get_connection());
             }
-
-            if (static::isValidRange($slot + 1, $slotRange->getEnd())) {
-                $results[] = new SlotRange($slot + 1, $slotRange->getEnd(), $slotRange->getConnection());
+            if (static::is_valid_range($slot + 1, $slot_range->get_end())) {
+                $results[] = new Slot_Range($slot + 1, $slot_range->get_end(), $slot_range->get_connection());
             }
         }
-
-        $this->slotRanges = $results;
+        $this->slot_ranges = $results;
     }
-
     /**
      * Returns the current number of assigned slots.
      *
      * @return int
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function count()
     {
-        return array_sum(array_map(
-            static function (\Predis\Cluster\SlotRange $slotRange): int {
-                return $slotRange->count();
-            },
-            $this->slotRanges
-        ));
+        return array_sum(array_map(static function (\Predis\Cluster\Slot_Range $slot_range): int {
+            return $slot_range->count();
+        }, $this->slot_ranges));
     }
-
     /**
      * Returns an iterator over the slot map.
      *
      * @return Traversable<int, string>
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function getIterator()
     {
-        return new ArrayIterator($this->toArray());
+        return new ArrayIterator($this->to_array());
     }
-
     /**
      * Find the slot range which contains the specific slot index.
      *
@@ -304,17 +245,15 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @return SlotRange|false The slot range object or false if not found.
      */
-    protected function findRangeBySlot(int $slot)
+    protected function find_range_by_slot(int $slot)
     {
-        foreach ($this->slotRanges as $slotRange) {
-            if ($slotRange->hasSlot($slot)) {
-                return $slotRange;
+        foreach ($this->slot_ranges as $slot_range) {
+            if ($slot_range->has_slot($slot)) {
+                return $slot_range;
             }
         }
-
         return false;
     }
-
     /**
      * Get gaps between sorted slot ranges with NullSlotRange object.
      *
@@ -322,35 +261,29 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @return SlotRange[]
      */
-    protected function getGaps(array $slotRanges): array
+    protected function get_gaps(array $slot_ranges): array
     {
-        if (empty($slotRanges)) {
-            return [
-                new NullSlotRange(0, SlotRange::MAX_SLOTS),
-            ];
+        if (empty($slot_ranges)) {
+            return [new Null_Slot_Range(0, Slot_Range::MAX_SLOTS)];
         }
         $gaps = [];
-        $count = count($slotRanges);
+        $count = count($slot_ranges);
         $i = 0;
-        foreach ($slotRanges as $key => $slotRange) {
-            $start = $slotRange->getStart();
-            $end = $slotRange->getEnd();
-            if (static::isValidRange($i, $start - 1)) {
-                $gaps[] = new NullSlotRange($i, $start - 1);
+        foreach ($slot_ranges as $key => $slot_range) {
+            $start = $slot_range->get_start();
+            $end = $slot_range->get_end();
+            if (static::is_valid_range($i, $start - 1)) {
+                $gaps[] = new Null_Slot_Range($i, $start - 1);
             }
-
             $i = $end + 1;
-
             if ($key === $count - 1) {
-                if (static::isValidRange($i, SlotRange::MAX_SLOTS)) {
-                    $gaps[] = new NullSlotRange($i, SlotRange::MAX_SLOTS);
+                if (static::is_valid_range($i, Slot_Range::MAX_SLOTS)) {
+                    $gaps[] = new Null_Slot_Range($i, Slot_Range::MAX_SLOTS);
                 }
             }
         }
-
         return $gaps;
     }
-
     /**
      * Sort slot ranges by start index.
      *
@@ -358,16 +291,12 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @return void
      */
-    protected function sortSlotRanges(array &$slotRanges)
+    protected function sort_slot_ranges(array &$slot_ranges)
     {
-        usort(
-            $slotRanges,
-            static function (SlotRange $a, SlotRange $b): int {
-                return $a->getStart() <=> $b->getStart();
-            }
-        );
+        usort($slot_ranges, static function (Slot_Range $a, Slot_Range $b): int {
+            return $a->get_start() <=> $b->get_start();
+        });
     }
-
     /**
      * Compact adjacent slot ranges with the same connection.
      *
@@ -375,31 +304,25 @@ class SlotMap implements ArrayAccess, IteratorAggregate, Countable
      *
      * @return SlotRange[]
      */
-    protected function compactSlotRanges(array $slotRanges): array
+    protected function compact_slot_ranges(array $slot_ranges): array
     {
-        if (empty($slotRanges)) {
+        if (empty($slot_ranges)) {
             return [];
         }
-
         $compacted = [];
-        $count = count($slotRanges);
+        $count = count($slot_ranges);
         $i = 0;
-        $carry = $slotRanges[0];
+        $carry = $slot_ranges[0];
         while ($i < $count) {
-            $next = $slotRanges[$i + 1] ?? null;
-            if (
-                !is_null($next)
-                && ($carry->getEnd() + 1) === $next->getStart()
-                && $carry->getConnection() === $next->getConnection()
-            ) {
-                $carry = new SlotRange($carry->getStart(), $next->getEnd(), $carry->getConnection());
+            $next = $slot_ranges[$i + 1] ?? null;
+            if (!is_null($next) && $carry->get_end() + 1 === $next->get_start() && $carry->get_connection() === $next->get_connection()) {
+                $carry = new Slot_Range($carry->get_start(), $next->get_end(), $carry->get_connection());
             } else {
                 $compacted[] = $carry;
                 $carry = $next;
             }
             $i++;
         }
-
         return array_values($compacted);
     }
 }

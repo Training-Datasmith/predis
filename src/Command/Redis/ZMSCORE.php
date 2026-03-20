@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see https://redis.io/commands/zmscore/
  *
@@ -24,12 +21,12 @@ use Predis\Command\Command as RedisCommand;
  *
  * For every member that does not exist in the sorted set, a null value is returned.
  */
-class ZMSCORE extends RedisCommand
+class ZMSCORE extends Redis_Command
 {
     /**
      * {@inheritDoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'ZMSCORE';
     }

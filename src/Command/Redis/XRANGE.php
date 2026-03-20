@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,65 +10,55 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see http://redis.io/commands/xrange
  */
-class XRANGE extends RedisCommand
+class XRANGE extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XRANGE';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if (count($arguments) === 4) {
             $arguments[] = $arguments[3];
             $arguments[3] = 'COUNT';
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
-
     /**
      * {@inheritdoc}
      * @return mixed[][]
      */
-    public function parseResponse($data): array
+    public function parse_response($data): array
     {
         $result = [];
         foreach ($data as $entry) {
             $processed = [];
             $count = count($entry[1]);
-
             for ($i = 0; $i < $count; ++$i) {
                 $processed[$entry[1][$i]] = $entry[1][++$i];
             }
-
             $result[$entry[0]] = $processed;
         }
-
         return $result;
     }
-
-    public function parseResp3Response($data)
+    public function parse_resp3response($data)
     {
-        return $this->parseResponse($data);
+        return $this->parse_response($data);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

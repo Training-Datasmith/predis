@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,17 +10,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Bloom_Filter;
 
-namespace Predis\Command\Redis\BloomFilter;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-use Predis\Command\Traits\BloomFilters\Capacity;
-use Predis\Command\Traits\BloomFilters\Error;
-use Predis\Command\Traits\BloomFilters\Expansion;
-use Predis\Command\Traits\BloomFilters\Items;
-use Predis\Command\Traits\BloomFilters\NoCreate;
-
-class BFINSERT extends RedisCommand
+use Predis\Command\Prefixable_Command as RedisCommand;
+use Predis\Command\Traits\Bloom_Filters\Capacity;
+use Predis\Command\Traits\Bloom_Filters\Error;
+use Predis\Command\Traits\Bloom_Filters\Expansion;
+use Predis\Command\Traits\Bloom_Filters\Items;
+use Predis\Command\Traits\Bloom_Filters\No_Create;
+class BFINSERT extends Redis_Command
 {
     use Capacity {
         Capacity::setArguments as setCapacity;
@@ -35,45 +32,36 @@ class BFINSERT extends RedisCommand
     use Items {
         Items::setArguments as setItems;
     }
-    use NoCreate {
-        NoCreate::setArguments as setNoCreate;
+    use No_Create {
+        No_Create::setArguments as setNoCreate;
     }
-
-    protected static $capacityArgumentPositionOffset = 1;
-    protected static $errorArgumentPositionOffset = 2;
-    protected static $expansionArgumentPositionOffset = 3;
-    protected static $noCreateArgumentPositionOffset = 4;
-    protected static $itemsArgumentPositionOffset = 6;
-
-    public function getId(): string
+    protected static $capacity_argument_position_offset = 1;
+    protected static $error_argument_position_offset = 2;
+    protected static $expansion_argument_position_offset = 3;
+    protected static $no_create_argument_position_offset = 4;
+    protected static $items_argument_position_offset = 6;
+    public function get_id(): string
     {
         return 'BF.INSERT';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $this->setNoCreate($arguments);
-        $arguments = $this->getArguments();
-
+        $this->set_no_create($arguments);
+        $arguments = $this->get_arguments();
         if (array_key_exists(5, $arguments) && $arguments[5]) {
             $arguments[5] = 'NONSCALING';
         }
-
-        $this->setItems($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setExpansion($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setErrorRate($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setCapacity($arguments);
-        $this->filterArguments();
+        $this->set_items($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_expansion($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_error_rate($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_capacity($arguments);
+        $this->filter_arguments();
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,46 +10,40 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see http://redis.io/commands/config-set
  * @see http://redis.io/commands/config-get
  * @see http://redis.io/commands/config-resetstat
  * @see http://redis.io/commands/config-rewrite
  */
-class CONFIG extends RedisCommand
+class CONFIG extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'CONFIG';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         if (is_array($data)) {
             if ($data !== array_values($data)) {
-                return $data; // Relay
+                return $data;
+                // Relay
             }
-
             $result = [];
-
             for ($i = 0; $i < count($data); ++$i) {
                 $result[$data[$i]] = $data[++$i];
             }
-
             return $result;
         }
-
         return $data;
     }
 }

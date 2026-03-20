@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,12 +10,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
@@ -25,44 +22,27 @@ trait Aggregate
     /**
      * @var string[]
      */
-    private static $aggregateValuesEnum = [
-        'min' => 'MIN',
-        'max' => 'MAX',
-        'sum' => 'SUM',
-    ];
-
+    private static $aggregate_values_enum = ['min' => 'MIN', 'max' => 'MAX', 'sum' => 'SUM'];
     /**
      * @var string
      */
-    private static $aggregateModifier = 'AGGREGATE';
-
-    public function setArguments(array $arguments): void
+    private static $aggregate_modifier = 'AGGREGATE';
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$aggregateArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$aggregate_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$aggregateArgumentPositionOffset];
-
-        if (is_string($argument) && in_array(strtoupper($argument), self::$aggregateValuesEnum)) {
-            $argument = self::$aggregateValuesEnum[$argument];
+        $argument = $arguments[static::$aggregate_argument_position_offset];
+        if (is_string($argument) && in_array(strtoupper($argument), self::$aggregate_values_enum)) {
+            $argument = self::$aggregate_values_enum[$argument];
         } else {
-            $enumValues = implode(', ', array_keys(self::$aggregateValuesEnum));
-            throw new UnexpectedValueException("Aggregate argument accepts only: {$enumValues} values");
+            $enum_values = implode(', ', array_keys(self::$aggregate_values_enum));
+            throw new UnexpectedValueException("Aggregate argument accepts only: {$enum_values} values");
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$aggregateArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$aggregateArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [self::$aggregateModifier],
-            [$argument],
-            $argumentsAfter
-        ));
+        $arguments_before = array_slice($arguments, 0, static::$aggregate_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$aggregate_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [self::$aggregate_modifier], [$argument], $arguments_after));
     }
 }

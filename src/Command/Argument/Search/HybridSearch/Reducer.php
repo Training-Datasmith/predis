@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,12 +10,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Hybrid_Search;
 
-namespace Predis\Command\Argument\Search\HybridSearch;
-
-use Predis\Command\Argument\ArrayableArgument;
-
-class Reducer implements ArrayableArgument
+use Predis\Command\Argument\Arrayable_Argument;
+class Reducer implements Arrayable_Argument
 {
     public const REDUCE_COUNT = 'COUNT';
     public const REDUCE_COUNT_DISTINCT = 'COUNT_DISTINCT';
@@ -27,12 +24,10 @@ class Reducer implements ArrayableArgument
     public const REDUCE_AVG = 'AVG';
     public const REDUCE_STDDEV = 'STDDEV';
     public const REDUCE_QUANTILE = 'QUANTILE';
-
     /**
      * @var array
      */
     protected $arguments = [];
-
     /**
      * @param string $function  One of the available functions. Check class constants.
      * @param array  $arguments List of properties
@@ -40,13 +35,11 @@ class Reducer implements ArrayableArgument
     public function __construct(string $function = self::REDUCE_COUNT, array $arguments = [], ?string $alias = null)
     {
         array_push($this->arguments, $function, count($arguments), ...$arguments);
-
         if ($alias) {
             array_push($this->arguments, 'AS', $alias);
         }
     }
-
-    public function toArray(): array
+    public function to_array(): array
     {
         return $this->arguments;
     }

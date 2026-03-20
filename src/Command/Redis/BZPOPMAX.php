@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\Redis\AbstractCommand\BZPOPBase;
-
+use Predis\Command\Redis\Abstract_Command\Bzpop_Base;
 /**
  * @see https://redis.io/commands/bzpopmax/
  *
@@ -26,9 +23,9 @@ use Predis\Command\Redis\AbstractCommand\BZPOPBase;
  * A member with the highest score is popped from first sorted set that is non-empty,
  * with the given keys being checked in the order that they are given.
  */
-class BZPOPMAX extends BZPOPBase
+class BZPOPMAX extends Bzpop_Base
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'BZPOPMAX';
     }

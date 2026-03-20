@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,18 +10,16 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-use Predis\Command\Traits\By\GeoBy;
+use Predis\Command\Prefixable_Command as RedisCommand;
+use Predis\Command\Traits\By\Geo_By;
 use Predis\Command\Traits\Count;
-use Predis\Command\Traits\From\GeoFrom;
+use Predis\Command\Traits\From\Geo_From;
 use Predis\Command\Traits\Sorting;
-use Predis\Command\Traits\With\WithCoord;
-use Predis\Command\Traits\With\WithDist;
-use Predis\Command\Traits\With\WithHash;
-
+use Predis\Command\Traits\With\With_Coord;
+use Predis\Command\Traits\With\With_Dist;
+use Predis\Command\Traits\With\With_Hash;
 /**
  * @see https://redis.io/commands/geosearch/
  *
@@ -32,13 +29,13 @@ use Predis\Command\Traits\With\WithHash;
  * This command extends the GEORADIUS command, so in addition to searching
  * within circular areas, it supports searching within rectangular areas.
  */
-class GEOSEARCH extends RedisCommand
+class GEOSEARCH extends Redis_Command
 {
-    use GeoFrom {
-        GeoFrom::setArguments as setFrom;
+    use Geo_From {
+        Geo_From::setArguments as setFrom;
     }
-    use GeoBy {
-        GeoBy::setArguments as setBy;
+    use Geo_By {
+        Geo_By::setArguments as setBy;
     }
     use Sorting {
         Sorting::setArguments as setSorting;
@@ -46,87 +43,72 @@ class GEOSEARCH extends RedisCommand
     use Count {
         Count::setArguments as setCount;
     }
-    use WithCoord {
-        WithCoord::setArguments as setWithCoord;
+    use With_Coord {
+        With_Coord::setArguments as setWithCoord;
     }
-    use WithDist {
-        WithDist::setArguments as setWithDist;
+    use With_Dist {
+        With_Dist::setArguments as setWithDist;
     }
-    use WithHash {
-        WithHash::setArguments as setWithHash;
+    use With_Hash {
+        With_Hash::setArguments as setWithHash;
     }
-
-    protected static $sortArgumentPositionOffset = 3;
-    protected static $countArgumentPositionOffset = 4;
-    protected static $withCoordArgumentPositionOffset = 6;
-    protected static $withDistArgumentPositionOffset = 7;
-    protected static $withHashArgumentPositionOffset = 8;
-
-    public function getId(): string
+    protected static $sort_argument_position_offset = 3;
+    protected static $count_argument_position_offset = 4;
+    protected static $with_coord_argument_position_offset = 6;
+    protected static $with_dist_argument_position_offset = 7;
+    protected static $with_hash_argument_position_offset = 8;
+    public function get_id(): string
     {
         return 'GEOSEARCH';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $this->setSorting($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setWithCoord($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setWithDist($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setWithHash($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setCount($arguments, $arguments[5] ?? false);
-        $arguments = $this->getArguments();
-
-        $this->setFrom($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setBy($arguments);
-        $this->filterArguments();
+        $this->set_sorting($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_with_coord($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_with_dist($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_with_hash($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_count($arguments, $arguments[5] ?? false);
+        $arguments = $this->get_arguments();
+        $this->set_from($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_by($arguments);
+        $this->filter_arguments();
     }
-
     /**
      * @return mixed[]
      */
-    public function parseResponse($data): array
+    public function parse_response($data): array
     {
-        $parsedData = [];
-        $itemKey = '';
-
+        $parsed_data = [];
+        $item_key = '';
         foreach ($data as $item) {
             if (!is_array($item)) {
-                $parsedData[] = $item;
+                $parsed_data[] = $item;
                 continue;
             }
-
-            foreach ($item as $key => $itemRow) {
+            foreach ($item as $key => $item_row) {
                 if ($key === 0) {
-                    $itemKey = $itemRow;
+                    $item_key = $item_row;
                     continue;
                 }
-
-                if (is_string($itemRow)) {
-                    $parsedData[$itemKey]['dist'] = round((float) $itemRow, 5);
-                } elseif (is_int($itemRow)) {
-                    $parsedData[$itemKey]['hash'] = $itemRow;
+                if (is_string($item_row)) {
+                    $parsed_data[$item_key]['dist'] = round((float) $item_row, 5);
+                } elseif (is_int($item_row)) {
+                    $parsed_data[$item_key]['hash'] = $item_row;
                 } else {
-                    $parsedData[$itemKey]['lng'] = round($itemRow[0], 5);
-                    $parsedData[$itemKey]['lat'] = round($itemRow[1], 5);
+                    $parsed_data[$item_key]['lng'] = round($item_row[0], 5);
+                    $parsed_data[$item_key]['lat'] = round($item_row[1], 5);
                 }
             }
         }
-
-        return $parsedData;
+        return $parsed_data;
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,33 +10,28 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Geospatial;
 
-class FromLonLat implements FromInterface
+class From_Lon_Lat implements From_Interface
 {
     private const KEYWORD = 'FROMLONLAT';
-
     /**
      * @var float
      */
     private $longitude;
-
     /**
      * @var float
      */
     private $latitude;
-
     public function __construct(float $longitude, float $latitude)
     {
         $this->longitude = $longitude;
         $this->latitude = $latitude;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         return [self::KEYWORD, $this->longitude, $this->latitude];
     }

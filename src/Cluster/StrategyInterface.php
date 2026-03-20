@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,19 +10,17 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Cluster;
 
-use Predis\Cluster\Distributor\DistributorInterface;
-use Predis\Command\CommandInterface;
-
+use Predis\Cluster\Distributor\Distributor_Interface;
+use Predis\Command\Command_Interface;
 /**
  * Interface for classes defining the strategy used to calculate an hash out of
  * keys extracted from supported commands.
  *
  * This is mostly useful to support clustering via client-side sharding.
  */
-interface StrategyInterface
+interface Strategy_Interface
 {
     /**
      * Returns a slot for the given command used for clustering distribution or
@@ -33,8 +30,7 @@ interface StrategyInterface
      *
      * @return int|null
      */
-    public function getSlot(CommandInterface $command);
-
+    public function get_slot(Command_Interface $command);
     /**
      * Returns a slot for the given key used for clustering distribution or NULL
      * when this is not possible.
@@ -43,17 +39,15 @@ interface StrategyInterface
      *
      * @return int|null
      */
-    public function getSlotByKey($key);
-
+    public function get_slot_by_key($key);
     /**
      * Returns a distributor instance to be used by the cluster.
      *
      * @return DistributorInterface
      */
-    public function getDistributor();
-
+    public function get_distributor();
     /**
      * Checks if the specified array of keys will generate the same hash.
      */
-    public function checkSameSlotForKeys(array $keys): bool;
+    public function check_same_slot_for_keys(array $keys): bool;
 }

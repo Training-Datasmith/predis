@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,35 +10,29 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
-class VSETATTR extends RedisCommand
+class VSETATTR extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'VSETATTR';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $lastArg = array_pop($arguments);
-
-        if (is_array($lastArg)) {
-            $arguments[] = json_encode($lastArg);
+        $last_arg = array_pop($arguments);
+        if (is_array($last_arg)) {
+            $arguments[] = json_encode($last_arg);
         } else {
-            $arguments[] = $lastArg;
+            $arguments[] = $last_arg;
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
-
     /**
      * @param       $data
      */
-    public function parseResponse($data): bool
+    public function parse_response($data): bool
     {
         return (bool) $data;
     }

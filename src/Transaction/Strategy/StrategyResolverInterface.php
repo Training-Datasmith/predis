@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,16 +10,14 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Transaction\Strategy;
 
-use Predis\Connection\ConnectionInterface;
-use Predis\Transaction\MultiExecState;
-
-interface StrategyResolverInterface
+use Predis\Connection\Connection_Interface;
+use Predis\Transaction\Multi_Exec_State;
+interface Strategy_Resolver_Interface
 {
     /**
      * Resolves the strategy associated with given connection.
      */
-    public function resolve(ConnectionInterface $connection, MultiExecState $state): StrategyInterface;
+    public function resolve(Connection_Interface $connection, Multi_Exec_State $state): Strategy_Interface;
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,55 +10,46 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
-class VGETATTR extends RedisCommand
+class VGETATTR extends Redis_Command
 {
     /**
      * @var bool
      */
-    private $asJson = false;
-
-    public function getId(): string
+    private $as_json = false;
+    public function get_id(): string
     {
         return 'VGETATTR';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $lastArg = array_pop($arguments);
-
-        if (is_bool($lastArg)) {
-            $this->asJson = $lastArg;
+        $last_arg = array_pop($arguments);
+        if (is_bool($last_arg)) {
+            $this->as_json = $last_arg;
         } else {
-            $arguments[] = $lastArg;
+            $arguments[] = $last_arg;
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
-
     /**
      * @param                          $data
      * @return array|mixed|string|null
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
-        if (!$this->asJson && !is_null($data)) {
+        if (!$this->as_json && !is_null($data)) {
             return json_decode($data, true);
         }
-
         return $data;
     }
-
     /**
      * @param                          $data
      * @return array|mixed|string|null
      */
-    public function parseResp3Response($data)
+    public function parse_resp3response($data)
     {
-        return $this->parseResponse($data);
+        return $this->parse_response($data);
     }
 }

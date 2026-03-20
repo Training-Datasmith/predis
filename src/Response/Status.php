@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,19 +10,16 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Response;
 
 /**
  * Represents a status response returned by Redis.
  */
-class Status implements ResponseInterface
+class Status implements Response_Interface
 {
     private static $OK;
     private static $QUEUED;
-
     private $payload;
-
     /**
      * @param string $payload Payload of the status response as returned by Redis.
      */
@@ -31,7 +27,6 @@ class Status implements ResponseInterface
     {
         $this->payload = $payload;
     }
-
     /**
      * Converts the response object to its string representation.
      */
@@ -39,17 +34,15 @@ class Status implements ResponseInterface
     {
         return $this->payload;
     }
-
     /**
      * Returns the payload of status response.
      *
      * @return string
      */
-    public function getPayload()
+    public function get_payload()
     {
         return $this->payload;
     }
-
     /**
      * Returns an instance of a status response object.
      *
@@ -65,8 +58,7 @@ class Status implements ResponseInterface
         switch ($payload) {
             case 'OK':
             case 'QUEUED':
-                return self::$$payload ?? self::$$payload = new self($payload);
-
+                return self::${$payload} ?? self::${$payload} = new self($payload);
             default:
                 return new self($payload);
         }

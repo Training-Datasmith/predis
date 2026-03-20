@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,79 +10,61 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
+use Predis\Command\Prefixable_Command as RedisCommand;
 use Predis\Command\Traits\Count;
 use Predis\Command\Traits\Keys;
-use Predis\Command\Traits\LeftRight;
-
-class LMPOP extends RedisCommand
+use Predis\Command\Traits\Left_Right;
+class LMPOP extends Redis_Command
 {
     use Keys {
         Keys::setArguments as setKeys;
     }
-    use LeftRight {
-        LeftRight::setArguments as setLeftRight;
+    use Left_Right {
+        Left_Right::setArguments as setLeftRight;
     }
     use Count {
         Count::setArguments as setCount;
     }
-
-    protected static $keysArgumentPositionOffset = 0;
-    protected static $leftRightArgumentPositionOffset = 1;
-    protected static $countArgumentPositionOffset = 2;
-
-    public function getId(): string
+    protected static $keys_argument_position_offset = 0;
+    protected static $left_right_argument_position_offset = 1;
+    protected static $count_argument_position_offset = 2;
+    public function get_id(): string
     {
         return 'LMPOP';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $this->setCount($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setLeftRight($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setKeys($arguments);
-        $this->filterArguments();
+        $this->set_count($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_left_right($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_keys($arguments);
+        $this->filter_arguments();
     }
-
-    public function parseResponse($data): ?array
+    public function parse_response($data): ?array
     {
         if (null === $data) {
             return null;
         }
-
         return [$data[0] => $data[1]];
     }
-
-    public function parseResp3Response($data)
+    public function parse_resp3response($data)
     {
-        return $this->parseResponse($data);
+        return $this->parse_response($data);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $arguments = $this->getArguments();
-
-        $keysOffset = static::$keysArgumentPositionOffset;
-        $keysCount = $arguments[$keysOffset];
-        $keys = array_slice($arguments, $keysOffset + 1, $keysCount);
-        $prefixedKeys = array_map(static function (string $key) use ($prefix): string {
+        $arguments = $this->get_arguments();
+        $keys_offset = static::$keys_argument_position_offset;
+        $keys_count = $arguments[$keys_offset];
+        $keys = array_slice($arguments, $keys_offset + 1, $keys_count);
+        $prefixed_keys = array_map(static function (string $key) use ($prefix): string {
             return $prefix . $key;
         }, $keys);
-
-        $argumentsBefore = array_slice($arguments, 0, $keysOffset + 1);
-        $argumentsAfter = array_slice($arguments, $keysOffset + $keysCount + 1);
-
-        $this->setRawArguments(array_merge(
-            $argumentsBefore,
-            $prefixedKeys,
-            $argumentsAfter
-        ));
+        $arguments_before = array_slice($arguments, 0, $keys_offset + 1);
+        $arguments_after = array_slice($arguments, $keys_offset + $keys_count + 1);
+        $this->set_raw_arguments(array_merge($arguments_before, $prefixed_keys, $arguments_after));
     }
 }

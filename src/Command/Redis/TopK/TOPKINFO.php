@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,35 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Top_K;
 
-namespace Predis\Command\Redis\TopK;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/topk.info/
  *
  * Returns number of required items (k), width, depth and decay values.
  */
-class TOPKINFO extends RedisCommand
+class TOPKINFO extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TOPK.INFO';
     }
-
     /**
      * @return mixed[]
      */
-    public function parseResponse($data): array
+    public function parse_response($data): array
     {
         $result = [];
-
-        for ($i = 0, $iMax = count($data); $i < $iMax; ++$i) {
+        for ($i = 0, $i_max = count($data); $i < $i_max; ++$i) {
             if (array_key_exists($i + 1, $data)) {
                 $result[(string) $data[$i]] = $data[++$i];
             }
         }
-
         return $result;
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

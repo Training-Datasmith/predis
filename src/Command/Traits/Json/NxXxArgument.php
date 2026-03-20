@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,56 +10,38 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\Json;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
-trait NxXxArgument
+trait Nx_Xx_Argument
 {
     /**
      * @var string[]
      */
-    private static $argumentEnum = [
-        'nx' => 'NX',
-        'xx' => 'XX',
-    ];
-
-    public function setArguments(array $arguments): void
+    private static $argument_enum = ['nx' => 'NX', 'xx' => 'XX'];
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$nxXxArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$nx_xx_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        if (null === $arguments[static::$nxXxArgumentPositionOffset]) {
-            array_splice($arguments, static::$nxXxArgumentPositionOffset, 1, [false]);
-            parent::setArguments($arguments);
-
+        if (null === $arguments[static::$nx_xx_argument_position_offset]) {
+            array_splice($arguments, static::$nx_xx_argument_position_offset, 1, [false]);
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$nxXxArgumentPositionOffset];
-
-        if (!in_array(strtoupper($argument), self::$argumentEnum, true)) {
-            $enumValues = implode(', ', array_keys(self::$argumentEnum));
-            throw new UnexpectedValueException("Argument accepts only: {$enumValues} values");
+        $argument = $arguments[static::$nx_xx_argument_position_offset];
+        if (!in_array(strtoupper($argument), self::$argument_enum, true)) {
+            $enum_values = implode(', ', array_keys(self::$argument_enum));
+            throw new UnexpectedValueException("Argument accepts only: {$enum_values} values");
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$nxXxArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$nxXxArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [self::$argumentEnum[strtolower($argument)]],
-            $argumentsAfter
-        ));
+        $arguments_before = array_slice($arguments, 0, static::$nx_xx_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$nx_xx_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [self::$argument_enum[strtolower($argument)]], $arguments_after));
     }
 }

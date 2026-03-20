@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,28 +10,23 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Hybrid_Search;
 
-namespace Predis\Command\Argument\Search\HybridSearch;
-
-use Predis\Command\Argument\ArrayableArgument;
-
-class SearchConfig implements ArrayableArgument
+use Predis\Command\Argument\Arrayable_Argument;
+class Search_Config implements Arrayable_Argument
 {
     /**
      * @var array
      */
     protected $arguments = ['SEARCH'];
-
     /**
      * @var ScorerConfig
      */
-    protected $scorerConfig;
-
+    protected $scorer_config;
     public function __construct()
     {
-        $this->scorerConfig = new ScorerConfig();
+        $this->scorer_config = new Scorer_Config();
     }
-
     /**
      * Search query.
      *
@@ -41,40 +35,32 @@ class SearchConfig implements ArrayableArgument
     public function query(string $query): self
     {
         $this->arguments[] = $query;
-
         return $this;
     }
-
     /**
      * @return $this
      */
     public function as(string $alias): self
     {
         array_push($this->arguments, 'YIELD_SCORE_AS', $alias);
-
         return $this;
     }
-
     /**
      * @param  callable(ScorerConfig): void $callable
      * @return $this
      */
-    public function buildScorerConfig(callable $callable): self
+    public function build_scorer_config(callable $callable): self
     {
-        $callable($this->scorerConfig);
-
+        $callable($this->scorer_config);
         return $this;
     }
-
-    public function toArray(): array
+    public function to_array(): array
     {
-        $scorerConfig = $this->scorerConfig->toArray();
-
-        if (!empty($scorerConfig)) {
+        $scorer_config = $this->scorer_config->to_array();
+        if (!empty($scorer_config)) {
             $this->arguments[] = 'SCORER';
-            $this->arguments = array_merge($this->arguments, $scorerConfig);
+            $this->arguments = array_merge($this->arguments, $scorer_config);
         }
-
         return $this->arguments;
     }
 }

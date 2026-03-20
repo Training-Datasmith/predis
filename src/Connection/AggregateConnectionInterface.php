@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,24 +10,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
-use Predis\Command\CommandInterface;
-
+use Predis\Command\Command_Interface;
 /**
  * Defines a virtual connection composed of multiple connection instances to
  * single Redis nodes.
  */
-interface AggregateConnectionInterface extends ConnectionInterface
+interface Aggregate_Connection_Interface extends Connection_Interface
 {
     /**
      * Adds a connection instance to the aggregate connection.
      *
      * @param NodeConnectionInterface $connection Connection instance.
      */
-    public function add(NodeConnectionInterface $connection);
-
+    public function add(Node_Connection_Interface $connection);
     /**
      * Removes the specified connection instance from the aggregate connection.
      *
@@ -36,8 +32,7 @@ interface AggregateConnectionInterface extends ConnectionInterface
      *
      * @return bool Returns true if the connection was in the pool.
      */
-    public function remove(NodeConnectionInterface $connection);
-
+    public function remove(Node_Connection_Interface $connection);
     /**
      * Returns the connection instance in charge for the given command.
      *
@@ -45,8 +40,7 @@ interface AggregateConnectionInterface extends ConnectionInterface
      *
      * @return NodeConnectionInterface
      */
-    public function getConnectionByCommand(CommandInterface $command);
-
+    public function get_connection_by_command(Command_Interface $command);
     /**
      * Returns a connection instance from the aggregate connection by its alias.
      *
@@ -54,5 +48,5 @@ interface AggregateConnectionInterface extends ConnectionInterface
      *
      * @return NodeConnectionInterface|null
      */
-    public function getConnectionById($connectionID);
+    public function get_connection_by_id($connection_id);
 }

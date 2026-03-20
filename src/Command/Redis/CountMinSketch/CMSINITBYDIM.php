@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,25 +10,22 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Count_Min_Sketch;
 
-namespace Predis\Command\Redis\CountMinSketch;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/cms.initbydim/
  *
  * Initializes a Count-Min Sketch to dimensions specified by user.
  */
-class CMSINITBYDIM extends RedisCommand
+class CMSINITBYDIM extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'CMS.INITBYDIM';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

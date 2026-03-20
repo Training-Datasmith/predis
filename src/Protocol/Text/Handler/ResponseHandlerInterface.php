@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Protocol\Text\Handler;
 
-use Predis\Connection\CompositeConnectionInterface;
-
+use Predis\Connection\Composite_Connection_Interface;
 /**
  * Defines a pluggable handler used to parse a particular type of response.
  */
-interface ResponseHandlerInterface
+interface Response_Handler_Interface
 {
     /**
      * Deserializes a response returned by Redis and reads more data from the
@@ -30,5 +27,5 @@ interface ResponseHandlerInterface
      *
      * @return mixed
      */
-    public function handle(CompositeConnectionInterface $connection, $payload);
+    public function handle(Composite_Connection_Interface $connection, $payload);
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Time_Series;
 
-namespace Predis\Command\Redis\TimeSeries;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/ts.decrby/
  *
@@ -23,26 +20,20 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  * or create a new sample with a value equal to the value of the sample
  * with the maximum existing timestamp with a given decrement.
  */
-class TSDECRBY extends RedisCommand
+class TSDECRBY extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TS.DECRBY';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         [$key, $value] = $arguments;
-        $commandArguments = (!empty($arguments[2])) ? $arguments[2]->toArray() : [];
-
-        parent::setArguments(array_merge(
-            [$key, $value],
-            $commandArguments
-        ));
+        $command_arguments = !empty($arguments[2]) ? $arguments[2]->to_array() : [];
+        parent::set_arguments(array_merge([$key, $value], $command_arguments));
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

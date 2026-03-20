@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,14 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Configuration;
 
 /**
  * Defines an handler used by Predis\Configuration\Options to filter, validate
  * or return default values for a given option.
  */
-interface OptionInterface
+interface Option_Interface
 {
     /**
      * Filters and validates the passed value.
@@ -28,8 +26,7 @@ interface OptionInterface
      *
      * @return mixed
      */
-    public function filter(OptionsInterface $options, $value);
-
+    public function filter(Options_Interface $options, $value);
     /**
      * Returns the default value for the option.
      *
@@ -37,5 +34,5 @@ interface OptionInterface
      *
      * @return mixed
      */
-    public function getDefault(OptionsInterface $options);
+    public function get_default(Options_Interface $options);
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,21 +10,18 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Hybrid_Search\Combine;
 
-namespace Predis\Command\Argument\Search\HybridSearch\Combine;
-
-class LinearCombineConfig extends BaseCombine
+class Linear_Combine_Config extends Base_Combine
 {
     /**
      * @var float
      */
     protected $alpha;
-
     /**
      * @var float
      */
     protected $beta;
-
     /**
      * The weight for the text score (a value between 0 and 1).
      *
@@ -34,10 +30,8 @@ class LinearCombineConfig extends BaseCombine
     public function alpha(float $alpha): self
     {
         $this->alpha = $alpha;
-
         return $this;
     }
-
     /**
      * The weight for the vector score (a value between 0 and 1).
      *
@@ -46,34 +40,27 @@ class LinearCombineConfig extends BaseCombine
     public function beta(float $beta): self
     {
         $this->beta = $beta;
-
         return $this;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         $this->arguments[] = 'LINEAR';
         $tokens = [];
-
         if ($this->alpha !== null) {
             array_push($tokens, 'ALPHA', $this->alpha);
         }
-
         if ($this->beta !== null) {
             array_push($tokens, 'BETA', $this->beta);
         }
-
         if ($this->as) {
             array_push($tokens, ...$this->as);
         }
-
         if (!empty($tokens)) {
             array_push($this->arguments, count($tokens), ...$tokens);
         }
-
         return $this->arguments;
     }
 }

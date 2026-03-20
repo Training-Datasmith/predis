@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,30 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Predis\Command\Traits\BloomFilters;
+namespace Predis\Command\Traits\Bloom_Filters;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
-trait NoCreate
+trait No_Create
 {
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (
-            static::$noCreateArgumentPositionOffset >= $argumentsLength
-            || false === $arguments[static::$noCreateArgumentPositionOffset]
-        ) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$no_create_argument_position_offset >= $arguments_length || false === $arguments[static::$no_create_argument_position_offset]) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$noCreateArgumentPositionOffset];
-
+        $argument = $arguments[static::$no_create_argument_position_offset];
         if (true === $argument) {
             $argument = 'NOCREATE';
         } else {
             throw new UnexpectedValueException('Wrong NOCREATE argument type');
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$noCreateArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$noCreateArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge($argumentsBefore, [$argument], $argumentsAfter));
+        $arguments_before = array_slice($arguments, 0, static::$no_create_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$no_create_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [$argument], $arguments_after));
     }
 }

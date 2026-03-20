@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,16 +10,14 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 class BLMPOP extends LMPOP
 {
-    protected static $keysArgumentPositionOffset = 1;
-    protected static $leftRightArgumentPositionOffset = 2;
-    protected static $countArgumentPositionOffset = 3;
-
-    public function getId(): string
+    protected static $keys_argument_position_offset = 1;
+    protected static $left_right_argument_position_offset = 2;
+    protected static $count_argument_position_offset = 3;
+    public function get_id(): string
     {
         return 'BLMPOP';
     }

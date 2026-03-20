@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,13 +10,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Configuration\Option;
 
 use InvalidArgumentException;
-use Predis\Configuration\OptionInterface;
-use Predis\Configuration\OptionsInterface;
-
+use Predis\Configuration\Option_Interface;
+use Predis\Configuration\Options_Interface;
 /**
  * Configures upstream driver information for CLIENT SETINFO.
  *
@@ -25,30 +22,25 @@ use Predis\Configuration\OptionsInterface;
  * (e.g., 'laravel_v11.0.0' or ['laravel_v11.0.0', 'my-app_v1.0.0']) that will
  * be included in the LIB-NAME sent to Redis via CLIENT SETINFO.
  */
-class UpstreamDriver implements OptionInterface
+class Upstream_Driver implements Option_Interface
 {
     /**
      * {@inheritdoc}
      */
-    public function filter(OptionsInterface $options, $value): string
+    public function filter(Options_Interface $options, $value): string
     {
         if (is_string($value)) {
             return $value;
         }
-
         if (is_array($value)) {
             return implode(';', $value);
         }
-
-        throw new InvalidArgumentException(
-            'UpstreamDriver option expects a string or an array of strings'
-        );
+        throw new InvalidArgumentException('UpstreamDriver option expects a string or an array of strings');
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options): string
+    public function get_default(Options_Interface $options): string
     {
         return '';
     }

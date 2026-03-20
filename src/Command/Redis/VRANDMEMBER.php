@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,26 +10,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
-class VRANDMEMBER extends RedisCommand
+class VRANDMEMBER extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'VRANDMEMBER';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $lastArg = array_pop($arguments);
-
-        if (!is_null($lastArg)) {
-            $arguments[] = $lastArg;
+        $last_arg = array_pop($arguments);
+        if (!is_null($last_arg)) {
+            $arguments[] = $last_arg;
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
 }

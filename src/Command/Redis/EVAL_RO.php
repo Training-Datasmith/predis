@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,25 +10,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use Predis\Command\Traits\Keys;
-
 /**
  * @see https://redis.io/commands/eval_ro/
  *
  * This is a read-only variant of the EVAL command
  * that cannot execute commands that modify data.
  */
-class EVAL_RO extends RedisCommand
+class EVAL_RO extends Redis_Command
 {
     use Keys;
-
-    protected static $keysArgumentPositionOffset = 1;
-
-    public function getId(): string
+    protected static $keys_argument_position_offset = 1;
+    public function get_id(): string
     {
         return 'EVAL_RO';
     }

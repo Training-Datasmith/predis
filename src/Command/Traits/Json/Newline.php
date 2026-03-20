@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,46 +10,30 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\Json;
 
 use UnexpectedValueException;
-
 trait Newline
 {
-    private static $newlineModifier = 'NEWLINE';
-
-    public function setArguments(array $arguments): void
+    private static $newline_modifier = 'NEWLINE';
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$newlineArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$newline_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        if ($arguments[static::$newlineArgumentPositionOffset] === '') {
-            array_splice($arguments, static::$newlineArgumentPositionOffset, 1, [false]);
-            parent::setArguments($arguments);
-
+        if ($arguments[static::$newline_argument_position_offset] === '') {
+            array_splice($arguments, static::$newline_argument_position_offset, 1, [false]);
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$newlineArgumentPositionOffset];
-
+        $argument = $arguments[static::$newline_argument_position_offset];
         if (!is_string($argument)) {
             throw new UnexpectedValueException('Newline argument value should be a string');
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$newlineArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$newlineArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [self::$newlineModifier],
-            [$argument],
-            $argumentsAfter
-        ));
+        $arguments_before = array_slice($arguments, 0, static::$newline_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$newline_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [self::$newline_modifier], [$argument], $arguments_after));
     }
 }

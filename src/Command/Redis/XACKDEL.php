@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,38 +10,32 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see http://redis.io/commands/xackdel
  */
-class XACKDEL extends RedisCommand
+class XACKDEL extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XACKDEL';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0], $arguments[1], strtoupper($arguments[2])];
-
-        array_push($processedArguments, 'IDS', strval(count($arguments[3])), ...$arguments[3]);
-
-        parent::setArguments($processedArguments);
+        $processed_arguments = [$arguments[0], $arguments[1], strtoupper($arguments[2])];
+        array_push($processed_arguments, 'IDS', strval(count($arguments[3])), ...$arguments[3]);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

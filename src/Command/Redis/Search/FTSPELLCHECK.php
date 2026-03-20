@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,48 +10,35 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Search;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
-class FTSPELLCHECK extends RedisCommand
+use Predis\Command\Prefixable_Command as RedisCommand;
+class FTSPELLCHECK extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'FT.SPELLCHECK';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         // If command already deserialized, bypass logic.
         if (in_array('DIALECT', $arguments)) {
-            parent::setArguments($arguments);
-
+            parent::set_arguments($arguments);
             return;
         }
-
         [$index, $query] = $arguments;
-
-        if (!empty($arguments[2]) && !in_array('DIALECT', $arguments[2]->toArray())) {
+        if (!empty($arguments[2]) && !in_array('DIALECT', $arguments[2]->to_array())) {
             // Default dialect is 2
             $arguments[2]->dialect(2);
         }
-
-        $commandArguments = ['DIALECT', 2];
-
+        $command_arguments = ['DIALECT', 2];
         if (!empty($arguments[2])) {
-            $commandArguments = $arguments[2]->toArray();
+            $command_arguments = $arguments[2]->to_array();
         }
-
-        parent::setArguments(array_merge(
-            [$index, $query],
-            $commandArguments
-        ));
+        parent::set_arguments(array_merge([$index, $query], $command_arguments));
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

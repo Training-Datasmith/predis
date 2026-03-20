@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,88 +10,77 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command;
 
-use Predis\ClientConfiguration;
+use Predis\Client_Configuration;
 use UnexpectedValueException;
-
 /**
  * Base class for Redis commands.
  */
-abstract class Command implements CommandInterface
+abstract class Command implements Command_Interface
 {
     private $slot;
     private $arguments = [];
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         $this->arguments = $arguments;
         unset($this->slot);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setRawArguments(array $arguments): void
+    public function set_raw_arguments(array $arguments): void
     {
         $this->arguments = $arguments;
         unset($this->slot);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getArguments()
+    public function get_arguments()
     {
         return $this->arguments;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getArgument($index)
+    public function get_argument($index)
     {
         if (isset($this->arguments[$index])) {
             return $this->arguments[$index];
         }
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setSlot($slot): void
+    public function set_slot($slot): void
     {
         $this->slot = $slot;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getSlot()
+    public function get_slot()
     {
         return $this->slot ?? null;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         return $data;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResp3Response($data)
+    public function parse_resp3response($data)
     {
         return $data;
     }
-
     /**
      * Normalizes the arguments array passed to a Redis command.
      *
@@ -100,15 +88,13 @@ abstract class Command implements CommandInterface
      *
      * @return array
      */
-    public static function normalizeArguments(array $arguments)
+    public static function normalize_arguments(array $arguments)
     {
         if (count($arguments) === 1 && isset($arguments[0]) && is_array($arguments[0])) {
             return $arguments[0];
         }
-
         return $arguments;
     }
-
     /**
      * Normalizes the arguments array passed to a variadic Redis command.
      *
@@ -116,85 +102,67 @@ abstract class Command implements CommandInterface
      *
      * @return array
      */
-    public static function normalizeVariadic(array $arguments)
+    public static function normalize_variadic(array $arguments)
     {
         if (count($arguments) === 2 && is_array($arguments[1])) {
             return array_merge([$arguments[0]], $arguments[1]);
         }
-
         return $arguments;
     }
-
     /**
      * Remove all false values from arguments.
      */
-    public function filterArguments(): void
+    public function filter_arguments(): void
     {
         $this->arguments = array_filter($this->arguments, static function ($argument): bool {
             return $argument !== false && $argument !== null;
         });
     }
-
     /**
      * {@inheritDoc}
      */
-    public function serializeCommand(): string
+    public function serialize_command(): string
     {
-        $commandID = $this->getId();
-        $arguments = $this->getArguments();
-
-        $cmdlen = strlen($commandID);
+        $command_id = $this->get_id();
+        $arguments = $this->get_arguments();
+        $cmdlen = strlen($command_id);
         $reqlen = count($arguments) + 1;
-
-        $buffer = "*{$reqlen}\r\n\${$cmdlen}\r\n{$commandID}\r\n";
-
+        $buffer = "*{$reqlen}\r\n\${$cmdlen}\r\n{$command_id}\r\n";
         foreach ($arguments as $argument) {
             $arglen = strlen(strval($argument));
             $buffer .= "\${$arglen}\r\n{$argument}\r\n";
         }
-
         return $buffer;
     }
-
     /**
      * {@inheritDoc}
      */
-    public static function deserializeCommand(string $serializedCommand): CommandInterface
+    public static function deserialize_command(string $serialized_command): Command_Interface
     {
-        if ($serializedCommand[0] !== '*') {
+        if ($serialized_command[0] !== '*') {
             throw new UnexpectedValueException('Invalid serializing format');
         }
-
-        $commandArray = explode("\r\n", $serializedCommand);
-        $commandId = $commandArray[2];
-        $classPath = __NAMESPACE__ . '\Redis\\';
-
+        $command_array = explode("\r\n", $serialized_command);
+        $command_id = $command_array[2];
+        $class_path = __NAMESPACE__ . '\Redis\\';
         // Check if given command is a module command.
-        if (count($commandIdArray = explode('.', $commandId)) > 1) {
+        if (count($command_id_array = explode('.', $command_id)) > 1) {
             // Fetch module configuration to resolve namespace.
-            $moduleConfiguration = array_filter(
-                ClientConfiguration::getModules(),
-                static function (array $module) use ($commandIdArray): bool {
-                    return $module['commandPrefix'] === $commandIdArray[0];
-                }
-            );
-
-            $commandClass = strtoupper($commandIdArray[0] . $commandIdArray[1]);
-            $classPath .= array_shift($moduleConfiguration)['name'] . '\\' . $commandClass;
+            $module_configuration = array_filter(Client_Configuration::get_modules(), static function (array $module) use ($command_id_array): bool {
+                return $module['commandPrefix'] === $command_id_array[0];
+            });
+            $command_class = strtoupper($command_id_array[0] . $command_id_array[1]);
+            $class_path .= array_shift($module_configuration)['name'] . '\\' . $command_class;
         } else {
-            $classPath .= $commandIdArray[0];
+            $class_path .= $command_id_array[0];
         }
-
-        $command = new $classPath();
+        $command = new $class_path();
         $arguments = [];
-
-        for ($i = 4, $iMax = count($commandArray); $i < $iMax; $i++) {
-            $arguments[] = $commandArray[$i];
+        for ($i = 4, $i_max = count($command_array); $i < $i_max; $i++) {
+            $arguments[] = $command_array[$i];
             ++$i;
         }
-
-        $command->setArguments($arguments);
-
+        $command->set_arguments($arguments);
         return $command;
     }
 }

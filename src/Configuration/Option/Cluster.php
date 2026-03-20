@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,16 +10,14 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Configuration\Option;
 
 use InvalidArgumentException;
-use Predis\Cluster\RedisStrategy;
-use Predis\Configuration\OptionsInterface;
-use Predis\Connection\Cluster\PredisCluster;
-use Predis\Connection\Cluster\RedisCluster;
+use Predis\Cluster\Redis_Strategy;
+use Predis\Configuration\Options_Interface;
+use Predis\Connection\Cluster\Predis_Cluster;
+use Predis\Connection\Cluster\Redis_Cluster;
 use Predis\Connection\Parameters;
-
 /**
  * Configures an aggregate connection used for clustering
  * multiple Redis nodes using various implementations with
@@ -31,22 +28,16 @@ class Cluster extends Aggregate
     /**
      * {@inheritdoc}
      */
-    public function filter(OptionsInterface $options, $value)
+    public function filter(Options_Interface $options, $value)
     {
         if (is_string($value)) {
-            $value = $this->getConnectionInitializerByString($options, $value);
+            $value = $this->get_connection_initializer_by_string($options, $value);
         }
-
         if (is_callable($value)) {
-            return $this->getConnectionInitializer($options, $value);
+            return $this->get_connection_initializer($options, $value);
         }
-        throw new InvalidArgumentException(sprintf(
-            '%s expects either a string or a callable value, %s given',
-            static::class,
-            is_object($value) ? get_class($value) : gettype($value)
-        ));
+        throw new InvalidArgumentException(sprintf('%s expects either a string or a callable value, %s given', static::class, is_object($value) ? get_class($value) : gettype($value)));
     }
-
     /**
      * Returns a connection initializer from a descriptive name.
      *
@@ -55,56 +46,38 @@ class Cluster extends Aggregate
      *
      * @return callable
      */
-    protected function getConnectionInitializerByString(OptionsInterface $options, string $description)
+    protected function get_connection_initializer_by_string(Options_Interface $options, string $description)
     {
         switch ($description) {
             case 'redis':
             case 'redis-cluster':
-                return static function ($parameters, $options, $option): \Predis\Connection\Cluster\RedisCluster {
-                    $optionParameters = $options->parameters ?? [];
-
-                    return new RedisCluster(
-                        $options->connections,
-                        new Parameters($optionParameters),
-                        new RedisStrategy($options->crc16),
-                        $options->readTimeout
-                    );
+                return static function ($parameters, $options, $option): \Predis\Connection\Cluster\Redis_Cluster {
+                    $option_parameters = $options->parameters ?? [];
+                    return new Redis_Cluster($options->connections, new Parameters($option_parameters), new Redis_Strategy($options->crc16), $options->read_timeout);
                 };
-
             case 'predis':
-                return $this->getDefaultConnectionInitializer();
-
+                return $this->get_default_connection_initializer();
             default:
-                throw new InvalidArgumentException(sprintf(
-                    '%s expects either `predis`, `redis` or `redis-cluster` as valid string values, `%s` given',
-                    static::class,
-                    $description
-                ));
+                throw new InvalidArgumentException(sprintf('%s expects either `predis`, `redis` or `redis-cluster` as valid string values, `%s` given', static::class, $description));
         }
     }
-
     /**
      * Returns the default connection initializer.
      *
      * @return callable
      */
-    protected function getDefaultConnectionInitializer()
+    protected function get_default_connection_initializer()
     {
-        return static function ($parameters, $options, $option): \Predis\Connection\Cluster\PredisCluster {
-            $optionsParameters = $options->parameters ?? [];
-
-            return new PredisCluster(new Parameters($optionsParameters));
+        return static function ($parameters, $options, $option): \Predis\Connection\Cluster\Predis_Cluster {
+            $options_parameters = $options->parameters ?? [];
+            return new Predis_Cluster(new Parameters($options_parameters));
         };
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options)
+    public function get_default(Options_Interface $options)
     {
-        return $this->getConnectionInitializer(
-            $options,
-            $this->getDefaultConnectionInitializer()
-        );
+        return $this->get_connection_initializer($options, $this->get_default_connection_initializer());
     }
 }

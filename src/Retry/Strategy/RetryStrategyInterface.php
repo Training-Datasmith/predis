@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,24 +10,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Retry\Strategy;
 
 /**
  * Retry strategy interface.
  */
-interface RetryStrategyInterface
+interface Retry_Strategy_Interface
 {
     /**
      * Minimum backoff between each retry in micro seconds.
      */
     public const DEFAULT_BASE = 8 * 1000;
-
     /**
      * Maximum backoff between each retry in micro seconds.
      */
     public const DEFAULT_CAP = 512 * 1000;
-
     /**
      * Compute backoff in micro seconds upon failure.
      */

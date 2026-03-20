@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @deprecated As of Redis version 6.2.0, this command is regarded as deprecated.
  *
@@ -24,77 +21,65 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  *
  * @see http://redis.io/commands/georadius
  */
-class GEORADIUS extends RedisCommand
+class GEORADIUS extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'GEORADIUS';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if ($arguments && is_array(end($arguments))) {
             $options = array_change_key_case(array_pop($arguments), CASE_UPPER);
-
             if (isset($options['WITHCOORD']) && $options['WITHCOORD'] == true) {
                 $arguments[] = 'WITHCOORD';
             }
-
             if (isset($options['WITHDIST']) && $options['WITHDIST'] == true) {
                 $arguments[] = 'WITHDIST';
             }
-
             if (isset($options['WITHHASH']) && $options['WITHHASH'] == true) {
                 $arguments[] = 'WITHHASH';
             }
-
             if (isset($options['COUNT'])) {
                 $arguments[] = 'COUNT';
                 $arguments[] = $options['COUNT'];
             }
-
             if (isset($options['SORT'])) {
                 $arguments[] = strtoupper($options['SORT']);
             }
-
             if (isset($options['STORE'])) {
                 $arguments[] = 'STORE';
                 $arguments[] = $options['STORE'];
             }
-
             if (isset($options['STOREDIST'])) {
                 $arguments[] = 'STOREDIST';
                 $arguments[] = $options['STOREDIST'];
             }
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        if ($arguments = $this->getArguments()) {
-            $arguments[0] = "$prefix{$arguments[0]}";
-            $startIndex = $this->getId() === 'GEORADIUS' ? 5 : 4;
-
-            if (($count = count($arguments)) > $startIndex) {
-                for ($i = $startIndex; $i < $count; ++$i) {
+        if ($arguments = $this->get_arguments()) {
+            $arguments[0] = "{$prefix}{$arguments[0]}";
+            $start_index = $this->get_id() === 'GEORADIUS' ? 5 : 4;
+            if (($count = count($arguments)) > $start_index) {
+                for ($i = $start_index; $i < $count; ++$i) {
                     switch (strtoupper($arguments[$i])) {
                         case 'STORE':
                         case 'STOREDIST':
-                            $arguments[$i] = "$prefix{$arguments[++$i]}";
+                            $arguments[$i] = "{$prefix}{$arguments[++$i]}";
                             break;
                     }
                 }
             }
-
-            $this->setRawArguments($arguments);
+            $this->set_raw_arguments($arguments);
         }
     }
 }

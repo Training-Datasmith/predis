@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,57 +10,47 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
-class VEMB extends RedisCommand
+class VEMB extends Redis_Command
 {
     /**
      * @var bool
      */
-    private $isRaw = false;
-
-    public function getId(): string
+    private $is_raw = false;
+    public function get_id(): string
     {
         return 'VEMB';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0], $arguments[1]];
-
+        $processed_arguments = [$arguments[0], $arguments[1]];
         if (isset($arguments[2])) {
-            $this->isRaw = true;
-            $processedArguments[] = 'RAW';
+            $this->is_raw = true;
+            $processed_arguments[] = 'RAW';
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
     /**
      * @param                            $data
      * @return array|float[]|string|null
      */
-    public function parseResponse($data): array
+    public function parse_response($data): array
     {
-        if (!$this->isRaw) {
+        if (!$this->is_raw) {
             return array_map(static function ($value): float {
                 return (float) $value;
             }, $data);
         }
-
-        $parsedData = [];
-
+        $parsed_data = [];
         for ($i = 0; $i < count($data); $i++) {
             if ($i > 1) {
-                $parsedData[] = (float) $data[$i];
+                $parsed_data[] = (float) $data[$i];
             } else {
-                $parsedData[] = $data[$i];
+                $parsed_data[] = $data[$i];
             }
         }
-
-        return $parsedData;
+        return $parsed_data;
     }
 }

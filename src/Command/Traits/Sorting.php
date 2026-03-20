@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,49 +10,31 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use UnexpectedValueException;
-
 trait Sorting
 {
-    private static $sortingEnum = [
-        'asc' => 'ASC',
-        'desc' => 'DESC',
-    ];
-
-    public function setArguments(array $arguments): void
+    private static $sorting_enum = ['asc' => 'ASC', 'desc' => 'DESC'];
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$sortArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$sort_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$sortArgumentPositionOffset];
-
+        $argument = $arguments[static::$sort_argument_position_offset];
         if (null === $argument) {
-            array_splice($arguments, static::$sortArgumentPositionOffset, 1, [false]);
-            parent::setArguments($arguments);
-
+            array_splice($arguments, static::$sort_argument_position_offset, 1, [false]);
+            parent::set_arguments($arguments);
             return;
         }
-
-        if (!in_array(strtoupper($argument), self::$sortingEnum, true)) {
-            $enumValues = implode(', ', array_keys(self::$sortingEnum));
-            throw new UnexpectedValueException("Sorting argument accepts only: {$enumValues} values");
+        if (!in_array(strtoupper($argument), self::$sorting_enum, true)) {
+            $enum_values = implode(', ', array_keys(self::$sorting_enum));
+            throw new UnexpectedValueException("Sorting argument accepts only: {$enum_values} values");
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$sortArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$sortArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [self::$sortingEnum[$argument]],
-            $argumentsAfter
-        ));
+        $arguments_before = array_slice($arguments, 0, static::$sort_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$sort_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [self::$sorting_enum[$argument]], $arguments_after));
     }
 }

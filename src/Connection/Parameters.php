@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,27 +10,19 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
 use InvalidArgumentException;
 use Predis\Retry\Retry;
-use Predis\Retry\Strategy\NoBackoff;
-
+use Predis\Retry\Strategy\No_Backoff;
 /**
  * Container for connection parameters used to initialize connections to Redis.
  *
  * {@inheritdoc}
  */
-class Parameters implements ParametersInterface
+class Parameters implements Parameters_Interface
 {
-    protected static $defaults = [
-        'scheme' => 'tcp',
-        'host' => '127.0.0.1',
-        'port' => 6379,
-        'protocol' => 2,
-    ];
-
+    protected static $defaults = ['scheme' => 'tcp', 'host' => '127.0.0.1', 'port' => 6379, 'protocol' => 2];
     /**
      * Set of connection parameters already filtered
      * for NULL or 0-length string values.
@@ -39,12 +30,10 @@ class Parameters implements ParametersInterface
      * @var array
      */
     protected $parameters;
-
     /**
      * @var bool
      */
-    private $disabledRetry = true;
-
+    private $disabled_retry = true;
     /**
      * @param array $parameters Named array of connection parameters.
      */
@@ -52,14 +41,12 @@ class Parameters implements ParametersInterface
     {
         if (!array_key_exists('retry', $parameters)) {
             // Retries disabled by default
-            static::$defaults['retry'] = new Retry(new NoBackoff(), 0);
+            static::$defaults['retry'] = new Retry(new No_Backoff(), 0);
         } else {
-            $this->disabledRetry = false;
+            $this->disabled_retry = false;
         }
-
         $this->parameters = $this->filter($parameters + static::$defaults);
     }
-
     /**
      * Filters parameters removing entries with NULL or 0-length string values.
      *
@@ -71,7 +58,6 @@ class Parameters implements ParametersInterface
             return $value !== null && $value !== '';
         });
     }
-
     /**
      * Creates a new instance by supplying the initial parameters either in the
      * form of an URI string or a named array.
@@ -83,10 +69,8 @@ class Parameters implements ParametersInterface
         if (is_string($parameters)) {
             $parameters = static::parse($parameters);
         }
-
         return new static($parameters ?: []);
     }
-
     /**
      * Parses an URI string returning an array of connection parameters.
      *
@@ -111,26 +95,17 @@ class Parameters implements ParametersInterface
             // unix:///path/to/sock hack, we will support it anyway until 2.0.
             $uri = str_ireplace('unix://', 'unix:', $uri);
         }
-
         if (!$parsed = parse_url($uri)) {
-            throw new InvalidArgumentException("Invalid parameters URI: $uri");
+            throw new InvalidArgumentException("Invalid parameters URI: {$uri}");
         }
-
-        if (
-            isset($parsed['host'])
-            && false !== strpos($parsed['host'], '[')
-            && false !== strpos($parsed['host'], ']')
-        ) {
+        if (isset($parsed['host']) && false !== strpos($parsed['host'], '[') && false !== strpos($parsed['host'], ']')) {
             $parsed['host'] = substr($parsed['host'], 1, -1);
         }
-
         if (isset($parsed['query'])) {
             parse_str($parsed['query'], $queryarray);
             unset($parsed['query']);
-
             $parsed = array_merge($parsed, $queryarray);
         }
-
         if (stripos($uri, 'redis') === 0) {
             if (isset($parsed['user'])) {
                 if (strlen($parsed['user'])) {
@@ -138,17 +113,14 @@ class Parameters implements ParametersInterface
                 }
                 unset($parsed['user']);
             }
-
             if (isset($parsed['pass'])) {
                 if (strlen($parsed['pass'])) {
                     $parsed['password'] = $parsed['pass'];
                 }
                 unset($parsed['pass']);
             }
-
             if (isset($parsed['path']) && preg_match('/^\/(\d+)(\/.*)?/', $parsed['path'], $path)) {
                 $parsed['database'] = $path[1];
-
                 if (isset($path[2])) {
                     $parsed['path'] = $path[2];
                 } else {
@@ -156,18 +128,15 @@ class Parameters implements ParametersInterface
                 }
             }
         }
-
         return $parsed;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function toArray()
+    public function to_array()
     {
         return $this->parameters;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -177,12 +146,10 @@ class Parameters implements ParametersInterface
             return $this->parameters[$parameter];
         }
     }
-
     public function __set(string $parameter, $value)
     {
         $this->parameters[$parameter] = $value;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -190,31 +157,26 @@ class Parameters implements ParametersInterface
     {
         return isset($this->parameters[$parameter]);
     }
-
     /**
      * {@inheritdoc}
      */
     public function __toString(): string
     {
         if ($this->scheme === 'unix') {
-            return "$this->scheme:$this->path";
+            return "{$this->scheme}:{$this->path}";
         }
-
         if (filter_var($this->host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-            return "$this->scheme://[$this->host]:$this->port";
+            return "{$this->scheme}://[{$this->host}]:{$this->port}";
         }
-
-        return "$this->scheme://$this->host:$this->port";
+        return "{$this->scheme}://{$this->host}:{$this->port}";
     }
-
     /**
      * Returns if retries is disabled.
      */
-    public function isDisabledRetry(): bool
+    public function is_disabled_retry(): bool
     {
-        return $this->disabledRetry;
+        return $this->disabled_retry;
     }
-
     /**
      * {@inheritdoc}
      */

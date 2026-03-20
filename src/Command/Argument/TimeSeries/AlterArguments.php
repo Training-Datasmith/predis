@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,9 +10,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Time_Series;
 
-namespace Predis\Command\Argument\TimeSeries;
-
-class AlterArguments extends CommonArguments
+class Alter_Arguments extends Common_Arguments
 {
 }

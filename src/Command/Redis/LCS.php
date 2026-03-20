@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,61 +10,52 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see https://redis.io/commands/lcs/
  *
  * The LCS command implements the longest common subsequence algorithm.
  */
-class LCS extends RedisCommand
+class LCS extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'LCS';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if (isset($arguments[2]) && $arguments[2]) {
             $arguments[2] = 'LEN';
         }
-
         if (isset($arguments[3]) && $arguments[3]) {
             $arguments[3] = 'IDX';
         }
-
         if (isset($arguments[5]) && $arguments[5]) {
             $arguments[5] = 'WITHMATCHLEN';
         }
-
         if (isset($arguments[4])) {
             if ($arguments[4] !== 0) {
-                $argumentsBefore = array_slice($arguments, 0, 4);
-                $argumentsAfter = array_slice($arguments, 5);
-                $arguments = array_merge($argumentsBefore, ['MINMATCHLEN', $arguments[4]], $argumentsAfter);
+                $arguments_before = array_slice($arguments, 0, 4);
+                $arguments_after = array_slice($arguments, 5);
+                $arguments = array_merge($arguments_before, ['MINMATCHLEN', $arguments[4]], $arguments_after);
             } else {
                 $arguments[4] = false;
             }
         }
-
-        parent::setArguments($arguments);
-        $this->filterArguments();
+        parent::set_arguments($arguments);
+        $this->filter_arguments();
     }
-
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         if (is_array($data)) {
             if ($data !== array_values($data)) {
-                return $data; // Relay
+                return $data;
+                // Relay
             }
-
             return [$data[0] => $data[1], $data[2] => $data[3]];
         }
-
         return $data;
     }
 }

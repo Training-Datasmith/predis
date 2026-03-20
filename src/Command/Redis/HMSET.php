@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,46 +10,39 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see http://redis.io/commands/hmset
  */
-class HMSET extends RedisCommand
+class HMSET extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'HMSET';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if (count($arguments) === 2 && is_array($arguments[1])) {
-            $flattenedKVs = [$arguments[0]];
+            $flattened_k_vs = [$arguments[0]];
             $args = $arguments[1];
-
             foreach ($args as $k => $v) {
-                $flattenedKVs[] = $k;
-                $flattenedKVs[] = $v;
+                $flattened_k_vs[] = $k;
+                $flattened_k_vs[] = $v;
             }
-
-            $arguments = $flattenedKVs;
+            $arguments = $flattened_k_vs;
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

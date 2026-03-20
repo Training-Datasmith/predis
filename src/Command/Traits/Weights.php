@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,12 +10,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
@@ -25,39 +22,25 @@ trait Weights
     /**
      * @var string
      */
-    private static $weightsModifier = 'WEIGHTS';
-
-    public function setArguments(array $arguments): void
+    private static $weights_modifier = 'WEIGHTS';
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$weightsArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$weights_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        if (!is_array($arguments[static::$weightsArgumentPositionOffset])) {
+        if (!is_array($arguments[static::$weights_argument_position_offset])) {
             throw new UnexpectedValueException('Wrong weights argument type');
         }
-
-        $weightsArray = $arguments[static::$weightsArgumentPositionOffset];
-
-        if (empty($weightsArray)) {
-            unset($arguments[static::$weightsArgumentPositionOffset]);
-            parent::setArguments($arguments);
-
+        $weights_array = $arguments[static::$weights_argument_position_offset];
+        if (empty($weights_array)) {
+            unset($arguments[static::$weights_argument_position_offset]);
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$weightsArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$weightsArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [self::$weightsModifier],
-            $weightsArray,
-            $argumentsAfter
-        ));
+        $arguments_before = array_slice($arguments, 0, static::$weights_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$weights_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [self::$weights_modifier], $weights_array, $arguments_after));
     }
 }

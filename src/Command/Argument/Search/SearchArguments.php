@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,45 +10,35 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Search;
 
 use InvalidArgumentException;
-
-class SearchArguments extends CommonArguments
+class Search_Arguments extends Common_Arguments
 {
     /**
      * @var string[]
      */
-    private $sortingEnum = [
-        'asc' => 'ASC',
-        'desc' => 'DESC',
-    ];
-
+    private $sorting_enum = ['asc' => 'ASC', 'desc' => 'DESC'];
     /**
      * Returns the document ids and not the content.
      *
      * @return $this
      */
-    public function noContent(): self
+    public function no_content(): self
     {
         $this->arguments[] = 'NOCONTENT';
-
         return $this;
     }
-
     /**
      * Returns the value of the sorting key, right after the id and score and/or payload, if requested.
      *
      * @return $this
      */
-    public function withSortKeys(): self
+    public function with_sort_keys(): self
     {
         $this->arguments[] = 'WITHSORTKEYS';
-
         return $this;
     }
-
     /**
      * Limits results to those having numeric values ranging between min and max,
      * if numeric_attribute is defined as a numeric attribute in FT.CREATE.
@@ -59,62 +48,52 @@ class SearchArguments extends CommonArguments
      * @param  array ...$filter Should contain: numeric_field, min and max. Example: ['numeric_field', 1, 10]
      * @return $this
      */
-    public function searchFilter(array ...$filter): self
+    public function search_filter(array ...$filter): self
     {
         $arguments = func_get_args();
-
         foreach ($arguments as $argument) {
             array_push($this->arguments, 'FILTER', ...$argument);
         }
-
         return $this;
     }
-
     /**
      * Filter the results to a given radius from lon and lat. Radius is given as a number and units.
      *
      * @param  array ...$filter Should contain: geo_field, lon, lat, radius, unit. Example: ['geo_field', 34.1231, 35.1231, 300, km]
      * @return $this
      */
-    public function geoFilter(array ...$filter): self
+    public function geo_filter(array ...$filter): self
     {
         $arguments = func_get_args();
-
         foreach ($arguments as $argument) {
             array_push($this->arguments, 'GEOFILTER', ...$argument);
         }
-
         return $this;
     }
-
     /**
      * Limits the result to a given set of keys specified in the list.
      *
      * @return $this
      */
-    public function inKeys(array $keys): self
+    public function in_keys(array $keys): self
     {
         $this->arguments[] = 'INKEYS';
         $this->arguments[] = count($keys);
         $this->arguments = array_merge($this->arguments, $keys);
-
         return $this;
     }
-
     /**
      * Filters the results to those appearing only in specific attributes of the document, like title or URL.
      *
      * @return $this
      */
-    public function inFields(array $fields): self
+    public function in_fields(array $fields): self
     {
         $this->arguments[] = 'INFIELDS';
         $this->arguments[] = count($fields);
         $this->arguments = array_merge($this->arguments, $fields);
-
         return $this;
     }
-
     /**
      * Limits the attributes returned from the document.
      * Num is the number of attributes following the keyword.
@@ -130,23 +109,18 @@ class SearchArguments extends CommonArguments
      * @param  string|bool ...$identifier
      * @return $this
      */
-    public function addReturn(int $count, ...$identifier): self
+    public function add_return(int $count, ...$identifier): self
     {
         $arguments = func_get_args();
-
         $this->arguments[] = 'RETURN';
-
-        for ($i = 1, $iMax = count($arguments); $i < $iMax; $i++) {
+        for ($i = 1, $i_max = count($arguments); $i < $i_max; $i++) {
             if (true === $arguments[$i]) {
                 $arguments[$i] = 'AS';
             }
         }
-
         $this->arguments = array_merge($this->arguments, $arguments);
-
         return $this;
     }
-
     /**
      * Returns only the sections of the attribute that contain the matched text.
      *
@@ -155,53 +129,43 @@ class SearchArguments extends CommonArguments
     public function summarize(array $fields = [], int $frags = 0, int $len = 0, string $separator = ''): self
     {
         $this->arguments[] = 'SUMMARIZE';
-
         if (!empty($fields)) {
             $this->arguments[] = 'FIELDS';
             $this->arguments[] = count($fields);
             $this->arguments = array_merge($this->arguments, $fields);
         }
-
         if ($frags !== 0) {
             $this->arguments[] = 'FRAGS';
             $this->arguments[] = $frags;
         }
-
         if ($len !== 0) {
             $this->arguments[] = 'LEN';
             $this->arguments[] = $len;
         }
-
         if ($separator !== '') {
             $this->arguments[] = 'SEPARATOR';
             $this->arguments[] = $separator;
         }
-
         return $this;
     }
-
     /**
      * Formats occurrences of matched text.
      *
      * @return $this
      */
-    public function highlight(array $fields = [], string $openTag = '', string $closeTag = ''): self
+    public function highlight(array $fields = [], string $open_tag = '', string $close_tag = ''): self
     {
         $this->arguments[] = 'HIGHLIGHT';
-
         if (!empty($fields)) {
             $this->arguments[] = 'FIELDS';
             $this->arguments[] = count($fields);
             $this->arguments = array_merge($this->arguments, $fields);
         }
-
-        if ($openTag !== '' && $closeTag !== '') {
-            array_push($this->arguments, 'TAGS', $openTag, $closeTag);
+        if ($open_tag !== '' && $close_tag !== '') {
+            array_push($this->arguments, 'TAGS', $open_tag, $close_tag);
         }
-
         return $this;
     }
-
     /**
      * Allows a maximum of N intervening number of unmatched offsets between phrase terms.
      * In other words, the slop for exact phrases is 0.
@@ -212,23 +176,19 @@ class SearchArguments extends CommonArguments
     {
         $this->arguments[] = 'SLOP';
         $this->arguments[] = $slop;
-
         return $this;
     }
-
     /**
      * Puts the query terms in the same order in the document as in the query, regardless of the offsets between them.
      * Typically used in conjunction with SLOP.
      *
      * @return $this
      */
-    public function inOrder(): self
+    public function in_order(): self
     {
         $this->arguments[] = 'INORDER';
-
         return $this;
     }
-
     /**
      * Uses a custom query expander instead of the stemmer.
      *
@@ -238,10 +198,8 @@ class SearchArguments extends CommonArguments
     {
         $this->arguments[] = 'EXPANDER';
         $this->arguments[] = $expander;
-
         return $this;
     }
-
     /**
      * Uses a custom scoring function you define.
      *
@@ -251,23 +209,19 @@ class SearchArguments extends CommonArguments
     {
         $this->arguments[] = 'SCORER';
         $this->arguments[] = $scorer;
-
         return $this;
     }
-
     /**
      * Returns a textual description of how the scores were calculated.
      * Using this options requires the WITHSCORES option.
      *
      * @return $this
      */
-    public function explainScore(): self
+    public function explain_score(): self
     {
         $this->arguments[] = 'EXPLAINSCORE';
-
         return $this;
     }
-
     /**
      * Orders the results by the value of this attribute.
      * This applies to both text and numeric attributes.
@@ -276,18 +230,16 @@ class SearchArguments extends CommonArguments
      *
      * @return $this
      */
-    public function sortBy(string $sortAttribute, string $orderBy = 'asc'): self
+    public function sort_by(string $sort_attribute, string $order_by = 'asc'): self
     {
         $this->arguments[] = 'SORTBY';
-        $this->arguments[] = $sortAttribute;
-
-        if (in_array(strtoupper($orderBy), $this->sortingEnum)) {
-            $this->arguments[] = $this->sortingEnum[strtolower($orderBy)];
+        $this->arguments[] = $sort_attribute;
+        if (in_array(strtoupper($order_by), $this->sorting_enum)) {
+            $this->arguments[] = $this->sorting_enum[strtolower($order_by)];
         } else {
-            $enumValues = implode(', ', array_values($this->sortingEnum));
-            throw new InvalidArgumentException("Wrong order direction value given. Currently supports: {$enumValues}");
+            $enum_values = implode(', ', array_values($this->sorting_enum));
+            throw new InvalidArgumentException("Wrong order direction value given. Currently supports: {$enum_values}");
         }
-
         return $this;
     }
 }

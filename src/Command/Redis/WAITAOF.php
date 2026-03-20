@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,20 +10,18 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see https://redis.io/commands/waitaof/
  *
  * This command blocks the current client until all the previous write commands are acknowledged
  * as having been fsynced to the AOF of the local Redis and/or at least the specified number of replicas.
  */
-class WAITAOF extends RedisCommand
+class WAITAOF extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'WAITAOF';
     }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,13 +10,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command;
 
 use InvalidArgumentException;
-use Predis\ClientException;
-use Predis\Command\Processor\ProcessorInterface;
-
+use Predis\Client_Exception;
+use Predis\Command\Processor\Processor_Interface;
 /**
  * Base command factory class.
  *
@@ -25,25 +22,22 @@ use Predis\Command\Processor\ProcessorInterface;
  * factory to create new instances of Redis commands objects. It also allows to
  * define or undefine command handler classes for each command ID.
  */
-abstract class Factory implements FactoryInterface
+abstract class Factory implements Factory_Interface
 {
     protected $commands = [];
     protected $processor;
-
     /**
      * {@inheritdoc}
      */
-    public function supports(string ...$commandIDs): bool
+    public function supports(string ...$command_i_ds): bool
     {
-        foreach ($commandIDs as $commandID) {
-            if ($this->getCommandClass($commandID) === null) {
+        foreach ($command_i_ds as $command_id) {
+            if ($this->get_command_class($command_id) === null) {
                 return false;
             }
         }
-
         return true;
     }
-
     /**
      * Returns the FQCN of a class that represents the specified command ID.
      *
@@ -51,32 +45,26 @@ abstract class Factory implements FactoryInterface
      *
      * @param string $commandID Command ID
      */
-    public function getCommandClass(string $commandID): ?string
+    public function get_command_class(string $command_id): ?string
     {
-        return $this->commands[strtoupper($commandID)] ?? null;
+        return $this->commands[strtoupper($command_id)] ?? null;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function create(string $commandID, array $arguments = []): CommandInterface
+    public function create(string $command_id, array $arguments = []): Command_Interface
     {
-        if (!$commandClass = $this->getCommandClass($commandID)) {
-            $commandID = strtoupper($commandID);
-
-            throw new ClientException("Command `$commandID` is not a registered Redis command.");
+        if (!$command_class = $this->get_command_class($command_id)) {
+            $command_id = strtoupper($command_id);
+            throw new Client_Exception("Command `{$command_id}` is not a registered Redis command.");
         }
-
-        $command = new $commandClass();
-        $command->setArguments($arguments);
-
+        $command = new $command_class();
+        $command->set_arguments($arguments);
         if (isset($this->processor)) {
             $this->processor->process($command);
         }
-
         return $command;
     }
-
     /**
      * Defines a command in the factory.
      *
@@ -89,17 +77,13 @@ abstract class Factory implements FactoryInterface
      *
      * @throws InvalidArgumentException
      */
-    public function define(string $commandID, string $commandClass): void
+    public function define(string $command_id, string $command_class): void
     {
-        if (!is_a($commandClass, 'Predis\Command\CommandInterface', true)) {
-            throw new InvalidArgumentException(
-                "Class $commandClass must implement Predis\Command\CommandInterface"
-            );
+        if (!is_a($command_class, 'Predis\Command\CommandInterface', true)) {
+            throw new InvalidArgumentException("Class {$command_class} must implement Predis\\Command\\CommandInterface");
         }
-
-        $this->commands[strtoupper($commandID)] = $commandClass;
+        $this->commands[strtoupper($command_id)] = $command_class;
     }
-
     /**
      * Undefines a command in the factory.
      *
@@ -109,11 +93,10 @@ abstract class Factory implements FactoryInterface
      *
      * @param string $commandID Command ID
      */
-    public function undefine(string $commandID): void
+    public function undefine(string $command_id): void
     {
-        unset($this->commands[strtoupper($commandID)]);
+        unset($this->commands[strtoupper($command_id)]);
     }
-
     /**
      * Sets a command processor for processing command arguments.
      *
@@ -126,15 +109,14 @@ abstract class Factory implements FactoryInterface
      *
      * @param ProcessorInterface|null $processor Command processor or NULL value.
      */
-    public function setProcessor(?ProcessorInterface $processor): void
+    public function set_processor(?Processor_Interface $processor): void
     {
         $this->processor = $processor;
     }
-
     /**
      * Returns the current command processor.
      */
-    public function getProcessor(): ?ProcessorInterface
+    public function get_processor(): ?Processor_Interface
     {
         return $this->processor;
     }

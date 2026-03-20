@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,33 +10,28 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see https://redis.io/commands/fcall_ro/
  *
  * This is a read-only variant of the FCALL command that cannot execute commands that modify data.
  */
-class FCALL_RO extends RedisCommand
+class FCALL_RO extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'FCALL_RO';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = array_merge([$arguments[0], count($arguments[1])], $arguments[1]);
-
+        $processed_arguments = array_merge([$arguments[0], count($arguments[1])], $arguments[1]);
         if (count($arguments) > 2) {
-            for ($i = 2, $iMax = count($arguments); $i < $iMax; $i++) {
-                $processedArguments[] = $arguments[$i];
+            for ($i = 2, $i_max = count($arguments); $i < $i_max; $i++) {
+                $processed_arguments[] = $arguments[$i];
             }
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
 }

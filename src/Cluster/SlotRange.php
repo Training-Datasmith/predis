@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,114 +10,101 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Cluster;
 
 use Countable;
 use OutOfBoundsException;
-
 /**
  * Represents a range of slots in a Redis cluster.
  */
-class SlotRange implements Countable
+class Slot_Range implements Countable
 {
     /**
      * Maximum number of slots in a Redis cluster is 16384.
      */
-    public const MAX_SLOTS = 0x3FFF;
-
+    public const MAX_SLOTS = 0x3fff;
     /**
      * Starting slot of the range.
      *
      * @var int
      */
     protected $start;
-
     /**
      * Ending slot of the range.
      *
      * @var int
      */
     protected $end;
-
     /**
      * Connection to the server hosting this slot range.
      *
      * @var string
      */
     protected $connection;
-
     public function __construct(int $start, int $end, string $connection)
     {
-        if (!static::isValidRange($start, $end)) {
-            throw new OutOfBoundsException("Invalid slot range $start-$end for `$connection`");
+        if (!static::is_valid_range($start, $end)) {
+            throw new OutOfBoundsException("Invalid slot range {$start}-{$end} for `{$connection}`");
         }
         $this->start = $start;
         $this->end = $end;
         $this->connection = $connection;
     }
-
     /**
      * Checks if a slot range is valid.
      *
      * @param int $first
      * @param int $last
      */
-    public static function isValidRange($first, $last): bool
+    public static function is_valid_range($first, $last): bool
     {
-        return $first >= 0x0000 && $first <= self::MAX_SLOTS && $last >= 0x0000 && $last <= self::MAX_SLOTS && $first <= $last;
+        return $first >= 0x0 && $first <= self::MAX_SLOTS && $last >= 0x0 && $last <= self::MAX_SLOTS && $first <= $last;
     }
-
     /**
      * Returns the start slot index of this range.
      *
      * @return int
      */
-    public function getStart()
+    public function get_start()
     {
         return $this->start;
     }
-
     /**
      * Returns the end slot index of this range.
      *
      * @return int
      */
-    public function getEnd()
+    public function get_end()
     {
         return $this->end;
     }
-
     /**
      * Returns the connection to the server hosting this slot range.
      *
      * @return string
      */
-    public function getConnection()
+    public function get_connection()
     {
         return $this->connection;
     }
-
     /**
      * Checks if the specific slot is contained in this range.
      *
      *
      */
-    public function hasSlot(int $slot): bool
+    public function has_slot(int $slot): bool
     {
         return $this->start <= $slot && $this->end >= $slot;
     }
-
     /**
      * Returns an array of connection strings for each slot in this range.
      *
      * @return string[]
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         return array_fill($this->start, $this->end - $this->start + 1, $this->connection);
     }
-
     /**
      * Returns the number of slots in this range.
      */
@@ -126,14 +112,13 @@ class SlotRange implements Countable
     {
         return $this->end - $this->start + 1;
     }
-
     /**
      * Checks if this range has an intersection with the given slot range.
      *
      *
      */
-    public function hasIntersectionWith(SlotRange $slotRange): bool
+    public function has_intersection_with(Slot_Range $slot_range): bool
     {
-        return $this->start <= $slotRange->getEnd() && $this->end >= $slotRange->getStart();
+        return $this->start <= $slot_range->get_end() && $this->end >= $slot_range->get_start();
     }
 }

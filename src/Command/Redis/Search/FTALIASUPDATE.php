@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,26 +10,23 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Search;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/ft.aliasupdate/
  *
  * Add an alias to an index. If the alias is already associated with another index,
  * FT.ALIASUPDATE removes the alias association with the previous index.
  */
-class FTALIASUPDATE extends RedisCommand
+class FTALIASUPDATE extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'FT.ALIASUPDATE';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForAllArguments($prefix);
+        $this->apply_prefix_for_all_arguments($prefix);
     }
 }

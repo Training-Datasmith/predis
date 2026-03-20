@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,27 +10,23 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Geospatial;
 
-class FromMember implements FromInterface
+class From_Member implements From_Interface
 {
     private const KEYWORD = 'FROMMEMBER';
-
     /**
      * @var string
      */
     private $member;
-
     public function __construct(string $member)
     {
         $this->member = $member;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         return [self::KEYWORD, $this->member];
     }

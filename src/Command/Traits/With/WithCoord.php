@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,30 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\With;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
-trait WithCoord
+trait With_Coord
 {
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (
-            static::$withCoordArgumentPositionOffset >= $argumentsLength
-            || false === $arguments[static::$withCoordArgumentPositionOffset]
-        ) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$with_coord_argument_position_offset >= $arguments_length || false === $arguments[static::$with_coord_argument_position_offset]) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$withCoordArgumentPositionOffset];
-
+        $argument = $arguments[static::$with_coord_argument_position_offset];
         if (true === $argument) {
             $argument = 'WITHCOORD';
         } else {
             throw new UnexpectedValueException('Wrong WITHCOORD argument type');
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$withCoordArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$withCoordArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge($argumentsBefore, [$argument], $argumentsAfter));
+        $arguments_before = array_slice($arguments, 0, static::$with_coord_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$with_coord_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [$argument], $arguments_after));
     }
 }

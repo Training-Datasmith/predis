@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,39 +10,29 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\Get;
 
 use UnexpectedValueException;
-
 trait Get
 {
-    private static $getModifier = 'GET';
-
-    public function setArguments(array $arguments): void
+    private static $get_modifier = 'GET';
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$getArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$get_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        if (!is_array($arguments[static::$getArgumentPositionOffset])) {
+        if (!is_array($arguments[static::$get_argument_position_offset])) {
             throw new UnexpectedValueException('Wrong get argument type');
         }
-
         $patterns = [];
-
-        foreach ($arguments[static::$getArgumentPositionOffset] as $pattern) {
-            $patterns[] = self::$getModifier;
+        foreach ($arguments[static::$get_argument_position_offset] as $pattern) {
+            $patterns[] = self::$get_modifier;
             $patterns[] = $pattern;
         }
-
-        $argumentsBeforeKeys = array_slice($arguments, 0, static::$getArgumentPositionOffset);
-        $argumentsAfterKeys = array_slice($arguments, static::$getArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge($argumentsBeforeKeys, $patterns, $argumentsAfterKeys));
+        $arguments_before_keys = array_slice($arguments, 0, static::$get_argument_position_offset);
+        $arguments_after_keys = array_slice($arguments, static::$get_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before_keys, $patterns, $arguments_after_keys));
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,85 +10,69 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-use Predis\Command\Redis\Utils\CommandUtility;
-
-class VSIM extends RedisCommand
+use Predis\Command\Redis\Utils\Command_Utility;
+class VSIM extends Redis_Command
 {
-    private $withScores = false;
-
-    public function getId(): string
+    private $with_scores = false;
+    public function get_id(): string
     {
         return 'VSIM';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0]];
-
+        $processed_arguments = [$arguments[0]];
         if (isset($arguments[1]) && !is_array($arguments[1])) {
             if (isset($arguments[2]) && false !== $arguments[2]) {
-                array_push($processedArguments, 'ELE', $arguments[1]);
+                array_push($processed_arguments, 'ELE', $arguments[1]);
             } else {
-                array_push($processedArguments, 'FP32', $arguments[1]);
+                array_push($processed_arguments, 'FP32', $arguments[1]);
             }
         } else {
-            array_push($processedArguments, 'VALUES', count($arguments[1]), ...$arguments[1]);
+            array_push($processed_arguments, 'VALUES', count($arguments[1]), ...$arguments[1]);
         }
-
         if (isset($arguments[3]) && false !== $arguments[3]) {
-            $this->withScores = true;
-            $processedArguments[] = 'WITHSCORES';
+            $this->with_scores = true;
+            $processed_arguments[] = 'WITHSCORES';
         }
-
         if (isset($arguments[4])) {
-            array_push($processedArguments, 'COUNT', $arguments[4]);
+            array_push($processed_arguments, 'COUNT', $arguments[4]);
         }
-
         if (isset($arguments[5])) {
-            array_push($processedArguments, 'EPSILON', $arguments[5]);
+            array_push($processed_arguments, 'EPSILON', $arguments[5]);
         }
-
         if (isset($arguments[6])) {
-            array_push($processedArguments, 'EF', $arguments[6]);
+            array_push($processed_arguments, 'EF', $arguments[6]);
         }
-
         if (isset($arguments[7])) {
-            array_push($processedArguments, 'FILTER', $arguments[7]);
+            array_push($processed_arguments, 'FILTER', $arguments[7]);
         }
-
         if (isset($arguments[8])) {
-            array_push($processedArguments, 'FILTER-EF', $arguments[8]);
+            array_push($processed_arguments, 'FILTER-EF', $arguments[8]);
         }
-
         if (isset($arguments[9]) && false !== $arguments[9]) {
-            $processedArguments[] = 'TRUTH';
+            $processed_arguments[] = 'TRUTH';
         }
-
         if (isset($arguments[10]) && false !== $arguments[10]) {
-            $processedArguments[] = 'NOTHREAD';
+            $processed_arguments[] = 'NOTHREAD';
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
     /**
      * @param                          $data
      * @return array|mixed|string|null
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
-        if ($this->withScores) {
+        if ($this->with_scores) {
             if ($data === array_values($data)) {
-                $data = CommandUtility::arrayToDictionary($data, static function ($key, $value): array {
+                $data = Command_Utility::array_to_dictionary($data, static function ($key, $value): array {
                     return [$key, (float) $value];
                 });
             }
         }
-
         return $data;
     }
 }

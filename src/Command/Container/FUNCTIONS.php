@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Container;
 
 use Predis\Response\Status;
-
 /**
  * @method Status delete(string $libraryName)
  * @method string dump()
@@ -26,9 +23,9 @@ use Predis\Response\Status;
  * @method Status restore(string $value, string $policy = null)
  * @method array  stats()
  */
-class FUNCTIONS extends AbstractContainer
+class FUNCTIONS extends Abstract_Container
 {
-    public function getContainerCommandId(): string
+    public function get_container_command_id(): string
     {
         return 'FUNCTIONS';
     }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,16 +10,14 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Protocol;
 
-use Predis\Connection\CompositeConnectionInterface;
-
+use Predis\Connection\Composite_Connection_Interface;
 /**
  * Defines a pluggable reader capable of parsing responses returned by Redis and
  * deserializing them to PHP objects.
  */
-interface ResponseReaderInterface
+interface Response_Reader_Interface
 {
     /**
      * Reads a response from a connection to Redis.
@@ -29,5 +26,5 @@ interface ResponseReaderInterface
      *
      * @return mixed
      */
-    public function read(CompositeConnectionInterface $connection);
+    public function read(Composite_Connection_Interface $connection);
 }

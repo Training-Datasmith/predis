@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,27 +10,24 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection\Cluster;
 
-use Predis\Cluster\StrategyInterface;
-use Predis\Command\CommandInterface;
-use Predis\Connection\AggregateConnectionInterface;
-
+use Predis\Cluster\Strategy_Interface;
+use Predis\Command\Command_Interface;
+use Predis\Connection\Aggregate_Connection_Interface;
 /**
  * Defines a cluster of Redis servers formed by aggregating multiple connection
  * instances to single Redis nodes.
  */
-interface ClusterInterface extends AggregateConnectionInterface
+interface Cluster_Interface extends Aggregate_Connection_Interface
 {
     /**
      * Executes given command on each connection from connection pool.
      */
-    public function executeCommandOnEachNode(CommandInterface $command): array;
-
+    public function execute_command_on_each_node(Command_Interface $command): array;
     /**
      * Returns the underlying command hash strategy used to hash commands by
      * using keys found in their arguments.
      */
-    public function getClusterStrategy(): StrategyInterface;
+    public function get_cluster_strategy(): Strategy_Interface;
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,26 +10,24 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Response;
 
 /**
  * Represents an error returned by Redis (responses identified by "-" in the
  * Redis protocol) during the execution of an operation on the server.
  */
-interface ErrorInterface extends ResponseInterface
+interface Error_Interface extends Response_Interface
 {
     /**
      * Returns the error message.
      *
      * @return string
      */
-    public function getMessage();
-
+    public function get_message();
     /**
      * Returns the error type (e.g. ERR, ASK, MOVED).
      *
      * @return string
      */
-    public function getErrorType();
+    public function get_error_type();
 }

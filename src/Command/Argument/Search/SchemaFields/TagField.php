@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,37 +10,25 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Schema_Fields;
 
-namespace Predis\Command\Argument\Search\SchemaFields;
-
-class TagField extends AbstractField
+class Tag_Field extends Abstract_Field
 {
     /**
      * @param bool|string $sortable
      */
-    public function __construct(
-        string $identifier,
-        string $alias = '',
-        $sortable = self::NOT_SORTABLE,
-        bool $noIndex = false,
-        string $separator = ',',
-        bool $caseSensitive = false,
-        bool $allowsEmpty = false,
-        bool $allowsMissing = false
-    ) {
-        $this->setCommonOptions('TAG', $identifier, $alias, $sortable, $noIndex, $allowsMissing);
-
+    public function __construct(string $identifier, string $alias = '', $sortable = self::NOT_SORTABLE, bool $no_index = false, string $separator = ',', bool $case_sensitive = false, bool $allows_empty = false, bool $allows_missing = false)
+    {
+        $this->set_common_options('TAG', $identifier, $alias, $sortable, $no_index, $allows_missing);
         if ($separator !== ',') {
-            $this->fieldArguments[] = 'SEPARATOR';
-            $this->fieldArguments[] = $separator;
+            $this->field_arguments[] = 'SEPARATOR';
+            $this->field_arguments[] = $separator;
         }
-
-        if ($caseSensitive) {
-            $this->fieldArguments[] = 'CASESENSITIVE';
+        if ($case_sensitive) {
+            $this->field_arguments[] = 'CASESENSITIVE';
         }
-
-        if ($allowsEmpty) {
-            $this->fieldArguments[] = 'INDEXEMPTY';
+        if ($allows_empty) {
+            $this->field_arguments[] = 'INDEXEMPTY';
         }
     }
 }

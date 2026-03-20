@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,61 +10,51 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Consumer\Push;
 
 use ArrayAccess;
-use ReturnTypeWillChange;
-
-class PushResponse implements PushResponseInterface, ArrayAccess
+use Return_Type_Will_Change;
+class Push_Response implements Push_Response_Interface, ArrayAccess
 {
     /**
      * @var array
      */
     private $response;
-
-    public function __construct(array $serverResponse)
+    public function __construct(array $server_response)
     {
-        $this->response = $serverResponse;
+        $this->response = $server_response;
     }
-
     /**
      * {@inheritDoc}
      * @throws PushNotificationException
      */
-    public function getDataType(): string
+    public function get_data_type(): string
     {
         if (!isset($this->response[0])) {
-            throw new PushNotificationException('Invalid server response');
+            throw new Push_Notification_Exception('Invalid server response');
         }
-
         return $this->response[0];
     }
-
     /**
      * {@inheritDoc}
      */
-    public function getPayload(): array
+    public function get_payload(): array
     {
         return array_slice($this->response, 1);
     }
-
     public function offsetExists($offset): bool
     {
         return isset($this->response[$offset]);
     }
-
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function offsetGet($offset)
     {
         return $this->response[$offset];
     }
-
     public function offsetSet($offset, $value): void
     {
         $this->response[$offset] = $value;
     }
-
     public function offsetUnset($offset): void
     {
         unset($this->response[$offset]);

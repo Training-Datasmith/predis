@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,12 +10,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-use Predis\Command\Traits\Expire\ExpireOptions;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
+use Predis\Command\Traits\Expire\Expire_Options;
 /**
  * @see http://redis.io/commands/expire
  *
@@ -24,20 +21,18 @@ use Predis\Command\Traits\Expire\ExpireOptions;
  * After the timeout has expired, the key will automatically be deleted.
  * A key with an associated timeout is often said to be volatile in Redis terminology.
  */
-class EXPIRE extends RedisCommand
+class EXPIRE extends Redis_Command
 {
-    use ExpireOptions;
-
+    use Expire_Options;
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'EXPIRE';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

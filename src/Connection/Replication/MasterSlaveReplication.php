@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,105 +10,91 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection\Replication;
 
 use InvalidArgumentException;
-use Predis\ClientException;
+use Predis\Client_Exception;
 use Predis\Command\Command;
-use Predis\Command\CommandInterface;
-use Predis\Command\RawCommand;
-use Predis\Connection\AbstractAggregateConnection;
-use Predis\Connection\ConnectionException;
-use Predis\Connection\FactoryInterface;
-use Predis\Connection\NodeConnectionInterface;
-use Predis\Connection\ParametersInterface;
-use Predis\Connection\RelayFactory;
-use Predis\Replication\MissingMasterException;
-use Predis\Replication\ReplicationStrategy;
-use Predis\Response\ErrorInterface as ResponseErrorInterface;
-use Predis\TimeoutException;
+use Predis\Command\Command_Interface;
+use Predis\Command\Raw_Command;
+use Predis\Connection\Abstract_Aggregate_Connection;
+use Predis\Connection\Connection_Exception;
+use Predis\Connection\Factory_Interface;
+use Predis\Connection\Node_Connection_Interface;
+use Predis\Connection\Parameters_Interface;
+use Predis\Connection\Relay_Factory;
+use Predis\Replication\Missing_Master_Exception;
+use Predis\Replication\Replication_Strategy;
+use Predis\Response\Error_Interface as ResponseErrorInterface;
+use Predis\Timeout_Exception;
 use Throwable;
-
 /**
  * Aggregate connection handling replication of Redis nodes configured in a
  * single master / multiple slaves setup.
  */
-class MasterSlaveReplication extends AbstractAggregateConnection implements ReplicationInterface
+class Master_Slave_Replication extends Abstract_Aggregate_Connection implements Replication_Interface
 {
     /**
      * @var ReplicationStrategy
      */
     protected $strategy;
-
     /**
      * @var NodeConnectionInterface
      */
     protected $master;
-
     /**
      * @var NodeConnectionInterface[]
      */
     protected $slaves = [];
-
     /**
      * @var NodeConnectionInterface[]
      */
     protected $pool = [];
-
     /**
      * @var NodeConnectionInterface[]
      */
     protected $aliases = [];
-
     /**
      * @var NodeConnectionInterface
      */
     protected $current;
-
     /**
      * @var bool
      */
-    protected $autoDiscovery = false;
-
+    protected $auto_discovery = false;
     /**
      * @var FactoryInterface
      */
-    protected $connectionFactory;
-
+    protected $connection_factory;
     /**
      * {@inheritdoc}
      */
-    public function __construct(?ReplicationStrategy $strategy = null)
+    public function __construct(?Replication_Strategy $strategy = null)
     {
-        $this->strategy = $strategy ?: new ReplicationStrategy();
+        $this->strategy = $strategy ?: new Replication_Strategy();
     }
-
     /**
      * Configures the automatic discovery of the replication configuration on failure.
      *
      * @param bool $value Enable or disable auto discovery.
      */
-    public function setAutoDiscovery($value): void
+    public function set_auto_discovery($value): void
     {
-        if (!$this->connectionFactory) {
-            throw new ClientException('Automatic discovery requires a connection factory');
+        if (!$this->connection_factory) {
+            throw new Client_Exception('Automatic discovery requires a connection factory');
         }
-
-        $this->autoDiscovery = (bool) $value;
+        $this->auto_discovery = (bool) $value;
     }
-
     /**
      * Sets the connection factory used to create the connections by the auto
      * discovery procedure.
      *
      * @param FactoryInterface $connectionFactory Connection factory instance.
      */
-    public function setConnectionFactory(FactoryInterface $connectionFactory): void
+    public function set_connection_factory(Factory_Interface $connection_factory): void
     {
-        $this->connectionFactory = $connectionFactory;
+        $this->connection_factory = $connection_factory;
     }
-
     /**
      * Resets the connection state.
      */
@@ -117,34 +102,28 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     {
         $this->current = null;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function add(NodeConnectionInterface $connection): void
+    public function add(Node_Connection_Interface $connection): void
     {
-        $parameters = $connection->getParameters();
-
+        $parameters = $connection->get_parameters();
         if ('master' === $parameters->role) {
             $this->master = $connection;
         } else {
             // everything else is considered a slvave.
             $this->slaves[] = $connection;
         }
-
         if (isset($parameters->alias)) {
             $this->aliases[$parameters->alias] = $connection;
         }
-
         $this->pool[(string) $connection] = $connection;
-
         $this->reset();
     }
-
     /**
      * {@inheritdoc}
      */
-    public function remove(NodeConnectionInterface $connection): bool
+    public function remove(Node_Connection_Interface $connection): bool
     {
         if ($connection === $this->master) {
             $this->master = null;
@@ -153,52 +132,41 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
         } else {
             return false;
         }
-
         unset($this->pool[(string) $connection]);
-
-        if ($this->aliases && $alias = $connection->getParameters()->alias) {
+        if ($this->aliases && $alias = $connection->get_parameters()->alias) {
             unset($this->aliases[$alias]);
         }
-
         $this->reset();
-
         return true;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getConnectionByCommand(CommandInterface $command)
+    public function get_connection_by_command(Command_Interface $command)
     {
         if (!$this->current) {
-            if ($this->strategy->isReadOperation($command) && $slave = $this->pickSlave()) {
+            if ($this->strategy->is_read_operation($command) && $slave = $this->pick_slave()) {
                 $this->current = $slave;
             } else {
-                $this->current = $this->getMasterOrDie();
+                $this->current = $this->get_master_or_die();
             }
-
             return $this->current;
         }
-
-        if ($this->current === $master = $this->getMasterOrDie()) {
+        if ($this->current === $master = $this->get_master_or_die()) {
             return $master;
         }
-
-        if (!$this->strategy->isReadOperation($command) || !$this->slaves) {
+        if (!$this->strategy->is_read_operation($command) || !$this->slaves) {
             $this->current = $master;
         }
-
         return $this->current;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getConnectionById($id)
+    public function get_connection_by_id($id)
     {
         return $this->pool[$id] ?? null;
     }
-
     /**
      * Returns a connection instance by its alias.
      *
@@ -206,11 +174,10 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
      *
      * @return NodeConnectionInterface|null
      */
-    public function getConnectionByAlias($alias)
+    public function get_connection_by_alias($alias)
     {
         return $this->aliases[$alias] ?? null;
     }
-
     /**
      * Returns a connection by its role.
      *
@@ -218,146 +185,126 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
      *
      * @return NodeConnectionInterface|null
      */
-    public function getConnectionByRole($role)
+    public function get_connection_by_role($role)
     {
         if ($role === 'master') {
-            return $this->getMaster();
+            return $this->get_master();
         }
         if ($role === 'slave') {
-            return $this->pickSlave();
+            return $this->pick_slave();
         }
-
         return null;
     }
-
     /**
      * Switches the internal connection in use by the backend.
      *
      * @param NodeConnectionInterface $connection Connection instance in the pool.
      */
-    public function switchTo(NodeConnectionInterface $connection): void
+    public function switch_to(Node_Connection_Interface $connection): void
     {
         if ($connection && $connection === $this->current) {
             return;
         }
-
         if ($connection !== $this->master && !in_array($connection, $this->slaves, true)) {
             throw new InvalidArgumentException('Invalid connection or connection not found.');
         }
-
         $this->current = $connection;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function switchToMaster(): void
+    public function switch_to_master(): void
     {
-        if (!$connection = $this->getConnectionByRole('master')) {
+        if (!$connection = $this->get_connection_by_role('master')) {
             throw new InvalidArgumentException('Invalid connection or connection not found.');
         }
-
-        $this->switchTo($connection);
+        $this->switch_to($connection);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function switchToSlave(): void
+    public function switch_to_slave(): void
     {
-        if (!$connection = $this->getConnectionByRole('slave')) {
+        if (!$connection = $this->get_connection_by_role('slave')) {
             throw new InvalidArgumentException('Invalid connection or connection not found.');
         }
-
-        $this->switchTo($connection);
+        $this->switch_to($connection);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getCurrent()
+    public function get_current()
     {
         return $this->current;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getMaster()
+    public function get_master()
     {
         return $this->master;
     }
-
     /**
      * Returns the connection associated to the master server.
      *
      * @return NodeConnectionInterface
      */
-    private function getMasterOrDie()
+    private function get_master_or_die()
     {
-        if (!$connection = $this->getMaster()) {
-            throw new MissingMasterException('No master server available for replication');
+        if (!$connection = $this->get_master()) {
+            throw new Missing_Master_Exception('No master server available for replication');
         }
-
         return $connection;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getSlaves()
+    public function get_slaves()
     {
         return $this->slaves;
     }
-
     /**
      * Returns the underlying replication strategy.
      *
      * @return ReplicationStrategy
      */
-    public function getReplicationStrategy()
+    public function get_replication_strategy()
     {
         return $this->strategy;
     }
-
     /**
      * Returns a random slave.
      *
      * @return NodeConnectionInterface|null
      */
-    protected function pickSlave()
+    protected function pick_slave()
     {
         if (!$this->slaves) {
             return null;
         }
-
         return $this->slaves[array_rand($this->slaves)];
     }
-
     /**
      * {@inheritdoc}
      */
-    public function isConnected(): bool
+    public function is_connected(): bool
     {
-        return $this->current && $this->current->isConnected();
+        return $this->current && $this->current->is_connected();
     }
-
     /**
      * {@inheritdoc}
      */
     public function connect(): void
     {
         if (!$this->current) {
-            if (!$this->current = $this->pickSlave()) {
-                if (!$this->current = $this->getMaster()) {
-                    throw new ClientException('No available connection for replication');
+            if (!$this->current = $this->pick_slave()) {
+                if (!$this->current = $this->get_master()) {
+                    throw new Client_Exception('No available connection for replication');
                 }
             }
         }
-
         $this->current->connect();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -367,111 +314,85 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
             $connection->disconnect();
         }
     }
-
     /**
      * Handles response from INFO.
      *
      * @param string $response
      */
-    private function handleInfoResponse($response): array
+    private function handle_info_response($response): array
     {
         $info = [];
-
         foreach (preg_split('/\r?\n/', $response) as $row) {
             if (strpos($row, ':') === false) {
                 continue;
             }
-
             [$k, $v] = explode(':', $row, 2);
             $info[$k] = $v;
         }
-
         return $info;
     }
-
     /**
      * Fetches the replication configuration from one of the servers.
      */
     public function discover(): void
     {
-        if (!$this->connectionFactory) {
-            throw new ClientException('Discovery requires a connection factory');
+        if (!$this->connection_factory) {
+            throw new Client_Exception('Discovery requires a connection factory');
         }
-
         while (true) {
             try {
-                if ($connection = $this->getMaster()) {
-                    $this->discoverFromMaster($connection, $this->connectionFactory);
+                if ($connection = $this->get_master()) {
+                    $this->discover_from_master($connection, $this->connection_factory);
                     break;
-                } elseif ($connection = $this->pickSlave()) {
-                    $this->discoverFromSlave($connection, $this->connectionFactory);
+                } elseif ($connection = $this->pick_slave()) {
+                    $this->discover_from_slave($connection, $this->connection_factory);
                     break;
                 }
-                throw new ClientException('No connection available for discovery');
-            } catch (ConnectionException $exception) {
+                throw new Client_Exception('No connection available for discovery');
+            } catch (Connection_Exception $exception) {
                 $this->remove($connection);
             }
         }
     }
-
     /**
      * Discovers the replication configuration by contacting the master node.
      *
      * @param NodeConnectionInterface $connection        Connection to the master node.
      * @param FactoryInterface        $connectionFactory Connection factory instance.
      */
-    protected function discoverFromMaster(NodeConnectionInterface $connection, FactoryInterface $connectionFactory)
+    protected function discover_from_master(Node_Connection_Interface $connection, Factory_Interface $connection_factory)
     {
-        $response = $connection->executeCommand(RawCommand::create('INFO', 'REPLICATION'));
-        $replication = $this->handleInfoResponse($response);
-
+        $response = $connection->execute_command(Raw_Command::create('INFO', 'REPLICATION'));
+        $replication = $this->handle_info_response($response);
         if ($replication['role'] !== 'master') {
-            throw new ClientException("Role mismatch (expected master, got slave) [$connection]");
+            throw new Client_Exception("Role mismatch (expected master, got slave) [{$connection}]");
         }
-
         $this->slaves = [];
-
         foreach ($replication as $k => $v) {
             $parameters = null;
-
             if (strpos($k, 'slave') === 0 && preg_match('/ip=(?P<host>.*),port=(?P<port>\d+)/', $v, $parameters)) {
-                $slaveConnection = $connectionFactory->create([
-                    'host' => $parameters['host'],
-                    'port' => $parameters['port'],
-                    'role' => 'slave',
-                ]);
-
-                $this->add($slaveConnection);
+                $slave_connection = $connection_factory->create(['host' => $parameters['host'], 'port' => $parameters['port'], 'role' => 'slave']);
+                $this->add($slave_connection);
             }
         }
     }
-
     /**
      * Discovers the replication configuration by contacting one of the slaves.
      *
      * @param NodeConnectionInterface $connection        Connection to one of the slaves.
      * @param FactoryInterface        $connectionFactory Connection factory instance.
      */
-    protected function discoverFromSlave(NodeConnectionInterface $connection, FactoryInterface $connectionFactory)
+    protected function discover_from_slave(Node_Connection_Interface $connection, Factory_Interface $connection_factory)
     {
-        $response = $connection->executeCommand(RawCommand::create('INFO', 'REPLICATION'));
-        $replication = $this->handleInfoResponse($response);
-
+        $response = $connection->execute_command(Raw_Command::create('INFO', 'REPLICATION'));
+        $replication = $this->handle_info_response($response);
         if ($replication['role'] !== 'slave') {
-            throw new ClientException("Role mismatch (expected slave, got master) [$connection]");
+            throw new Client_Exception("Role mismatch (expected slave, got master) [{$connection}]");
         }
-
-        $masterConnection = $connectionFactory->create([
-            'host' => $replication['master_host'],
-            'port' => $replication['master_port'],
-            'role' => 'master',
-        ]);
-
-        $this->add($masterConnection);
-
-        $this->discoverFromMaster($masterConnection, $connectionFactory);
+        $master_connection = $connection_factory->create(['host' => $replication['master_host'], 'port' => $replication['master_port'], 'role' => 'master']);
+        $this->add($master_connection);
+        $this->discover_from_master($master_connection, $connection_factory);
     }
-
     /**
      * Retries the execution of a command upon slave failure.
      *
@@ -481,86 +402,70 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
      * @return mixed
      * @throws Throwable
      */
-    private function retryCommandOnFailure(CommandInterface $command, string $method)
+    private function retry_command_on_failure(Command_Interface $command, string $method)
     {
-        $parameters = $this->getParameters();
-
-        if (!$parameters->isDisabledRetry() && !$this->connectionFactory instanceof RelayFactory) {
+        $parameters = $this->get_parameters();
+        if (!$parameters->is_disabled_retry() && !$this->connection_factory instanceof Relay_Factory) {
             $retry = $parameters->retry;
-            $retry->updateCatchableExceptions([MissingMasterException::class]);
-
-            return $retry->callWithRetry(
-                function () use ($command, $method) {
-                    return $this->executeCommandInternal($command, $method);
-                },
-                function (Throwable $exception): void {
-                    $this->onFailCallback($exception);
-                }
-            );
+            $retry->update_catchable_exceptions([Missing_Master_Exception::class]);
+            return $retry->call_with_retry(function () use ($command, $method) {
+                return $this->execute_command_internal($command, $method);
+            }, function (Throwable $exception): void {
+                $this->on_fail_callback($exception);
+            });
         }
-
         while (true) {
             try {
-                $connection = $this->getConnectionByCommand($command);
-                $response = $connection->$method($command);
-
-                if ($response instanceof ResponseErrorInterface && $response->getErrorType() === 'LOADING') {
-                    throw new ConnectionException($connection, "Redis is loading the dataset in memory [$connection]");
+                $connection = $this->get_connection_by_command($command);
+                $response = $connection->{$method}($command);
+                if ($response instanceof Response_Error_Interface && $response->get_error_type() === 'LOADING') {
+                    throw new Connection_Exception($connection, "Redis is loading the dataset in memory [{$connection}]");
                 }
-
                 break;
-            } catch (ConnectionException $exception) {
-                $this->onConnectionExceptionCallback($exception);
-            } catch (MissingMasterException $exception) {
-                $this->onMissingMasterException($exception);
+            } catch (Connection_Exception $exception) {
+                $this->on_connection_exception_callback($exception);
+            } catch (Missing_Master_Exception $exception) {
+                $this->on_missing_master_exception($exception);
             }
         }
-
         return $response;
     }
-
     /**
      * Executes command against valid connection.
      *
      * @return mixed
      * @throws ConnectionException
      */
-    protected function executeCommandInternal(CommandInterface $command, string $method)
+    protected function execute_command_internal(Command_Interface $command, string $method)
     {
-        $connection = $this->getConnectionByCommand($command);
-        $response = $connection->$method($command);
-
-        if ($response instanceof ResponseErrorInterface && $response->getErrorType() === 'LOADING') {
-            throw new ConnectionException($connection, "Redis is loading the dataset in memory [$connection]");
+        $connection = $this->get_connection_by_command($command);
+        $response = $connection->{$method}($command);
+        if ($response instanceof Response_Error_Interface && $response->get_error_type() === 'LOADING') {
+            throw new Connection_Exception($connection, "Redis is loading the dataset in memory [{$connection}]");
         }
-
         return $response;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function writeRequest(CommandInterface $command): void
+    public function write_request(Command_Interface $command): void
     {
-        $this->retryCommandOnFailure($command, __FUNCTION__);
+        $this->retry_command_on_failure($command, __FUNCTION__);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function readResponse(CommandInterface $command)
+    public function read_response(Command_Interface $command)
     {
-        return $this->retryCommandOnFailure($command, __FUNCTION__);
+        return $this->retry_command_on_failure($command, __FUNCTION__);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function executeCommand(CommandInterface $command)
+    public function execute_command(Command_Interface $command)
     {
-        return $this->retryCommandOnFailure($command, __FUNCTION__);
+        return $this->retry_command_on_failure($command, __FUNCTION__);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -568,36 +473,30 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
     {
         return ['master', 'slaves', 'pool', 'aliases', 'strategy'];
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getParameters(): ?ParametersInterface
+    public function get_parameters(): ?Parameters_Interface
     {
         if (isset($this->master)) {
-            return $this->master->getParameters();
+            return $this->master->get_parameters();
         }
-
-        $slave = $this->pickSlave();
-
+        $slave = $this->pick_slave();
         if (null !== $slave) {
-            return $slave->getParameters();
+            return $slave->get_parameters();
         }
-
         return null;
     }
-
     /**
      * Handle connection exception.
      *
      * @throws ClientException|ConnectionException
      */
-    private function onConnectionExceptionCallback(ConnectionException $exception): void
+    private function on_connection_exception_callback(Connection_Exception $exception): void
     {
-        $connection = $exception->getConnection();
+        $connection = $exception->get_connection();
         $connection->disconnect();
-
-        if ($connection === $this->master && !$this->autoDiscovery) {
+        if ($connection === $this->master && !$this->auto_discovery) {
             // Throw immediately when master connection is failing, even
             // when the command represents a read-only operation, unless
             // automatic discovery has been enabled.
@@ -610,52 +509,42 @@ class MasterSlaveReplication extends AbstractAggregateConnection implements Repl
         if (!$this->slaves && !$this->master) {
             throw $exception;
         }
-
         // ... that is, unless we have no more connections to use.
-        if ($this->autoDiscovery) {
+        if ($this->auto_discovery) {
             $this->discover();
         }
     }
-
     /**
      * Exception handling callback.
      *
      * @throws Throwable
      */
-    private function onFailCallback(Throwable $exception): void
+    private function on_fail_callback(Throwable $exception): void
     {
-        if ($exception instanceof ConnectionException) {
-            $this->onConnectionExceptionCallback($exception);
-
+        if ($exception instanceof Connection_Exception) {
+            $this->on_connection_exception_callback($exception);
             return;
         }
-
-        if ($exception instanceof MissingMasterException) {
-            $this->onMissingMasterException($exception);
-
+        if ($exception instanceof Missing_Master_Exception) {
+            $this->on_missing_master_exception($exception);
             return;
         }
-
-        if ($exception instanceof TimeoutException) {
-            $connection = $exception->getConnection();
-
+        if ($exception instanceof Timeout_Exception) {
+            $connection = $exception->get_connection();
             if ($connection) {
                 $connection->disconnect();
-
                 return;
             }
         }
-
         throw $exception;
     }
-
     /**
      * @throws ClientException
      * @throws MissingMasterException
      */
-    private function onMissingMasterException(MissingMasterException $exception): void
+    private function on_missing_master_exception(Missing_Master_Exception $exception): void
     {
-        if ($this->autoDiscovery) {
+        if ($this->auto_discovery) {
             $this->discover();
         } else {
             throw $exception;

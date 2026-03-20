@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,13 +10,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Configuration;
 
-use Predis\Command\Processor\ProcessorInterface;
-use Predis\Connection\FactoryInterface;
-use Predis\Connection\ParametersInterface;
-
+use Predis\Command\Processor\Processor_Interface;
+use Predis\Connection\Factory_Interface;
+use Predis\Connection\Parameters_Interface;
 /**
  * @property callable                  $aggregate       Custom aggregate connection initializer
  * @property callable                  $cluster         Aggregate connection initializer for clustering
@@ -30,7 +27,7 @@ use Predis\Connection\ParametersInterface;
  * @property int                       $readTimeout     Timeout in milliseconds between read operations on reading from multiple connections.
  * @property string|string[]           $upstream_driver Upstream driver info for CLIENT SETINFO.
  */
-interface OptionsInterface
+interface Options_Interface
 {
     /**
      * Returns the default value for the given option.
@@ -39,8 +36,7 @@ interface OptionsInterface
      *
      * @return mixed|null
      */
-    public function getDefault($option);
-
+    public function get_default($option);
     /**
      * Checks if the given option has been set by the user upon initialization.
      *
@@ -49,7 +45,6 @@ interface OptionsInterface
      * @return bool
      */
     public function defined($option);
-
     /**
      * Checks if the given option has been set and does not evaluate to NULL.
      *
@@ -58,7 +53,6 @@ interface OptionsInterface
      * @return bool
      */
     public function __isset($option);
-
     /**
      * Returns the value of the given option.
      *
@@ -67,7 +61,6 @@ interface OptionsInterface
      * @return mixed|null
      */
     public function __get($option);
-
     /**
      * Set the value of the given option.
      *

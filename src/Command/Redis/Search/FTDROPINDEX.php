@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,35 +10,26 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Search;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
-class FTDROPINDEX extends RedisCommand
+use Predis\Command\Prefixable_Command as RedisCommand;
+class FTDROPINDEX extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'FT.DROPINDEX';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         [$index] = $arguments;
-        $commandArguments = [];
-
+        $command_arguments = [];
         if (!empty($arguments[1])) {
-            $commandArguments = $arguments[1]->toArray();
+            $command_arguments = $arguments[1]->to_array();
         }
-
-        parent::setArguments(array_merge(
-            [$index],
-            $commandArguments
-        ));
+        parent::set_arguments(array_merge([$index], $command_arguments));
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

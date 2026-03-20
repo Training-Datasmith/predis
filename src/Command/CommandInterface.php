@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,13 +10,12 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command;
 
 /**
  * Defines an abstraction representing a Redis command.
  */
-interface CommandInterface
+interface Command_Interface
 {
     /**
      * Returns the ID of the Redis command. By convention, command identifiers
@@ -25,43 +23,37 @@ interface CommandInterface
      *
      * @return string
      */
-    public function getId();
-
+    public function get_id();
     /**
      * Assign the specified slot to the command for clustering distribution.
      *
      * @param int $slot Slot ID.
      */
-    public function setSlot($slot);
-
+    public function set_slot($slot);
     /**
      * Returns the assigned slot of the command for clustering distribution.
      *
      * @return int|null
      */
-    public function getSlot();
-
+    public function get_slot();
     /**
      * Sets the arguments for the command.
      *
      * @param array $arguments List of arguments.
      */
-    public function setArguments(array $arguments);
-
+    public function set_arguments(array $arguments);
     /**
      * Sets the raw arguments for the command without processing them.
      *
      * @param array $arguments List of arguments.
      */
-    public function setRawArguments(array $arguments);
-
+    public function set_raw_arguments(array $arguments);
     /**
      * Gets the arguments of the command.
      *
      * @return array
      */
-    public function getArguments();
-
+    public function get_arguments();
     /**
      * Gets the argument of the command at the specified index.
      *
@@ -69,8 +61,7 @@ interface CommandInterface
      *
      * @return mixed|null
      */
-    public function getArgument($index);
-
+    public function get_argument($index);
     /**
      * Parses a raw response and returns a PHP object.
      *
@@ -78,23 +69,20 @@ interface CommandInterface
      *
      * @return mixed
      */
-    public function parseResponse($data);
-
+    public function parse_response($data);
     /**
      * Parses RESP3 protocol response and returns a PHP object.
      *
      * @param  mixed $data
      * @return mixed
      */
-    public function parseResp3Response($data);
-
+    public function parse_resp3response($data);
     /**
      * Returns RESP-formatted representation of command.
      */
-    public function serializeCommand(): string;
-
+    public function serialize_command(): string;
     /**
      * Creates command object from given serialized representation.
      */
-    public static function deserializeCommand(string $serializedCommand): CommandInterface;
+    public static function deserialize_command(string $serialized_command): Command_Interface;
 }

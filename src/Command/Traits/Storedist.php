@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,30 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
 trait Storedist
 {
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (
-            static::$storeDistArgumentPositionOffset >= $argumentsLength
-            || false === $arguments[static::$storeDistArgumentPositionOffset]
-        ) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$store_dist_argument_position_offset >= $arguments_length || false === $arguments[static::$store_dist_argument_position_offset]) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$storeDistArgumentPositionOffset];
-
+        $argument = $arguments[static::$store_dist_argument_position_offset];
         if (true === $argument) {
             $argument = 'STOREDIST';
         } else {
             throw new UnexpectedValueException('Wrong STOREDIST argument type');
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$storeDistArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$storeDistArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge($argumentsBefore, [$argument], $argumentsAfter));
+        $arguments_before = array_slice($arguments, 0, static::$store_dist_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$store_dist_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [$argument], $arguments_after));
     }
 }

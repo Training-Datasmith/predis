@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,49 +10,34 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Predis\Command\Traits\BloomFilters;
+namespace Predis\Command\Traits\Bloom_Filters;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
-trait BucketSize
+trait Bucket_Size
 {
-    private static $bucketSizeModifier = 'BUCKETSIZE';
-
-    public function setArguments(array $arguments): void
+    private static $bucket_size_modifier = 'BUCKETSIZE';
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$bucketSizeArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$bucket_size_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        if ($arguments[static::$bucketSizeArgumentPositionOffset] === -1) {
-            array_splice($arguments, static::$bucketSizeArgumentPositionOffset, 1, [false]);
-            parent::setArguments($arguments);
-
+        if ($arguments[static::$bucket_size_argument_position_offset] === -1) {
+            array_splice($arguments, static::$bucket_size_argument_position_offset, 1, [false]);
+            parent::set_arguments($arguments);
             return;
         }
-
-        if ($arguments[static::$bucketSizeArgumentPositionOffset] < 1) {
+        if ($arguments[static::$bucket_size_argument_position_offset] < 1) {
             throw new UnexpectedValueException('Wrong bucket size argument value or position offset');
         }
-
-        $argument = $arguments[static::$bucketSizeArgumentPositionOffset];
-        $argumentsBefore = array_slice($arguments, 0, static::$bucketSizeArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$bucketSizeArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [self::$bucketSizeModifier],
-            [$argument],
-            $argumentsAfter
-        ));
+        $argument = $arguments[static::$bucket_size_argument_position_offset];
+        $arguments_before = array_slice($arguments, 0, static::$bucket_size_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$bucket_size_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [self::$bucket_size_modifier], [$argument], $arguments_after));
     }
 }

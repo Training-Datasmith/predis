@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,47 +10,44 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\T_Digest;
 
-namespace Predis\Command\Redis\TDigest;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/tdigest.trimmed_mean/
  *
  * Returns an estimation of the mean value from the sketch,
  * excluding observation values outside the low and high cutoff quantiles.
  */
-class TDIGESTTRIMMED_MEAN extends RedisCommand
+class TDIGESTTRIMMED_MEAN extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TDIGEST.TRIMMED_MEAN';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         if (is_string($data) || !is_float($data)) {
             return $data;
         }
-
         // convert Relay (RESP3) constants to strings
         if (is_nan($data)) {
             return 'nan';
         }
-
         switch ($data) {
-            case INF: return 'inf';
-            case -INF: return '-inf';
-            default: return $data;
+            case INF:
+                return 'inf';
+            case -INF:
+                return '-inf';
+            default:
+                return $data;
         }
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

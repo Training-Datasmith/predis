@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,21 +10,19 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use Predis\Command\Traits\Count;
 use Predis\Command\Traits\Keys;
-use Predis\Command\Traits\MinMaxModifier;
-
+use Predis\Command\Traits\Min_Max_Modifier;
 /**
  * @see https://redis.io/commands/zmpop/
  *
  * Pops one or more elements, that are member-score pairs,
  * from the first non-empty sorted set in the provided list of key names.
  */
-class ZMPOP extends RedisCommand
+class ZMPOP extends Redis_Command
 {
     use Keys {
         Keys::setArguments as setKeys;
@@ -33,61 +30,49 @@ class ZMPOP extends RedisCommand
     use Count {
         Count::setArguments as setCount;
     }
-    use MinMaxModifier;
-
-    protected static $keysArgumentPositionOffset = 0;
-    protected static $countArgumentPositionOffset = 2;
-    protected static $modifierArgumentPositionOffset = 1;
-
-    public function getId(): string
+    use Min_Max_Modifier;
+    protected static $keys_argument_position_offset = 0;
+    protected static $count_argument_position_offset = 2;
+    protected static $modifier_argument_position_offset = 1;
+    public function get_id(): string
     {
         return 'ZMPOP';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $this->setCount($arguments);
-        $arguments = $this->getArguments();
-
-        $this->resolveModifier(static::$modifierArgumentPositionOffset, $arguments);
-
-        $this->setKeys($arguments);
-        $arguments = $this->getArguments();
-
-        parent::setArguments($arguments);
+        $this->set_count($arguments);
+        $arguments = $this->get_arguments();
+        $this->resolve_modifier(static::$modifier_argument_position_offset, $arguments);
+        $this->set_keys($arguments);
+        $arguments = $this->get_arguments();
+        parent::set_arguments($arguments);
     }
-
     /**
      * @return mixed[]
      */
-    public function parseResponse($data): array
+    public function parse_response($data): array
     {
         $key = array_shift($data);
-
         if (null === $key) {
             return [$key];
         }
-
         $data = $data[0];
-        $parsedData = [];
-
-        for ($i = 0, $iMax = count($data); $i < $iMax; $i++) {
-            for ($j = 0, $jMax = count($data[$i]); $j < $jMax; ++$j) {
+        $parsed_data = [];
+        for ($i = 0, $i_max = count($data); $i < $i_max; $i++) {
+            for ($j = 0, $j_max = count($data[$i]); $j < $j_max; ++$j) {
                 if ($data[$i][$j + 1] ?? false) {
-                    $parsedData[$data[$i][$j]] = $data[$i][++$j];
+                    $parsed_data[$data[$i][$j]] = $data[$i][++$j];
                 }
             }
         }
-
-        return array_combine([$key], [$parsedData]);
+        return array_combine([$key], [$parsed_data]);
     }
-
     /**
      * @param                                               $data
      * @return array|array[]|false|mixed|null[]|string|null
      */
-    public function parseResp3Response($data)
+    public function parse_resp3response($data)
     {
-        return $this->parseResponse($data);
+        return $this->parse_response($data);
     }
 }

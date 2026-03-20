@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,30 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\From;
 
 use InvalidArgumentException;
-use Predis\Command\Argument\Geospatial\FromInterface;
-
-trait GeoFrom
+use Predis\Command\Argument\Geospatial\From_Interface;
+trait Geo_From
 {
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $argumentPositionOffset = $this->getFromArgumentPositionOffset($arguments);
-
-        if (null === $argumentPositionOffset) {
+        $argument_position_offset = $this->get_from_argument_position_offset($arguments);
+        if (null === $argument_position_offset) {
             throw new InvalidArgumentException('Invalid FROM argument value given');
         }
-
-        $fromArgumentObject = $arguments[$argumentPositionOffset];
-        $argumentsBefore = array_slice($arguments, 0, $argumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, $argumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            $fromArgumentObject->toArray(),
-            $argumentsAfter
-        ));
+        $from_argument_object = $arguments[$argument_position_offset];
+        $arguments_before = array_slice($arguments, 0, $argument_position_offset);
+        $arguments_after = array_slice($arguments, $argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, $from_argument_object->to_array(), $arguments_after));
     }
-
-    private function getFromArgumentPositionOffset(array $arguments): ?int
+    private function get_from_argument_position_offset(array $arguments): ?int
     {
         foreach ($arguments as $i => $value) {
-            if ($value instanceof FromInterface) {
+            if ($value instanceof From_Interface) {
                 return $i;
             }
         }
-
         return null;
     }
 }

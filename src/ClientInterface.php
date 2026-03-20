@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,36 +10,35 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis;
 
-use Predis\Command\Argument\Geospatial\ByInterface;
-use Predis\Command\Argument\Geospatial\FromInterface;
-use Predis\Command\Argument\Search\AggregateArguments;
-use Predis\Command\Argument\Search\AlterArguments;
-use Predis\Command\Argument\Search\CreateArguments;
-use Predis\Command\Argument\Search\DropArguments;
-use Predis\Command\Argument\Search\ExplainArguments;
-use Predis\Command\Argument\Search\HybridSearch\HybridSearchQuery;
-use Predis\Command\Argument\Search\ProfileArguments;
-use Predis\Command\Argument\Search\SchemaFields\FieldInterface;
-use Predis\Command\Argument\Search\SearchArguments;
-use Predis\Command\Argument\Search\SugAddArguments;
-use Predis\Command\Argument\Search\SugGetArguments;
-use Predis\Command\Argument\Search\SynUpdateArguments;
-use Predis\Command\Argument\Server\LimitOffsetCount;
+use Predis\Command\Argument\Geospatial\By_Interface;
+use Predis\Command\Argument\Geospatial\From_Interface;
+use Predis\Command\Argument\Search\Aggregate_Arguments;
+use Predis\Command\Argument\Search\Alter_Arguments;
+use Predis\Command\Argument\Search\Create_Arguments;
+use Predis\Command\Argument\Search\Drop_Arguments;
+use Predis\Command\Argument\Search\Explain_Arguments;
+use Predis\Command\Argument\Search\Hybrid_Search\Hybrid_Search_Query;
+use Predis\Command\Argument\Search\Profile_Arguments;
+use Predis\Command\Argument\Search\Schema_Fields\Field_Interface;
+use Predis\Command\Argument\Search\Search_Arguments;
+use Predis\Command\Argument\Search\Sug_Add_Arguments;
+use Predis\Command\Argument\Search\Sug_Get_Arguments;
+use Predis\Command\Argument\Search\Syn_Update_Arguments;
+use Predis\Command\Argument\Server\Limit_Offset_Count;
 use Predis\Command\Argument\Server\To;
-use Predis\Command\Argument\TimeSeries\AddArguments;
-use Predis\Command\Argument\TimeSeries\AlterArguments as TSAlterArguments;
-use Predis\Command\Argument\TimeSeries\CreateArguments as TSCreateArguments;
-use Predis\Command\Argument\TimeSeries\DecrByArguments;
-use Predis\Command\Argument\TimeSeries\GetArguments;
-use Predis\Command\Argument\TimeSeries\IncrByArguments;
-use Predis\Command\Argument\TimeSeries\InfoArguments;
-use Predis\Command\Argument\TimeSeries\MGetArguments;
-use Predis\Command\Argument\TimeSeries\MRangeArguments;
-use Predis\Command\Argument\TimeSeries\RangeArguments;
-use Predis\Command\CommandInterface;
+use Predis\Command\Argument\Time_Series\Add_Arguments;
+use Predis\Command\Argument\Time_Series\Alter_Arguments as TSAlterArguments;
+use Predis\Command\Argument\Time_Series\Create_Arguments as TSCreateArguments;
+use Predis\Command\Argument\Time_Series\Decr_By_Arguments;
+use Predis\Command\Argument\Time_Series\Get_Arguments;
+use Predis\Command\Argument\Time_Series\Incr_By_Arguments;
+use Predis\Command\Argument\Time_Series\Info_Arguments;
+use Predis\Command\Argument\Time_Series\M_Get_Arguments;
+use Predis\Command\Argument\Time_Series\M_Range_Arguments;
+use Predis\Command\Argument\Time_Series\Range_Arguments;
+use Predis\Command\Command_Interface;
 use Predis\Command\Container\ACL;
 use Predis\Command\Container\CLIENT;
 use Predis\Command\Container\FUNCTIONS;
@@ -50,12 +48,11 @@ use Predis\Command\Container\Search\FTCONFIG;
 use Predis\Command\Container\Search\FTCURSOR;
 use Predis\Command\Container\XGROUP;
 use Predis\Command\Container\XINFO;
-use Predis\Command\FactoryInterface;
+use Predis\Command\Factory_Interface;
 use Predis\Command\Redis\VADD;
-use Predis\Configuration\OptionsInterface;
-use Predis\Connection\ConnectionInterface;
+use Predis\Configuration\Options_Interface;
+use Predis\Connection\Connection_Interface;
 use Predis\Response\Status;
-
 /**
  * Interface defining a client able to execute commands against Redis.
  *
@@ -421,39 +418,34 @@ use Predis\Response\Status;
  * @property XGROUP    $xgroup
  * @property XINFO     $xinfo
  */
-interface ClientInterface
+interface Client_Interface
 {
     /**
      * Returns the command factory used by the client.
      *
      * @return FactoryInterface
      */
-    public function getCommandFactory();
-
+    public function get_command_factory();
     /**
      * Returns the client options specified upon initialization.
      *
      * @return OptionsInterface
      */
-    public function getOptions();
-
+    public function get_options();
     /**
      * Opens the underlying connection to the server.
      */
     public function connect();
-
     /**
      * Closes the underlying connection from the server.
      */
     public function disconnect();
-
     /**
      * Returns the underlying connection instance.
      *
      * @return ConnectionInterface
      */
-    public function getConnection();
-
+    public function get_connection();
     /**
      * Creates a new instance of the specified Redis command.
      *
@@ -462,8 +454,7 @@ interface ClientInterface
      *
      * @return CommandInterface
      */
-    public function createCommand($method, $arguments = []);
-
+    public function create_command($method, $arguments = []);
     /**
      * Executes the specified Redis command.
      *
@@ -471,8 +462,7 @@ interface ClientInterface
      *
      * @return mixed
      */
-    public function executeCommand(CommandInterface $command);
-
+    public function execute_command(Command_Interface $command);
     /**
      * Creates a Redis command with the specified arguments and sends a request
      * to the server.

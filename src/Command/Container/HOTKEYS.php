@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,26 +10,22 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Container;
 
 use Predis\Response\Status;
-
 /**
  * @method Status stop()
  * @method Status reset()
  * @method array  get()
  */
-class HOTKEYS extends AbstractContainer
+class HOTKEYS extends Abstract_Container
 {
     public const CPU = 'CPU';
     public const NET = 'NET';
-
-    public function getContainerCommandId(): string
+    public function get_container_command_id(): string
     {
         return 'HOTKEYS';
     }
-
     /**
      * Starts a hotkeys tracking on server side.
      *

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,8 +10,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Predis\Command\Redis\CuckooFilter;
+namespace Predis\Command\Redis\Cuckoo_Filter;
 
 /**
  * @see https://redis.io/commands/cf.insertnx/
@@ -22,7 +20,7 @@ namespace Predis\Command\Redis\CuckooFilter;
  */
 class CFINSERTNX extends CFINSERT
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'CF.INSERTNX';
     }

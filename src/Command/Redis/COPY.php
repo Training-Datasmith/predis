@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,19 +10,17 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use Predis\Command\Traits\DB;
 use Predis\Command\Traits\Replace;
-
 /**
  * @see https://redis.io/commands/copy/
  *
  * This command copies the value stored at the source key to the destination key.
  */
-class COPY extends RedisCommand
+class COPY extends Redis_Command
 {
     use DB {
         DB::setArguments as setDB;
@@ -31,19 +28,15 @@ class COPY extends RedisCommand
     use Replace {
         Replace::setArguments as setReplace;
     }
-
-    protected static $dbArgumentPositionOffset = 2;
-
-    public function getId(): string
+    protected static $db_argument_position_offset = 2;
+    public function get_id(): string
     {
         return 'COPY';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $this->setDB($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setReplace($arguments);
+        $this->set_db($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_replace($arguments);
     }
 }

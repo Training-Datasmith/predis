@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,20 +10,18 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Container\Search;
 
-use Predis\Command\Argument\Search\CursorArguments;
-use Predis\Command\Container\AbstractContainer;
+use Predis\Command\Argument\Search\Cursor_Arguments;
+use Predis\Command\Container\Abstract_Container;
 use Predis\Response\Status;
-
 /**
  * @method Status del(string $index, int $cursorId)
  * @method array  read(string $index, int $cursorId, ?CursorArguments $arguments = null)
  */
-class FTCURSOR extends AbstractContainer
+class FTCURSOR extends Abstract_Container
 {
-    public function getContainerCommandId(): string
+    public function get_container_command_id(): string
     {
         return 'FTCURSOR';
     }

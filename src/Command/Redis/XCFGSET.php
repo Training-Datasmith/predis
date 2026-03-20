@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see http://redis.io/commands/xcfgset
  *
@@ -23,38 +20,33 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  *
  * Configures the idempotency parameters for a stream's IDMP map.
  */
-class XCFGSET extends RedisCommand
+class XCFGSET extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XCFGSET';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0]];
-
+        $processed_arguments = [$arguments[0]];
         // IDMP-DURATION option
         if (isset($arguments[1]) && $arguments[1] !== null) {
-            array_push($processedArguments, 'IDMP-DURATION', $arguments[1]);
+            array_push($processed_arguments, 'IDMP-DURATION', $arguments[1]);
         }
-
         // IDMP-MAXSIZE option
         if (isset($arguments[2]) && $arguments[2] !== null) {
-            array_push($processedArguments, 'IDMP-MAXSIZE', $arguments[2]);
+            array_push($processed_arguments, 'IDMP-MAXSIZE', $arguments[2]);
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

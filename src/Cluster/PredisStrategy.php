@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,66 +10,54 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Cluster;
 
-use Predis\Cluster\Distributor\DistributorInterface;
-use Predis\Cluster\Distributor\HashRing;
-
+use Predis\Cluster\Distributor\Distributor_Interface;
+use Predis\Cluster\Distributor\Hash_Ring;
 /**
  * Default cluster strategy used by Predis to handle client-side sharding.
  */
-class PredisStrategy extends ClusterStrategy
+class Predis_Strategy extends Cluster_Strategy
 {
     protected $distributor;
-
     /**
      * @param DistributorInterface|null $distributor Optional distributor instance.
      */
-    public function __construct(?DistributorInterface $distributor = null)
+    public function __construct(?Distributor_Interface $distributor = null)
     {
         parent::__construct();
-
-        $this->distributor = $distributor ?: new HashRing();
+        $this->distributor = $distributor ?: new Hash_Ring();
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getSlotByKey($key)
+    public function get_slot_by_key($key)
     {
-        $key = $this->extractKeyTag($key);
+        $key = $this->extract_key_tag($key);
         $hash = $this->distributor->hash($key);
-
-        return $this->distributor->getSlot($hash);
+        return $this->distributor->get_slot($hash);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function checkSameSlotForKeys(array $keys): bool
+    public function check_same_slot_for_keys(array $keys): bool
     {
         if (!$count = count($keys)) {
             return false;
         }
-
-        $currentKey = $this->extractKeyTag($keys[0]);
-
+        $current_key = $this->extract_key_tag($keys[0]);
         for ($i = 1; $i < $count; ++$i) {
-            $nextKey = $this->extractKeyTag($keys[$i]);
-
-            if ($currentKey !== $nextKey) {
+            $next_key = $this->extract_key_tag($keys[$i]);
+            if ($current_key !== $next_key) {
                 return false;
             }
         }
-
         return true;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getDistributor()
+    public function get_distributor()
     {
         return $this->distributor;
     }

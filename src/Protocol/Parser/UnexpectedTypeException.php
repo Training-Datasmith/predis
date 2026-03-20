@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,27 +10,22 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Protocol\Parser;
 
 use Throwable;
 use UnexpectedValueException;
-
-class UnexpectedTypeException extends UnexpectedValueException
+class Unexpected_Type_Exception extends UnexpectedValueException
 {
     /**
      * @var string
      */
     protected $type;
-
     public function __construct(string $type, $message = '', $code = 0, ?Throwable $previous = null)
     {
         $this->type = $type;
-
         parent::__construct($message, $code, $previous);
     }
-
-    public function getType(): string
+    public function get_type(): string
     {
         return $this->type;
     }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,25 +10,22 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Search;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/ft.aliasadd/
  *
  * Add an alias to an index.
  */
-class FTALIASADD extends RedisCommand
+class FTALIASADD extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'FT.ALIASADD';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForAllArguments($prefix);
+        $this->apply_prefix_for_all_arguments($prefix);
     }
 }

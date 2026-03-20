@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Protocol;
 
-use Predis\CommunicationException;
-
+use Predis\Communication_Exception;
 /**
  * Exception used to identify errors encountered while parsing the Redis wire
  * protocol.
  */
-class ProtocolException extends CommunicationException
+class Protocol_Exception extends Communication_Exception
 {
 }

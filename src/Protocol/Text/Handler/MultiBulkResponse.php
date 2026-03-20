@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,60 +10,47 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Protocol\Text\Handler;
 
-use Predis\CommunicationException;
-use Predis\Connection\CompositeConnectionInterface;
-use Predis\Protocol\ProtocolException;
-
+use Predis\Communication_Exception;
+use Predis\Connection\Composite_Connection_Interface;
+use Predis\Protocol\Protocol_Exception;
 /**
  * Handler for the multibulk response type in the standard Redis wire protocol.
  * It returns multibulk responses as PHP arrays.
  *
  * @see http://redis.io/topics/protocol
  */
-class MultiBulkResponse implements ResponseHandlerInterface
+class Multi_Bulk_Response implements Response_Handler_Interface
 {
     /**
      * {@inheritdoc}
      */
-    public function handle(CompositeConnectionInterface $connection, $payload)
+    public function handle(Composite_Connection_Interface $connection, $payload)
     {
         $length = (int) $payload;
-
-        if ("$length" !== $payload) {
-            CommunicationException::handle(new ProtocolException(
-                $connection,
-                "Cannot parse '$payload' as a valid length of a multi-bulk response [{$connection->getParameters()}]"
-            ));
+        if ("{$length}" !== $payload) {
+            Communication_Exception::handle(new Protocol_Exception($connection, "Cannot parse '{$payload}' as a valid length of a multi-bulk response [{$connection->get_parameters()}]"));
         }
-
         if ($length === -1) {
             return;
         }
-
         $list = [];
-
         if ($length > 0) {
-            $handlersCache = [];
-            $reader = $connection->getProtocol()->getResponseReader();
-
+            $handlers_cache = [];
+            $reader = $connection->get_protocol()->get_response_reader();
             for ($i = 0; $i < $length; ++$i) {
-                $header = $connection->readLine();
+                $header = $connection->read_line();
                 $prefix = $header[0];
-
-                if (isset($handlersCache[$prefix])) {
-                    $handler = $handlersCache[$prefix];
+                if (isset($handlers_cache[$prefix])) {
+                    $handler = $handlers_cache[$prefix];
                 } else {
-                    $handler = $reader->getHandler($prefix);
-                    $handlersCache[$prefix] = $handler;
+                    $handler = $reader->get_handler($prefix);
+                    $handlers_cache[$prefix] = $handler;
                 }
-
                 $list[$i] = $handler->handle($connection, substr($header, 1));
             }
         }
-
         return $list;
     }
 }

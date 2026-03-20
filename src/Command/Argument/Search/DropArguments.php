@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,18 +10,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Search;
 
-use Predis\Command\Argument\ArrayableArgument;
-
-class DropArguments implements ArrayableArgument
+use Predis\Command\Argument\Arrayable_Argument;
+class Drop_Arguments implements Arrayable_Argument
 {
     /**
      * @var array
      */
     protected $arguments = [];
-
     /**
      * Drop operation that, if set, deletes the actual document hashes.
      *
@@ -31,11 +27,9 @@ class DropArguments implements ArrayableArgument
     public function dd(): self
     {
         $this->arguments[] = 'DD';
-
         return $this;
     }
-
-    public function toArray(): array
+    public function to_array(): array
     {
         return $this->arguments;
     }

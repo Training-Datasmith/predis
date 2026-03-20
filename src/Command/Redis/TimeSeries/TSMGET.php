@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,29 +10,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Predis\Command\Redis\TimeSeries;
+namespace Predis\Command\Redis\Time_Series;
 
 use Predis\Command\Command as RedisCommand;
-
-class TSMGET extends RedisCommand
+class TSMGET extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TS.MGET';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [];
-        $argumentsObject = array_shift($arguments);
-        $commandArguments = $argumentsObject->toArray();
-
-        array_push($processedArguments, 'FILTER', ...$arguments);
-
-        parent::setArguments(array_merge(
-            $commandArguments,
-            $processedArguments
-        ));
+        $processed_arguments = [];
+        $arguments_object = array_shift($arguments);
+        $command_arguments = $arguments_object->to_array();
+        array_push($processed_arguments, 'FILTER', ...$arguments);
+        parent::set_arguments(array_merge($command_arguments, $processed_arguments));
     }
 }

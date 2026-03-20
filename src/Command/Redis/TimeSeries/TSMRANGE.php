@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,31 +10,24 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Predis\Command\Redis\TimeSeries;
+namespace Predis\Command\Redis\Time_Series;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see https://redis.io/commands/ts.mrange/
  *
  * Query a range across multiple time series by filters in forward direction.
  */
-class TSMRANGE extends RedisCommand
+class TSMRANGE extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TS.MRANGE';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        [$fromTimestamp, $toTimestamp] = $arguments;
-        $commandArguments = $arguments[2]->toArray();
-
-        parent::setArguments(array_merge(
-            [$fromTimestamp, $toTimestamp],
-            $commandArguments
-        ));
+        [$from_timestamp, $to_timestamp] = $arguments;
+        $command_arguments = $arguments[2]->to_array();
+        parent::set_arguments(array_merge([$from_timestamp, $to_timestamp], $command_arguments));
     }
 }

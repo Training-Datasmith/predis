@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,12 +10,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-use Predis\Command\Traits\With\WithScores;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
+use Predis\Command\Traits\With\With_Scores;
 /**
  * @see https://redis.io/commands/zrandmember/
  *
@@ -27,17 +24,15 @@ use Predis\Command\Traits\With\WithScores;
  * If called with a negative count, the behavior changes and the command
  * is allowed to return the same element multiple times.
  */
-class ZRANDMEMBER extends RedisCommand
+class ZRANDMEMBER extends Redis_Command
 {
-    use WithScores;
-
-    public function getId(): string
+    use With_Scores;
+    public function get_id(): string
     {
         return 'ZRANDMEMBER';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

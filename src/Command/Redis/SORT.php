@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,46 +10,38 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see http://redis.io/commands/sort
  */
-class SORT extends RedisCommand
+class SORT extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'SORT';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if (count($arguments) === 1) {
-            parent::setArguments($arguments);
-
+            parent::set_arguments($arguments);
             return;
         }
-
         $query = [$arguments[0]];
-        $sortParams = array_change_key_case($arguments[1], CASE_UPPER);
-
-        if (isset($sortParams['BY'])) {
+        $sort_params = array_change_key_case($arguments[1], CASE_UPPER);
+        if (isset($sort_params['BY'])) {
             $query[] = 'BY';
-            $query[] = $sortParams['BY'];
+            $query[] = $sort_params['BY'];
         }
-
-        if (isset($sortParams['GET'])) {
-            $getargs = $sortParams['GET'];
-
+        if (isset($sort_params['GET'])) {
+            $getargs = $sort_params['GET'];
             if (is_array($getargs)) {
                 foreach ($getargs as $getarg) {
                     $query[] = 'GET';
@@ -61,59 +52,47 @@ class SORT extends RedisCommand
                 $query[] = $getargs;
             }
         }
-
-        if (isset($sortParams['LIMIT'])
-            && is_array($sortParams['LIMIT'])
-            && count($sortParams['LIMIT']) == 2) {
+        if (isset($sort_params['LIMIT']) && is_array($sort_params['LIMIT']) && count($sort_params['LIMIT']) == 2) {
             $query[] = 'LIMIT';
-            $query[] = $sortParams['LIMIT'][0];
-            $query[] = $sortParams['LIMIT'][1];
+            $query[] = $sort_params['LIMIT'][0];
+            $query[] = $sort_params['LIMIT'][1];
         }
-
-        if (isset($sortParams['SORT'])) {
-            $query[] = strtoupper($sortParams['SORT']);
+        if (isset($sort_params['SORT'])) {
+            $query[] = strtoupper($sort_params['SORT']);
         }
-
-        if (isset($sortParams['ALPHA']) && $sortParams['ALPHA'] == true) {
+        if (isset($sort_params['ALPHA']) && $sort_params['ALPHA'] == true) {
             $query[] = 'ALPHA';
         }
-
-        if (isset($sortParams['STORE'])) {
+        if (isset($sort_params['STORE'])) {
             $query[] = 'STORE';
-            $query[] = $sortParams['STORE'];
+            $query[] = $sort_params['STORE'];
         }
-
-        parent::setArguments($query);
+        parent::set_arguments($query);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        if ($arguments = $this->getArguments()) {
-            $arguments[0] = "$prefix{$arguments[0]}";
-
+        if ($arguments = $this->get_arguments()) {
+            $arguments[0] = "{$prefix}{$arguments[0]}";
             if (($count = count($arguments)) > 1) {
                 for ($i = 1; $i < $count; ++$i) {
                     switch (strtoupper($arguments[$i])) {
                         case 'BY':
                         case 'STORE':
-                            $arguments[$i] = "$prefix{$arguments[++$i]}";
+                            $arguments[$i] = "{$prefix}{$arguments[++$i]}";
                             break;
-
                         case 'GET':
                             $value = $arguments[++$i];
                             if ($value !== '#') {
-                                $arguments[$i] = "$prefix$value";
+                                $arguments[$i] = "{$prefix}{$value}";
                             }
                             break;
-
                         case 'LIMIT':
                             $i += 2;
                             break;
                     }
                 }
             }
-
-            $this->setRawArguments($arguments);
+            $this->set_raw_arguments($arguments);
         }
     }
 }

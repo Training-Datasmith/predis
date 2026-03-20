@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,7 +10,6 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Configuration;
 
 /**
@@ -22,27 +20,14 @@ namespace Predis\Configuration;
  *
  * {@inheritdoc}
  */
-class Options implements OptionsInterface
+class Options implements Options_Interface
 {
     /** @var array */
-    protected $handlers = [
-        'aggregate' => Option\Aggregate::class,
-        'cluster' => Option\Cluster::class,
-        'replication' => Option\Replication::class,
-        'connections' => Option\Connections::class,
-        'commands' => Option\Commands::class,
-        'exceptions' => Option\Exceptions::class,
-        'prefix' => Option\Prefix::class,
-        'crc16' => Option\CRC16::class,
-        'upstream_driver' => Option\UpstreamDriver::class,
-    ];
-
+    protected $handlers = ['aggregate' => Option\Aggregate::class, 'cluster' => Option\Cluster::class, 'replication' => Option\Replication::class, 'connections' => Option\Connections::class, 'commands' => Option\Commands::class, 'exceptions' => Option\Exceptions::class, 'prefix' => Option\Prefix::class, 'crc16' => Option\CRC16::class, 'upstream_driver' => Option\Upstream_Driver::class];
     /** @var array */
     protected $options = [];
-
     /** @var array */
     protected $input;
-
     /**
      * @param array|null $options Named array of client options
      */
@@ -50,42 +35,31 @@ class Options implements OptionsInterface
     {
         $this->input = $options ?? [];
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getDefault($option)
+    public function get_default($option)
     {
         if (isset($this->handlers[$option])) {
             $handler = $this->handlers[$option];
             $handler = new $handler();
-
-            return $handler->getDefault($this);
+            return $handler->get_default($this);
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function defined($option): bool
     {
-        return
-            array_key_exists($option, $this->options)
-            || array_key_exists($option, $this->input)
-        ;
+        return array_key_exists($option, $this->options) || array_key_exists($option, $this->input);
     }
-
     /**
      * {@inheritdoc}
      */
     public function __isset($option)
     {
-        return (
-            array_key_exists($option, $this->options)
-            || array_key_exists($option, $this->input)
-        ) && $this->__get($option) !== null;
+        return (array_key_exists($option, $this->options) || array_key_exists($option, $this->input)) && $this->__get($option) !== null;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -94,11 +68,9 @@ class Options implements OptionsInterface
         if (isset($this->options[$option]) || array_key_exists($option, $this->options)) {
             return $this->options[$option];
         }
-
         if (isset($this->input[$option]) || array_key_exists($option, $this->input)) {
             $value = $this->input[$option];
             unset($this->input[$option]);
-
             if (isset($this->handlers[$option])) {
                 $handler = $this->handlers[$option];
                 $handler = new $handler();
@@ -106,15 +78,12 @@ class Options implements OptionsInterface
             } elseif (is_object($value) && method_exists($value, '__invoke')) {
                 $value = $value($this);
             }
-
             return $this->options[$option] = $value;
         }
-
         if (isset($this->handlers[$option])) {
-            return $this->options[$option] = $this->getDefault($option);
+            return $this->options[$option] = $this->get_default($option);
         }
     }
-
     /**
      * {@inheritDoc}
      */

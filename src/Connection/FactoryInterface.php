@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,13 +10,12 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
 /**
  * Interface for classes providing a factory of connections to Redis nodes.
  */
-interface FactoryInterface
+interface Factory_Interface
 {
     /**
      * Defines or overrides the connection class identified by a scheme prefix.
@@ -26,14 +24,12 @@ interface FactoryInterface
      * @param mixed  $initializer Fully-qualified name of a class or a callable for lazy initialization.
      */
     public function define($scheme, $initializer);
-
     /**
      * Undefines the connection identified by a scheme prefix.
      *
      * @param string $scheme Target connection scheme.
      */
     public function undefine($scheme);
-
     /**
      * Creates a new connection object.
      *

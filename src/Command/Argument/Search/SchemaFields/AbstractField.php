@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,61 +10,46 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Schema_Fields;
 
-namespace Predis\Command\Argument\Search\SchemaFields;
-
-abstract class AbstractField implements FieldInterface
+abstract class Abstract_Field implements Field_Interface
 {
     public const SORTABLE = true;
     public const NOT_SORTABLE = false;
     public const SORTABLE_UNF = 'UNF';
-
     /**
      * @var array
      */
-    protected $fieldArguments = [];
-
+    protected $field_arguments = [];
     /**
      * @param  bool|string $sortable
      */
-    protected function setCommonOptions(
-        string $fieldType,
-        string $identifier,
-        string $alias = '',
-        $sortable = self::NOT_SORTABLE,
-        bool $noIndex = false,
-        bool $allowsMissing = false
-    ): void {
-        $this->fieldArguments[] = $identifier;
-
+    protected function set_common_options(string $field_type, string $identifier, string $alias = '', $sortable = self::NOT_SORTABLE, bool $no_index = false, bool $allows_missing = false): void
+    {
+        $this->field_arguments[] = $identifier;
         if ($alias !== '') {
-            $this->fieldArguments[] = 'AS';
-            $this->fieldArguments[] = $alias;
+            $this->field_arguments[] = 'AS';
+            $this->field_arguments[] = $alias;
         }
-
-        $this->fieldArguments[] = $fieldType;
-
+        $this->field_arguments[] = $field_type;
         if ($sortable === self::SORTABLE) {
-            $this->fieldArguments[] = 'SORTABLE';
+            $this->field_arguments[] = 'SORTABLE';
         } elseif ($sortable === self::SORTABLE_UNF) {
-            $this->fieldArguments[] = 'SORTABLE';
-            $this->fieldArguments[] = 'UNF';
+            $this->field_arguments[] = 'SORTABLE';
+            $this->field_arguments[] = 'UNF';
         }
-
-        if ($noIndex) {
-            $this->fieldArguments[] = 'NOINDEX';
+        if ($no_index) {
+            $this->field_arguments[] = 'NOINDEX';
         }
-
-        if ($allowsMissing) {
-            $this->fieldArguments[] = 'INDEXMISSING';
+        if ($allows_missing) {
+            $this->field_arguments[] = 'INDEXMISSING';
         }
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
-        return $this->fieldArguments;
+        return $this->field_arguments;
     }
 }

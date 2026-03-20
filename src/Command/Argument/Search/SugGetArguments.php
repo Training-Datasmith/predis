@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,10 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Search;
 
-class SugGetArguments extends CommonArguments
+class Sug_Get_Arguments extends Common_Arguments
 {
     /**
      * Performs a fuzzy prefix search, including prefixes at Levenshtein distance of 1 from the prefix sent.
@@ -24,10 +22,8 @@ class SugGetArguments extends CommonArguments
     public function fuzzy(): self
     {
         $this->arguments[] = 'FUZZY';
-
         return $this;
     }
-
     /**
      * Limits the results to a maximum of num (default: 5).
      *
@@ -36,7 +32,6 @@ class SugGetArguments extends CommonArguments
     public function max(int $num): self
     {
         array_push($this->arguments, 'MAX', $num);
-
         return $this;
     }
 }

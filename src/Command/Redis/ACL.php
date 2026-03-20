@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,45 +10,38 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see https://redis.io/commands/?name=ACL
  *
  * Container command corresponds to any ACL *.
  * Represents any ACL command with subcommand as first argument.
  */
-class ACL extends RedisCommand
+class ACL extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'ACL';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         if (!is_array($data)) {
             return $data;
         }
-
         if ($data === array_values($data)) {
             return $data;
         }
-
         // flatten Relay (RESP3) maps
         $return = [];
-
         array_walk($data, static function ($value, $key) use (&$return): void {
             $return[] = $key;
             $return[] = $value;
         });
-
         return $return;
     }
 }

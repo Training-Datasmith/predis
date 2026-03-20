@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,18 +10,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Consumer\Push;
 
-use Predis\Consumer\AbstractDispatcherLoop;
-
-class DispatcherLoop extends AbstractDispatcherLoop
+use Predis\Consumer\Abstract_Dispatcher_Loop;
+class Dispatcher_Loop extends Abstract_Dispatcher_Loop
 {
     public function __construct(Consumer $consumer)
     {
         $this->consumer = $consumer;
     }
-
     /**
      * {@inheritDoc}
      */
@@ -30,14 +26,13 @@ class DispatcherLoop extends AbstractDispatcherLoop
     {
         foreach ($this->consumer as $notification) {
             if (null !== $notification) {
-                $messageType = $notification->getDataType();
-
-                if (isset($this->callbacksDictionary[$messageType])) {
-                    $callback = $this->callbacksDictionary[$messageType];
-                    $callback($notification->getPayload(), $this);
-                } elseif (isset($this->defaultCallback)) {
-                    $callback = $this->defaultCallback;
-                    $callback($notification->getPayload(), $this);
+                $message_type = $notification->get_data_type();
+                if (isset($this->callbacks_dictionary[$message_type])) {
+                    $callback = $this->callbacks_dictionary[$message_type];
+                    $callback($notification->get_payload(), $this);
+                } elseif (isset($this->default_callback)) {
+                    $callback = $this->default_callback;
+                    $callback($notification->get_payload(), $this);
                 }
             }
         }

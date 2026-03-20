@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,31 +10,27 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Utils;
 
 use RuntimeException;
 use UnexpectedValueException;
-
-class CommandUtility
+class Command_Utility
 {
     /**
      * Converts RESP2 array into RESP3 dictionary.
      *
      * @param  callable|null $callback  Callback that applies to each key, value (except arrays) before convert them into key => value
      */
-    public static function arrayToDictionary(array $array, ?callable $callback = null, bool $recursive = true): array
+    public static function array_to_dictionary(array $array, ?callable $callback = null, bool $recursive = true): array
     {
         if (count($array) % 2 !== 0) {
             throw new UnexpectedValueException('Array must have an even number of arguments');
         }
-
         $dict = [];
-
         for ($i = 0; $i < count($array); $i += 2) {
             if (is_array($array[$i + 1])) {
                 if ($recursive) {
-                    $dict[$array[$i]] = self::arrayToDictionary($array[$i + 1], $callback, $recursive);
+                    $dict[$array[$i]] = self::array_to_dictionary($array[$i + 1], $callback, $recursive);
                 } else {
                     $dict[$array[$i]] = $array[$i + 1];
                 }
@@ -46,14 +41,11 @@ class CommandUtility
                     $key = $array[$i];
                     $value = $array[$i + 1];
                 }
-
                 $dict[$key] = $value;
             }
         }
-
         return $dict;
     }
-
     /**
      * Converts a value into XXH3 hash.
      *
@@ -64,21 +56,17 @@ class CommandUtility
         if (!in_array('xxh3', hash_algos(), true)) {
             throw new RuntimeException('XXH3 algorithm is not supported. Please install PECL xxhash extension.');
         }
-
         return hash('xxh3', $value);
     }
-
     /**
      * Converts associative array into flatten array (key1, value1...keyN, valueN).
      */
-    public static function dictionaryToArray(array $dict): array
+    public static function dictionary_to_array(array $dict): array
     {
         $array = [];
-
         array_walk($dict, static function ($value, $key) use (&$array): void {
             array_push($array, $key, $value);
         });
-
         return $array;
     }
 }

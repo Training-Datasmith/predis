@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,33 +10,25 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Schema_Fields;
 
-namespace Predis\Command\Argument\Search\SchemaFields;
-
-class VectorField extends AbstractField
+class Vector_Field extends Abstract_Field
 {
     /**
      * @var array
      */
-    protected $fieldArguments = [];
-
-    public function __construct(
-        string $fieldName,
-        string $algorithm,
-        array $attributeNameValueDictionary,
-        string $alias = ''
-    ) {
-        $this->setCommonOptions('VECTOR', $fieldName, $alias);
-
-        array_push($this->fieldArguments, $algorithm, count($attributeNameValueDictionary));
-        $this->fieldArguments = array_merge($this->fieldArguments, $attributeNameValueDictionary);
+    protected $field_arguments = [];
+    public function __construct(string $field_name, string $algorithm, array $attribute_name_value_dictionary, string $alias = '')
+    {
+        $this->set_common_options('VECTOR', $field_name, $alias);
+        array_push($this->field_arguments, $algorithm, count($attribute_name_value_dictionary));
+        $this->field_arguments = array_merge($this->field_arguments, $attribute_name_value_dictionary);
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
-        return $this->fieldArguments;
+        return $this->field_arguments;
     }
 }

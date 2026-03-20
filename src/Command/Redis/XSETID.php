@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,34 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see http://redis.io/commands/xsetid
  */
-class XSETID extends RedisCommand
+class XSETID extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XSETID';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $preparedArguments = array_slice($arguments, 0, 2);
-
+        $prepared_arguments = array_slice($arguments, 0, 2);
         if (isset($arguments[2])) {
-            array_push($preparedArguments, 'ENTRIESADDED', $arguments[2]);
+            array_push($prepared_arguments, 'ENTRIESADDED', $arguments[2]);
         }
-
         if (isset($arguments[3])) {
-            array_push($preparedArguments, 'MAXDELETEDID', $arguments[3]);
+            array_push($prepared_arguments, 'MAXDELETEDID', $arguments[3]);
         }
-
-        parent::setArguments($preparedArguments);
+        parent::set_arguments($prepared_arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

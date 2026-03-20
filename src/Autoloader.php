@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,7 +10,6 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis;
 
 /**
@@ -25,18 +23,16 @@ class Autoloader
 {
     private $directory;
     private $prefix;
-    private $prefixLength;
-
+    private $prefix_length;
     /**
      * @param string $baseDirectory Base directory where the source files are located.
      */
-    public function __construct($baseDirectory = __DIR__)
+    public function __construct($base_directory = __DIR__)
     {
-        $this->directory = $baseDirectory;
+        $this->directory = $base_directory;
         $this->prefix = __NAMESPACE__ . '\\';
-        $this->prefixLength = strlen($this->prefix);
+        $this->prefix_length = strlen($this->prefix);
     }
-
     /**
      * Registers the autoloader class with the PHP SPL autoloader.
      *
@@ -46,18 +42,16 @@ class Autoloader
     {
         spl_autoload_register([new self(), 'autoload'], true, $prepend);
     }
-
     /**
      * Loads a class from a file using its fully qualified name.
      *
      * @param string $className Fully qualified name of a class.
      */
-    public function autoload($className): void
+    public function autoload($class_name): void
     {
-        if (0 === strpos($className, $this->prefix)) {
-            $parts = explode('\\', substr($className, $this->prefixLength));
+        if (0 === strpos($class_name, $this->prefix)) {
+            $parts = explode('\\', substr($class_name, $this->prefix_length));
             $filepath = $this->directory . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $parts) . '.php';
-
             if (is_file($filepath)) {
                 require $filepath;
             }

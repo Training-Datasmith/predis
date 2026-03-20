@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,37 +10,28 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
-trait MinMaxModifier
+trait Min_Max_Modifier
 {
     /**
      * @var array{string: string}
      */
-    private $modifierEnum = [
-        'min' => 'MIN',
-        'max' => 'MAX',
-    ];
-
-    public function resolveModifier(int $offset, array &$arguments): void
+    private $modifier_enum = ['min' => 'MIN', 'max' => 'MAX'];
+    public function resolve_modifier(int $offset, array &$arguments): void
     {
         if ($offset >= count($arguments)) {
-            $arguments[$offset] = $this->modifierEnum['min'];
-
+            $arguments[$offset] = $this->modifier_enum['min'];
             return;
         }
-
-        if (!is_string($arguments[$offset]) || !array_key_exists($arguments[$offset], $this->modifierEnum)) {
+        if (!is_string($arguments[$offset]) || !array_key_exists($arguments[$offset], $this->modifier_enum)) {
             throw new UnexpectedValueException('Wrong type of modifier given');
         }
-
-        $arguments[$offset] = $this->modifierEnum[$arguments[$offset]];
+        $arguments[$offset] = $this->modifier_enum[$arguments[$offset]];
     }
 }

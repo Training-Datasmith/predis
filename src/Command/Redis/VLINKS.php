@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,48 +10,41 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-use Predis\Command\Redis\Utils\CommandUtility;
-
-class VLINKS extends RedisCommand
+use Predis\Command\Redis\Utils\Command_Utility;
+class VLINKS extends Redis_Command
 {
     /**
      * @var bool
      */
-    private $withScores = false;
-
-    public function getId(): string
+    private $with_scores = false;
+    public function get_id(): string
     {
         return 'VLINKS';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $lastArg = array_pop($arguments);
-
-        if (is_bool($lastArg)) {
-            $this->withScores = $lastArg;
+        $last_arg = array_pop($arguments);
+        if (is_bool($last_arg)) {
+            $this->with_scores = $last_arg;
             $arguments[] = 'WITHSCORES';
         } else {
-            $arguments[] = $lastArg;
+            $arguments[] = $last_arg;
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
-
     /**
      * @param             $data
      */
-    public function parseResponse($data): ?array
+    public function parse_response($data): ?array
     {
         if (!is_null($data)) {
-            if ($this->withScores) {
+            if ($this->with_scores) {
                 foreach ($data as $key => $value) {
                     if ($value === array_values($value)) {
-                        $data[$key] = CommandUtility::arrayToDictionary($value, static function ($key, $value): array {
+                        $data[$key] = Command_Utility::array_to_dictionary($value, static function ($key, $value): array {
                             return [$key, (float) $value];
                         });
                     } else {
@@ -61,7 +53,6 @@ class VLINKS extends RedisCommand
                 }
             }
         }
-
         return $data;
     }
 }

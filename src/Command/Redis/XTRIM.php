@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,32 +10,28 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see http://redis.io/commands/xtrim
  */
-class XTRIM extends RedisCommand
+class XTRIM extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XTRIM';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         $args = [];
         $options = $arguments[3] ?? [];
-
         $args[] = $arguments[0];
         // Either e.g. 'MAXLEN' or ['MAXLEN', '~']
         if (is_array($arguments[1])) {
@@ -44,22 +39,18 @@ class XTRIM extends RedisCommand
         } else {
             $args[] = $arguments[1];
         }
-
         $args[] = $arguments[2];
         if (isset($options['limit'])) {
             $args[] = 'LIMIT';
             $args[] = $options['limit'];
         }
-
         if (isset($options['trimming'])) {
             $args[] = strtoupper($options['trimming']);
         }
-
-        parent::setArguments($args);
+        parent::set_arguments($args);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

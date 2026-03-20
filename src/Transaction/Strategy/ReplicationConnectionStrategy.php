@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,20 +10,17 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Transaction\Strategy;
 
-use Predis\Connection\Replication\ReplicationInterface;
-use Predis\Transaction\MultiExecState;
-
-class ReplicationConnectionStrategy extends NonClusterConnectionStrategy
+use Predis\Connection\Replication\Replication_Interface;
+use Predis\Transaction\Multi_Exec_State;
+class Replication_Connection_Strategy extends Non_Cluster_Connection_Strategy
 {
     /**
      * @var ReplicationInterface
      */
     protected $connection;
-
-    public function __construct(ReplicationInterface $connection, MultiExecState $state)
+    public function __construct(Replication_Interface $connection, Multi_Exec_State $state)
     {
         parent::__construct($connection, $state);
     }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,10 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Time_Series;
 
-namespace Predis\Command\Argument\TimeSeries;
-
-class IncrByArguments extends CommonArguments
+class Incr_By_Arguments extends Common_Arguments
 {
     /**
      * Is (integer) UNIX sample timestamp in milliseconds or * to set the timestamp according to the server clock.
@@ -22,13 +20,11 @@ class IncrByArguments extends CommonArguments
      * @param  string|int $timeStamp
      * @return $this
      */
-    public function timestamp($timeStamp): self
+    public function timestamp($time_stamp): self
     {
-        array_push($this->arguments, 'TIMESTAMP', $timeStamp);
-
+        array_push($this->arguments, 'TIMESTAMP', $time_stamp);
         return $this;
     }
-
     /**
      * Changes data storage from compressed (default) to uncompressed.
      *
@@ -37,7 +33,6 @@ class IncrByArguments extends CommonArguments
     public function uncompressed(): self
     {
         $this->arguments[] = 'UNCOMPRESSED';
-
         return $this;
     }
 }

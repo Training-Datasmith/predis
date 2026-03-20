@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,53 +10,45 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
-use Predis\Command\CommandInterface;
-use Predis\Command\RawCommand;
-use Predis\CommunicationException;
-use Predis\Connection\Resource\Exception\StreamInitException;
-use Predis\Protocol\Parser\ParserStrategyResolver;
-use Predis\Protocol\Parser\Strategy\ParserStrategyInterface;
-use Predis\Protocol\ProtocolException;
-use Predis\TimeoutException;
-
+use Predis\Command\Command_Interface;
+use Predis\Command\Raw_Command;
+use Predis\Communication_Exception;
+use Predis\Connection\Resource\Exception\Stream_Init_Exception;
+use Predis\Protocol\Parser\Parser_Strategy_Resolver;
+use Predis\Protocol\Parser\Strategy\Parser_Strategy_Interface;
+use Predis\Protocol\Protocol_Exception;
+use Predis\Timeout_Exception;
 /**
  * Base class with the common logic used by connection classes to communicate
  * with Redis.
  */
-abstract class AbstractConnection implements NodeConnectionInterface
+abstract class Abstract_Connection implements Node_Connection_Interface
 {
     /**
      * @var ParserStrategyInterface
      */
-    protected $parserStrategy;
-
+    protected $parser_strategy;
     /**
      * @var int|null
      */
-    protected $clientId;
-
+    protected $client_id;
     protected $resource;
-    private $cachedId;
-
+    private $cached_id;
     protected $parameters;
-
     /**
      * @var RawCommand[]
      */
-    protected $initCommands = [];
-
+    protected $init_commands = [];
     /**
      * @param ParametersInterface $parameters Initialization parameters for the connection.
      */
-    public function __construct(ParametersInterface $parameters)
+    public function __construct(Parameters_Interface $parameters)
     {
         $this->parameters = $parameters;
-        $this->setParserStrategy();
+        $this->set_parser_strategy();
     }
-
     /**
      * Disconnects from the server and destroys the underlying resource when
      * PHP's garbage collector kicks in.
@@ -66,45 +57,38 @@ abstract class AbstractConnection implements NodeConnectionInterface
     {
         $this->disconnect();
     }
-
     /**
      * {@inheritdoc}
      */
-    public function isConnected()
+    public function is_connected()
     {
         return isset($this->resource);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function hasDataToRead(): bool
+    public function has_data_to_read(): bool
     {
         return true;
     }
-
     /**
      * Creates a stream resource to communicate with Redis.
      *
      * @return mixed
      * @throws StreamInitException
      */
-    abstract protected function createResource();
-
+    abstract protected function create_resource();
     /**
      * {@inheritdoc}
      */
     public function connect()
     {
-        if (!$this->isConnected()) {
-            $this->resource = $this->createResource();
-
+        if (!$this->is_connected()) {
+            $this->resource = $this->create_resource();
             return true;
         }
-
         return false;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -112,41 +96,35 @@ abstract class AbstractConnection implements NodeConnectionInterface
     {
         unset($this->resource);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function addConnectCommand(CommandInterface $command): void
+    public function add_connect_command(Command_Interface $command): void
     {
-        $this->initCommands[] = $command;
+        $this->init_commands[] = $command;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getInitCommands(): array
+    public function get_init_commands(): array
     {
-        return $this->initCommands;
+        return $this->init_commands;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function executeCommand(CommandInterface $command)
+    public function execute_command(Command_Interface $command)
     {
-        $this->writeRequest($command);
-
-        return $this->readResponse($command);
+        $this->write_request($command);
+        return $this->read_response($command);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function readResponse(CommandInterface $command)
+    public function read_response(Command_Interface $command)
     {
         return $this->read();
     }
-
     /**
      * Helper method to handle connection errors.
      *
@@ -154,94 +132,76 @@ abstract class AbstractConnection implements NodeConnectionInterface
      * @param  int                    $code    Error code.
      * @throws CommunicationException
      */
-    protected function onConnectionError($message, $code = 0): void
+    protected function on_connection_error($message, $code = 0): void
     {
-        CommunicationException::handle(
-            new ConnectionException($this, "$message [{$this->getParameters()}]", $code)
-        );
+        Communication_Exception::handle(new Connection_Exception($this, "{$message} [{$this->get_parameters()}]", $code));
     }
-
     /**
      * Helper method to handle timeout errors.
      *
      * @throws CommunicationException
      */
-    protected function onTimeoutError(int $code = 0): void
+    protected function on_timeout_error(int $code = 0): void
     {
-        CommunicationException::handle(
-            new TimeoutException($this, $code)
-        );
+        Communication_Exception::handle(new Timeout_Exception($this, $code));
     }
-
     /**
      * Helper method to handle protocol errors.
      *
      * @param  string                 $message Error message.
      * @throws CommunicationException
      */
-    protected function onProtocolError($message)
+    protected function on_protocol_error($message)
     {
-        CommunicationException::handle(
-            new ProtocolException($this, "$message [{$this->getParameters()}]")
-        );
+        Communication_Exception::handle(new Protocol_Exception($this, "{$message} [{$this->get_parameters()}]"));
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getResource()
+    public function get_resource()
     {
         if (isset($this->resource)) {
             return $this->resource;
         }
-
         $this->connect();
-
         return $this->resource;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getParameters()
+    public function get_parameters()
     {
         return $this->parameters;
     }
-
     /**
      * Gets an identifier for the connection.
      *
      * @return string
      */
-    protected function getIdentifier()
+    protected function get_identifier()
     {
         if ($this->parameters->scheme === 'unix') {
             return $this->parameters->path;
         }
-
         return "{$this->parameters->host}:{$this->parameters->port}";
     }
-
     /**
      * {@inheritDoc}
      */
-    public function getClientId(): ?int
+    public function get_client_id(): ?int
     {
-        return $this->clientId;
+        return $this->client_id;
     }
-
     /**
      * {@inheritdoc}
      */
     public function __toString(): string
     {
-        if (!isset($this->cachedId)) {
-            $this->cachedId = $this->getIdentifier();
+        if (!isset($this->cached_id)) {
+            $this->cached_id = $this->get_identifier();
         }
-
-        return $this->cachedId;
+        return $this->cached_id;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -249,13 +209,12 @@ abstract class AbstractConnection implements NodeConnectionInterface
     {
         return ['parameters', 'initCommands'];
     }
-
     /**
      * Set parser strategy for given connection.
      */
-    protected function setParserStrategy(): void
+    protected function set_parser_strategy(): void
     {
-        $strategyResolver = new ParserStrategyResolver();
-        $this->parserStrategy = $strategyResolver->resolve((int) $this->parameters->protocol);
+        $strategy_resolver = new Parser_Strategy_Resolver();
+        $this->parser_strategy = $strategy_resolver->resolve((int) $this->parameters->protocol);
     }
 }

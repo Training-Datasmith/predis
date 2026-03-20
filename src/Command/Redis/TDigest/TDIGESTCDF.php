@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\T_Digest;
 
-namespace Predis\Command\Redis\TDigest;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/tdigest.cdf/
  *
@@ -23,42 +20,40 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  * of (observations smaller than the given value + half
  * the observations equal to the given value).
  */
-class TDIGESTCDF extends RedisCommand
+class TDIGESTCDF extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TDIGEST.CDF';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         if (!is_array($data)) {
             return $data;
         }
-
         // convert Relay (RESP3) constants to strings
         return array_map(static function ($value) {
             if (is_string($value) || !is_float($value)) {
                 return $value;
             }
-
             if (is_nan($value)) {
                 return 'nan';
             }
-
             switch ($value) {
-                case INF: return 'inf';
-                case -INF: return '-inf';
-                default: return $value;
+                case INF:
+                    return 'inf';
+                case -INF:
+                    return '-inf';
+                default:
+                    return $value;
             }
         }, $data);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,44 +10,33 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Search;
 
-use Predis\Command\Argument\Search\SchemaFields\FieldInterface;
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Argument\Search\Schema_Fields\Field_Interface;
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/ft.create/
  *
  * Create an index with the given specification
  */
-class FTCREATE extends RedisCommand
+class FTCREATE extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'FT.CREATE';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         [$index, $schema] = $arguments;
-        $commandArguments = (!empty($arguments[2])) ? $arguments[2]->toArray() : [];
-
-        $schema = array_reduce($schema, static function (array $carry, FieldInterface $field): array {
-            return array_merge($carry, $field->toArray());
+        $command_arguments = !empty($arguments[2]) ? $arguments[2]->to_array() : [];
+        $schema = array_reduce($schema, static function (array $carry, Field_Interface $field): array {
+            return array_merge($carry, $field->to_array());
         }, []);
-
         array_unshift($schema, 'SCHEMA');
-
-        parent::setArguments(array_merge(
-            [$index],
-            $commandArguments,
-            $schema
-        ));
+        parent::set_arguments(array_merge([$index], $command_arguments, $schema));
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

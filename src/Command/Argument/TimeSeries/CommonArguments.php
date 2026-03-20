@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,13 +10,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Time_Series;
 
-namespace Predis\Command\Argument\TimeSeries;
-
-use Predis\Command\Argument\ArrayableArgument;
+use Predis\Command\Argument\Arrayable_Argument;
 use UnexpectedValueException;
-
-class CommonArguments implements ArrayableArgument
+class Common_Arguments implements Arrayable_Argument
 {
     public const POLICY_BLOCK = 'BLOCK';
     public const POLICY_FIRST = 'FIRST';
@@ -25,27 +22,22 @@ class CommonArguments implements ArrayableArgument
     public const POLICY_MIN = 'MIN';
     public const POLICY_MAX = 'MAX';
     public const POLICY_SUM = 'SUM';
-
     public const ENCODING_UNCOMPRESSED = 'UNCOMPRESSED';
     public const ENCODING_COMPRESSED = 'COMPRESSED';
-
     /**
      * @var array
      */
     protected $arguments = [];
-
     /**
      * Is maximum age for samples compared to the highest reported timestamp, in milliseconds.
      *
      * @return $this
      */
-    public function retentionMsecs(int $retentionPeriod): self
+    public function retention_msecs(int $retention_period): self
     {
-        array_push($this->arguments, 'RETENTION', $retentionPeriod);
-
+        array_push($this->arguments, 'RETENTION', $retention_period);
         return $this;
     }
-
     /**
      * Ignore samples with given time or value difference.
      *
@@ -53,54 +45,45 @@ class CommonArguments implements ArrayableArgument
      * @param  float $maxValDiff  Non-negative float value
      * @return $this
      */
-    public function ignore(int $maxTimeDiff, float $maxValDiff): self
+    public function ignore(int $max_time_diff, float $max_val_diff): self
     {
-        if ($maxTimeDiff < 0 || $maxValDiff < 0) {
+        if ($max_time_diff < 0 || $max_val_diff < 0) {
             throw new UnexpectedValueException('Ignore does not accept negative values');
         }
-
-        array_push($this->arguments, 'IGNORE', $maxTimeDiff, $maxValDiff);
-
+        array_push($this->arguments, 'IGNORE', $max_time_diff, $max_val_diff);
         return $this;
     }
-
     /**
      * Is initial allocation size, in bytes, for the data part of each new chunk.
      *
      * @return $this
      */
-    public function chunkSize(int $size): self
+    public function chunk_size(int $size): self
     {
         array_push($this->arguments, 'CHUNK_SIZE', $size);
-
         return $this;
     }
-
     /**
      * Is policy for handling insertion of multiple samples with identical timestamps.
      *
      * @return $this
      */
-    public function duplicatePolicy(string $policy = self::POLICY_BLOCK): self
+    public function duplicate_policy(string $policy = self::POLICY_BLOCK): self
     {
         array_push($this->arguments, 'DUPLICATE_POLICY', $policy);
-
         return $this;
     }
-
     /**
      * Is set of label-value pairs that represent metadata labels of the key and serve as a secondary index.
      *
      * @param  mixed ...$labelValuePair
      * @return $this
      */
-    public function labels(...$labelValuePair): self
+    public function labels(...$label_value_pair): self
     {
-        array_push($this->arguments, 'LABELS', ...$labelValuePair);
-
+        array_push($this->arguments, 'LABELS', ...$label_value_pair);
         return $this;
     }
-
     /**
      * Specifies the series samples encoding format.
      *
@@ -109,10 +92,8 @@ class CommonArguments implements ArrayableArgument
     public function encoding(string $encoding = self::ENCODING_COMPRESSED): self
     {
         array_push($this->arguments, 'ENCODING', $encoding);
-
         return $this;
     }
-
     /**
      * Is used when a time series is a compaction.
      * With LATEST, TS.GET reports the compacted value of the latest, possibly partial, bucket.
@@ -122,38 +103,32 @@ class CommonArguments implements ArrayableArgument
     public function latest(): self
     {
         $this->arguments[] = 'LATEST';
-
         return $this;
     }
-
     /**
      * Includes in the reply all label-value pairs representing metadata labels of the time series.
      *
      * @return $this
      */
-    public function withLabels(): self
+    public function with_labels(): self
     {
         $this->arguments[] = 'WITHLABELS';
-
         return $this;
     }
-
     /**
      * Returns a subset of the label-value pairs that represent metadata labels of the time series.
      *
      * @return $this
      */
-    public function selectedLabels(string ...$labels): self
+    public function selected_labels(string ...$labels): self
     {
         array_push($this->arguments, 'SELECTED_LABELS', ...$labels);
-
         return $this;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         return $this->arguments;
     }

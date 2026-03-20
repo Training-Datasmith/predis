@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,55 +10,46 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use Predis\Command\Traits\Keys;
-use Predis\Command\Traits\With\WithScores;
-
+use Predis\Command\Traits\With\With_Scores;
 /**
  * @see https://redis.io/commands/zdiff/
  *
  * This command is similar to ZDIFFSTORE, but instead of
  * storing the resulting sorted set, it is returned to the client.
  */
-class ZDIFF extends RedisCommand
+class ZDIFF extends Redis_Command
 {
-    use WithScores {
-        WithScores::setArguments as setWithScore;
+    use With_Scores {
+        With_Scores::setArguments as setWithScore;
     }
     use Keys {
         Keys::setArguments as setKeys;
     }
-
-    protected static $keysArgumentPositionOffset = 0;
-
-    public function getId(): string
+    protected static $keys_argument_position_offset = 0;
+    public function get_id(): string
     {
         return 'ZDIFF';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $this->setKeys($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setWithScore($arguments);
+        $this->set_keys($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_with_score($arguments);
     }
-
     /**
      * @param                          $data
      * @return mixed[]
      */
-    public function parseResp3Response($data): array
+    public function parse_resp3response($data): array
     {
-        $parsedData = [];
-
+        $parsed_data = [];
         foreach ($data as $element) {
-            $parsedData[] = $this->parseResponse($element);
+            $parsed_data[] = $this->parse_response($element);
         }
-
-        return $parsedData;
+        return $parsed_data;
     }
 }

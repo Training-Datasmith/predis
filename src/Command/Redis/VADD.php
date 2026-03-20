@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,77 +10,62 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use UnexpectedValueException;
-
-class VADD extends RedisCommand
+class VADD extends Redis_Command
 {
     public const QUANT_DEFAULT = null;
     public const QUANT_NOQUANT = 'NOQUANT';
     public const QUANT_BIN = 'BIN';
     public const QUANT_Q8 = 'Q8';
-
     /**
      * {@inheritDoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'VADD';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0]];
-
+        $processed_arguments = [$arguments[0]];
         if (isset($arguments[3])) {
-            array_push($processedArguments, 'REDUCE', $arguments[3]);
+            array_push($processed_arguments, 'REDUCE', $arguments[3]);
         }
-
         if (is_string($arguments[1])) {
-            array_push($processedArguments, 'FP32', $arguments[1]);
+            array_push($processed_arguments, 'FP32', $arguments[1]);
         } elseif (is_array($arguments[1])) {
-            array_push($processedArguments, 'VALUES', count($arguments[1]), ...$arguments[1]);
+            array_push($processed_arguments, 'VALUES', count($arguments[1]), ...$arguments[1]);
         } else {
             throw new UnexpectedValueException('Vector should be rather 32 bit floating blob or array of floatings');
         }
-
-        $processedArguments[] = $arguments[2];
-
+        $processed_arguments[] = $arguments[2];
         if (isset($arguments[4]) && false !== $arguments[4]) {
-            $processedArguments[] = 'CAS';
+            $processed_arguments[] = 'CAS';
         }
-
         if (isset($arguments[5])) {
-            $processedArguments[] = $arguments[5];
+            $processed_arguments[] = $arguments[5];
         }
-
         if (isset($arguments[6])) {
-            array_push($processedArguments, 'EF', $arguments[6]);
+            array_push($processed_arguments, 'EF', $arguments[6]);
         }
-
         if (isset($arguments[7])) {
-            $processedArguments[] = 'SETATTR';
-
+            $processed_arguments[] = 'SETATTR';
             if (is_string($arguments[7])) {
-                $processedArguments[] = $arguments[7];
+                $processed_arguments[] = $arguments[7];
             } elseif (is_array($arguments[7])) {
-                $processedArguments[] = json_encode($arguments[7]);
+                $processed_arguments[] = json_encode($arguments[7]);
             } else {
                 throw new UnexpectedValueException('Attributes arguments should be a JSON string or associative array');
             }
         }
-
         if (isset($arguments[8])) {
-            array_push($processedArguments, 'M', $arguments[8]);
+            array_push($processed_arguments, 'M', $arguments[8]);
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function parseResponse($data): bool
+    public function parse_response($data): bool
     {
         return (bool) $data;
     }

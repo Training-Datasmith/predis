@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,45 +10,38 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Configuration\Option;
 
 use InvalidArgumentException;
-use Predis\Command\FactoryInterface;
-use Predis\Command\RawFactory;
-use Predis\Command\RedisFactory;
-use Predis\Configuration\OptionInterface;
-use Predis\Configuration\OptionsInterface;
-
+use Predis\Command\Factory_Interface;
+use Predis\Command\Raw_Factory;
+use Predis\Command\Redis_Factory;
+use Predis\Configuration\Option_Interface;
+use Predis\Configuration\Options_Interface;
 /**
  * Configures a connection factory to be used by the client.
  */
-class Commands implements OptionInterface
+class Commands implements Option_Interface
 {
     /**
      * {@inheritdoc}
      */
-    public function filter(OptionsInterface $options, $value)
+    public function filter(Options_Interface $options, $value)
     {
         if (is_callable($value)) {
             $value = call_user_func($value, $options);
         }
-        if ($value instanceof FactoryInterface) {
+        if ($value instanceof Factory_Interface) {
             return $value;
         }
         if (is_array($value)) {
-            return $this->createFactoryByArray($options, $value);
+            return $this->create_factory_by_array($options, $value);
         }
-
         if (is_string($value)) {
-            return $this->createFactoryByString($options, $value);
+            return $this->create_factory_by_string($options, $value);
         }
-        throw new InvalidArgumentException(sprintf(
-            '%s expects a valid command factory',
-            static::class
-        ));
+        throw new InvalidArgumentException(sprintf('%s expects a valid command factory', static::class));
     }
-
     /**
      * Creates a new default command factory from a named array.
      *
@@ -62,24 +54,21 @@ class Commands implements OptionInterface
      *
      * @return FactoryInterface
      */
-    protected function createFactoryByArray(OptionsInterface $options, array $value)
+    protected function create_factory_by_array(Options_Interface $options, array $value)
     {
         /**
          * @var FactoryInterface
          */
-        $commands = $this->getDefault($options);
-
-        foreach ($value as $commandID => $commandClass) {
-            if ($commandClass === null) {
-                $commands->undefine($commandID);
+        $commands = $this->get_default($options);
+        foreach ($value as $command_id => $command_class) {
+            if ($command_class === null) {
+                $commands->undefine($command_id);
             } else {
-                $commands->define($commandID, $commandClass);
+                $commands->define($command_id, $command_class);
             }
         }
-
         return $commands;
     }
-
     /**
      * Creates a new command factory from a descriptive string.
      *
@@ -96,55 +85,40 @@ class Commands implements OptionInterface
      *
      * @return FactoryInterface
      */
-    protected function createFactoryByString(OptionsInterface $options, string $value)
+    protected function create_factory_by_string(Options_Interface $options, string $value)
     {
         switch (strtolower($value)) {
             case 'default':
             case 'predis':
-                return $this->getDefault($options);
-
+                return $this->get_default($options);
             case 'raw':
-                return $this->createRawFactory($options);
-
+                return $this->create_raw_factory($options);
             default:
-                throw new InvalidArgumentException(sprintf(
-                    '%s does not recognize `%s` as a supported configuration string',
-                    static::class,
-                    $value
-                ));
+                throw new InvalidArgumentException(sprintf('%s does not recognize `%s` as a supported configuration string', static::class, $value));
         }
     }
-
     /**
      * Creates a new raw command factory instance.
      *
      * @param OptionsInterface $options Client options container
      */
-    protected function createRawFactory(OptionsInterface $options): FactoryInterface
+    protected function create_raw_factory(Options_Interface $options): Factory_Interface
     {
-        $commands = new RawFactory();
-
+        $commands = new Raw_Factory();
         if (isset($options->prefix)) {
-            throw new InvalidArgumentException(sprintf(
-                '%s does not support key prefixing',
-                RawFactory::class
-            ));
+            throw new InvalidArgumentException(sprintf('%s does not support key prefixing', Raw_Factory::class));
         }
-
         return $commands;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options): \Predis\Command\RedisFactory
+    public function get_default(Options_Interface $options): \Predis\Command\Redis_Factory
     {
-        $commands = new RedisFactory();
-
+        $commands = new Redis_Factory();
         if (isset($options->prefix)) {
-            $commands->setProcessor($options->prefix);
+            $commands->set_processor($options->prefix);
         }
-
         return $commands;
     }
 }

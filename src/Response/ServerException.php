@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,33 +10,29 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Response;
 
-use Predis\PredisException;
-
+use Predis\Predis_Exception;
 /**
  * Exception class that identifies server-side Redis errors.
  */
-class ServerException extends PredisException implements ErrorInterface
+class Server_Exception extends Predis_Exception implements Error_Interface
 {
     /**
      * Gets the type of the error returned by Redis.
      */
-    public function getErrorType(): string
+    public function get_error_type(): string
     {
-        [$errorType] = explode(' ', $this->getMessage(), 2);
-
-        return $errorType;
+        [$error_type] = explode(' ', $this->get_message(), 2);
+        return $error_type;
     }
-
     /**
      * Converts the exception to an instance of Predis\Response\Error.
      *
      * @return Error
      */
-    public function toErrorResponse(): \Predis\Response\Error
+    public function to_error_response(): \Predis\Response\Error
     {
-        return new Error($this->getMessage());
+        return new Error($this->get_message());
     }
 }

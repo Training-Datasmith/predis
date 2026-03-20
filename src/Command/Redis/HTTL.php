@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,28 +10,23 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
-class HTTL extends RedisCommand
+use Predis\Command\Prefixable_Command as RedisCommand;
+class HTTL extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'HTTL';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0], 'FIELDS', count($arguments[1])];
-        $processedArguments = array_merge($processedArguments, $arguments[1]);
-
-        parent::setArguments($processedArguments);
+        $processed_arguments = [$arguments[0], 'FIELDS', count($arguments[1])];
+        $processed_arguments = array_merge($processed_arguments, $arguments[1]);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

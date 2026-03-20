@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,48 +10,32 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Schema_Fields;
 
-namespace Predis\Command\Argument\Search\SchemaFields;
-
-class TextField extends AbstractField
+class Text_Field extends Abstract_Field
 {
     /**
      * @param bool|string $sortable
      */
-    public function __construct(
-        string $identifier,
-        string $alias = '',
-        $sortable = self::NOT_SORTABLE,
-        bool $noIndex = false,
-        bool $noStem = false,
-        string $phonetic = '',
-        int $weight = 1,
-        bool $withSuffixTrie = false,
-        bool $allowsEmpty = false,
-        bool $allowsMissing = false
-    ) {
-        $this->setCommonOptions('TEXT', $identifier, $alias, $sortable, $noIndex, $allowsMissing);
-
-        if ($noStem) {
-            $this->fieldArguments[] = 'NOSTEM';
+    public function __construct(string $identifier, string $alias = '', $sortable = self::NOT_SORTABLE, bool $no_index = false, bool $no_stem = false, string $phonetic = '', int $weight = 1, bool $with_suffix_trie = false, bool $allows_empty = false, bool $allows_missing = false)
+    {
+        $this->set_common_options('TEXT', $identifier, $alias, $sortable, $no_index, $allows_missing);
+        if ($no_stem) {
+            $this->field_arguments[] = 'NOSTEM';
         }
-
         if ($phonetic !== '') {
-            $this->fieldArguments[] = 'PHONETIC';
-            $this->fieldArguments[] = $phonetic;
+            $this->field_arguments[] = 'PHONETIC';
+            $this->field_arguments[] = $phonetic;
         }
-
         if ($weight !== 1) {
-            $this->fieldArguments[] = 'WEIGHT';
-            $this->fieldArguments[] = $weight;
+            $this->field_arguments[] = 'WEIGHT';
+            $this->field_arguments[] = $weight;
         }
-
-        if ($withSuffixTrie) {
-            $this->fieldArguments[] = 'WITHSUFFIXTRIE';
+        if ($with_suffix_trie) {
+            $this->field_arguments[] = 'WITHSUFFIXTRIE';
         }
-
-        if ($allowsEmpty) {
-            $this->fieldArguments[] = 'INDEXEMPTY';
+        if ($allows_empty) {
+            $this->field_arguments[] = 'INDEXEMPTY';
         }
     }
 }

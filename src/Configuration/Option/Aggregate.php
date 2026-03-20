@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Configuration\Option;
 
 use InvalidArgumentException;
-use Predis\Configuration\OptionInterface;
-use Predis\Configuration\OptionsInterface;
-use Predis\Connection\AggregateConnectionInterface;
-use Predis\Connection\NodeConnectionInterface;
-
+use Predis\Configuration\Option_Interface;
+use Predis\Configuration\Options_Interface;
+use Predis\Connection\Aggregate_Connection_Interface;
+use Predis\Connection\Node_Connection_Interface;
 /**
  * Client option for configuring generic aggregate connections.
  *
@@ -29,23 +26,18 @@ use Predis\Connection\NodeConnectionInterface;
  *
  * Creation and configuration of the aggregate connection is up to the user.
  */
-class Aggregate implements OptionInterface
+class Aggregate implements Option_Interface
 {
     /**
      * {@inheritdoc}
      */
-    public function filter(OptionsInterface $options, $value)
+    public function filter(Options_Interface $options, $value)
     {
         if (!is_callable($value)) {
-            throw new InvalidArgumentException(sprintf(
-                '%s expects a callable object acting as an aggregate connection initializer',
-                static::class
-            ));
+            throw new InvalidArgumentException(sprintf('%s expects a callable object acting as an aggregate connection initializer', static::class));
         }
-
-        return $this->getConnectionInitializer($options, $value);
+        return $this->get_connection_initializer($options, $value);
     }
-
     /**
      * Wraps a user-supplied callable used to create a new aggregate connection.
      *
@@ -68,28 +60,19 @@ class Aggregate implements OptionInterface
      * @return callable
      * @throws InvalidArgumentException
      */
-    protected function getConnectionInitializer(OptionsInterface $options, callable $callable)
+    protected function get_connection_initializer(Options_Interface $options, callable $callable)
     {
-        return function ($parameters = null, $autoaggregate = false) use ($callable, $options): \Predis\Connection\AggregateConnectionInterface {
+        return function ($parameters = null, $autoaggregate = false) use ($callable, $options): \Predis\Connection\Aggregate_Connection_Interface {
             $connection = call_user_func_array($callable, [&$parameters, $options, $this]);
-
-            if (!$connection instanceof AggregateConnectionInterface) {
-                throw new InvalidArgumentException(sprintf(
-                    '%s expects the supplied callable to return an instance of %s, but %s was returned',
-                    static::class,
-                    AggregateConnectionInterface::class,
-                    is_object($connection) ? get_class($connection) : gettype($connection)
-                ));
+            if (!$connection instanceof Aggregate_Connection_Interface) {
+                throw new InvalidArgumentException(sprintf('%s expects the supplied callable to return an instance of %s, but %s was returned', static::class, Aggregate_Connection_Interface::class, is_object($connection) ? get_class($connection) : gettype($connection)));
             }
-
             if ($parameters && $autoaggregate) {
                 static::aggregate($options, $connection, $parameters);
             }
-
             return $connection;
         };
     }
-
     /**
      * Adds single connections to an aggregate connection instance.
      *
@@ -97,19 +80,17 @@ class Aggregate implements OptionInterface
      * @param AggregateConnectionInterface $connection Target aggregate connection
      * @param array                        $nodes      List of nodes to be added to the target aggregate connection
      */
-    public static function aggregate(OptionsInterface $options, AggregateConnectionInterface $connection, array $nodes): void
+    public static function aggregate(Options_Interface $options, Aggregate_Connection_Interface $connection, array $nodes): void
     {
         $connections = $options->connections;
-
         foreach ($nodes as $node) {
-            $connection->add($node instanceof NodeConnectionInterface ? $node : $connections->create($node));
+            $connection->add($node instanceof Node_Connection_Interface ? $node : $connections->create($node));
         }
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options)
+    public function get_default(Options_Interface $options)
     {
     }
 }

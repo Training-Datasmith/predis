@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,7 +10,6 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Cluster\Distributor;
 
 /**
@@ -20,53 +18,46 @@ namespace Predis\Cluster\Distributor;
  * sharding.
  * @author Lorenzo Castelli <lcastelli@gmail.com>
  */
-class KetamaRing extends HashRing
+class Ketama_Ring extends Hash_Ring
 {
     public const DEFAULT_REPLICAS = 160;
-
     /**
      * @param mixed $nodeHashCallback Callback returning a string used to calculate the hash of nodes.
      */
-    public function __construct($nodeHashCallback = null)
+    public function __construct($node_hash_callback = null)
     {
-        parent::__construct($this::DEFAULT_REPLICAS, $nodeHashCallback);
+        parent::__construct($this::DEFAULT_REPLICAS, $node_hash_callback);
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function addNodeToRing(&$ring, $node, $totalNodes, $replicas, $weightRatio)
+    protected function add_node_to_ring(&$ring, $node, $total_nodes, $replicas, $weight_ratio)
     {
-        $nodeObject = $node['object'];
-        $nodeHash = $this->getNodeHash($nodeObject);
-        $replicas = (int) floor($weightRatio * $totalNodes * ($replicas / 4));
-
+        $node_object = $node['object'];
+        $node_hash = $this->get_node_hash($node_object);
+        $replicas = (int) floor($weight_ratio * $total_nodes * ($replicas / 4));
         for ($i = 0; $i < $replicas; ++$i) {
-            $unpackedDigest = unpack('V4', md5("$nodeHash-$i", true));
-
-            foreach ($unpackedDigest as $key) {
-                $ring[$key] = $nodeObject;
+            $unpacked_digest = unpack('V4', md5("{$node_hash}-{$i}", true));
+            foreach ($unpacked_digest as $key) {
+                $ring[$key] = $node_object;
             }
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function hash($value)
     {
         $hash = unpack('V', md5($value, true));
-
         return $hash[1];
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function wrapAroundStrategy($upper, $lower, $ringKeysCount)
+    protected function wrap_around_strategy($upper, $lower, $ring_keys_count)
     {
         // Binary search for the first item in ringkeys with a value greater
         // or equal to the key. If no such item exists, return the first item.
-        return $lower < $ringKeysCount ? $lower : 0;
+        return $lower < $ring_keys_count ? $lower : 0;
     }
 }

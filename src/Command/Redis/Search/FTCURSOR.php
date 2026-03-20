@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,31 +10,23 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Search;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
-class FTCURSOR extends RedisCommand
+use Predis\Command\Prefixable_Command as RedisCommand;
+class FTCURSOR extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'FT.CURSOR';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        [$subcommand, $index, $cursorId] = $arguments;
-        $commandArguments = (!empty($arguments[3])) ? $arguments[3]->toArray() : [];
-
-        parent::setArguments(array_merge(
-            [$subcommand, $index, $cursorId],
-            $commandArguments
-        ));
+        [$subcommand, $index, $cursor_id] = $arguments;
+        $command_arguments = !empty($arguments[3]) ? $arguments[3]->to_array() : [];
+        parent::set_arguments(array_merge([$subcommand, $index, $cursor_id], $command_arguments));
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

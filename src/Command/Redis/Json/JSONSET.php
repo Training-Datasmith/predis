@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,38 +10,32 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Json;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-use Predis\Command\Traits\Json\NxXxArgument;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
+use Predis\Command\Traits\Json\Nx_Xx_Argument;
 /**
  * @see https://redis.io/commands/json.set/
  *
  * Set the JSON value at path in key
  */
-class JSONSET extends RedisCommand
+class JSONSET extends Redis_Command
 {
-    use NxXxArgument {
+    use Nx_Xx_Argument {
         setArguments as setSubcommand;
     }
-
-    protected static $nxXxArgumentPositionOffset = 3;
-
-    public function getId(): string
+    protected static $nx_xx_argument_position_offset = 3;
+    public function get_id(): string
     {
         return 'JSON.SET';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $this->setSubcommand($arguments);
-        $this->filterArguments();
+        $this->set_subcommand($arguments);
+        $this->filter_arguments();
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Configuration\Option;
 
 use InvalidArgumentException;
-use Predis\Configuration\OptionsInterface;
-use Predis\Connection\AggregateConnectionInterface;
-use Predis\Connection\Replication\MasterSlaveReplication;
-use Predis\Connection\Replication\SentinelReplication;
-
+use Predis\Configuration\Options_Interface;
+use Predis\Connection\Aggregate_Connection_Interface;
+use Predis\Connection\Replication\Master_Slave_Replication;
+use Predis\Connection\Replication\Sentinel_Replication;
 /**
  * Configures an aggregate connection used for master/slave replication among
  * multiple Redis nodes.
@@ -29,22 +26,16 @@ class Replication extends Aggregate
     /**
      * {@inheritdoc}
      */
-    public function filter(OptionsInterface $options, $value)
+    public function filter(Options_Interface $options, $value)
     {
         if (is_string($value)) {
-            $value = $this->getConnectionInitializerByString($options, $value);
+            $value = $this->get_connection_initializer_by_string($options, $value);
         }
-
         if (is_callable($value)) {
-            return $this->getConnectionInitializer($options, $value);
+            return $this->get_connection_initializer($options, $value);
         }
-        throw new InvalidArgumentException(sprintf(
-            '%s expects either a string or a callable value, %s given',
-            static::class,
-            is_object($value) ? get_class($value) : gettype($value)
-        ));
+        throw new InvalidArgumentException(sprintf('%s expects either a string or a callable value, %s given', static::class, is_object($value) ? get_class($value) : gettype($value)));
     }
-
     /**
      * Returns a connection initializer (callable) from a descriptive string.
      *
@@ -64,64 +55,50 @@ class Replication extends Aggregate
      *
      * @return callable
      */
-    protected function getConnectionInitializerByString(OptionsInterface $options, string $description)
+    protected function get_connection_initializer_by_string(Options_Interface $options, string $description)
     {
         switch ($description) {
             case 'sentinel':
             case 'redis-sentinel':
-                return static function ($parameters, $options): \Predis\Connection\Replication\SentinelReplication {
-                    return new SentinelReplication($options->service, $parameters, $options->connections);
+                return static function ($parameters, $options): \Predis\Connection\Replication\Sentinel_Replication {
+                    return new Sentinel_Replication($options->service, $parameters, $options->connections);
                 };
-
             case 'predis':
-                return $this->getDefaultConnectionInitializer();
-
+                return $this->get_default_connection_initializer();
             default:
-                throw new InvalidArgumentException(sprintf(
-                    '%s expects either `predis`, `sentinel` or `redis-sentinel` as valid string values, `%s` given',
-                    static::class,
-                    $description
-                ));
+                throw new InvalidArgumentException(sprintf('%s expects either `predis`, `sentinel` or `redis-sentinel` as valid string values, `%s` given', static::class, $description));
         }
     }
-
     /**
      * Returns the default connection initializer.
      *
      * @return callable
      */
-    protected function getDefaultConnectionInitializer()
+    protected function get_default_connection_initializer()
     {
-        return static function ($parameters, $options): \Predis\Connection\Replication\MasterSlaveReplication {
-            $connection = new MasterSlaveReplication();
-
+        return static function ($parameters, $options): \Predis\Connection\Replication\Master_Slave_Replication {
+            $connection = new Master_Slave_Replication();
             if ($options->autodiscovery) {
-                $connection->setConnectionFactory($options->connections);
-                $connection->setAutoDiscovery(true);
+                $connection->set_connection_factory($options->connections);
+                $connection->set_auto_discovery(true);
             }
-
             return $connection;
         };
     }
-
     /**
      * {@inheritdoc}
      */
-    public static function aggregate(OptionsInterface $options, AggregateConnectionInterface $connection, array $nodes): void
+    public static function aggregate(Options_Interface $options, Aggregate_Connection_Interface $connection, array $nodes): void
     {
-        if (!$connection instanceof SentinelReplication) {
+        if (!$connection instanceof Sentinel_Replication) {
             parent::aggregate($options, $connection, $nodes);
         }
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getDefault(OptionsInterface $options)
+    public function get_default(Options_Interface $options)
     {
-        return $this->getConnectionInitializer(
-            $options,
-            $this->getDefaultConnectionInitializer()
-        );
+        return $this->get_connection_initializer($options, $this->get_default_connection_initializer());
     }
 }

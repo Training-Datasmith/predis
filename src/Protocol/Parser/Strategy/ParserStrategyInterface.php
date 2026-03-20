@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,14 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Protocol\Parser\Strategy;
 
-interface ParserStrategyInterface
+interface Parser_Strategy_Interface
 {
     /**
      * Parse given line of RESP protocol string.
      *
      * @return mixed
      */
-    public function parseData(string $data);
+    public function parse_data(string $data);
 }

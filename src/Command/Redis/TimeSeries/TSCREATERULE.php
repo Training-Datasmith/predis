@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,42 +10,35 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Time_Series;
 
-namespace Predis\Command\Redis\TimeSeries;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/ts.createrule/
  *
  * Create a compaction rule
  */
-class TSCREATERULE extends RedisCommand
+class TSCREATERULE extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TS.CREATERULE';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        [$sourceKey, $destKey, $aggregator, $bucketDuration] = $arguments;
-        $processedArguments = [$sourceKey, $destKey, 'AGGREGATION', $aggregator, $bucketDuration];
-
+        [$source_key, $dest_key, $aggregator, $bucket_duration] = $arguments;
+        $processed_arguments = [$source_key, $dest_key, 'AGGREGATION', $aggregator, $bucket_duration];
         if (count($arguments) === 5) {
-            $processedArguments[] = $arguments[4];
+            $processed_arguments[] = $arguments[4];
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        if ($arguments = $this->getArguments()) {
+        if ($arguments = $this->get_arguments()) {
             $arguments[0] = $prefix . $arguments[0];
             $arguments[1] = $prefix . $arguments[1];
-
-            $this->setRawArguments($arguments);
+            $this->set_raw_arguments($arguments);
         }
     }
 }

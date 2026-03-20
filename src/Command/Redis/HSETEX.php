@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,13 +10,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use UnexpectedValueException;
-
-class HSETEX extends RedisCommand
+class HSETEX extends Redis_Command
 {
     public const TTL_NULL = '';
     public const TTL_EX = 'ex';
@@ -25,95 +22,68 @@ class HSETEX extends RedisCommand
     public const TTL_EXAT = 'exat';
     public const TTL_PXAT = 'pxat';
     public const TTL_KEEP_TTL = 'keepttl';
-
     public const SET_NULL = '';
     public const SET_FNX = 'fnx';
     public const SET_FXX = 'fxx';
-
     /**
      * @var string[]
      */
-    private static $ttlModifierEnum = [
-        self::TTL_EX => 'EX',
-        self::TTL_PX => 'PX',
-        self::TTL_EXAT => 'EXAT',
-        self::TTL_PXAT => 'PXAT',
-        self::TTL_KEEP_TTL => 'KEEPTTL',
-    ];
-
+    private static $ttl_modifier_enum = [self::TTL_EX => 'EX', self::TTL_PX => 'PX', self::TTL_EXAT => 'EXAT', self::TTL_PXAT => 'PXAT', self::TTL_KEEP_TTL => 'KEEPTTL'];
     /**
      * @var string[]
      */
-    private static $setModifierEnum = [
-        self::SET_FNX => 'FNX',
-        self::SET_FXX => 'FXX',
-    ];
-
-    public function getId(): string
+    private static $set_modifier_enum = [self::SET_FNX => 'FNX', self::SET_FXX => 'FXX'];
+    public function get_id(): string
     {
         return 'HSETEX';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0]];
-        $flatArray = [];
-
+        $processed_arguments = [$arguments[0]];
+        $flat_array = [];
         // Convert key => value, into key, value
-        array_walk($arguments[1], static function ($value, $key) use (&$flatArray): void {
-            array_push($flatArray, $key, $value);
+        array_walk($arguments[1], static function ($value, $key) use (&$flat_array): void {
+            array_push($flat_array, $key, $value);
         });
-
         // Only required arguments
         if (!array_key_exists(2, $arguments)) {
-            array_push($processedArguments, 'FIELDS', count($flatArray) / 2);
-            $processedArguments = array_merge($processedArguments, $flatArray);
-            parent::setArguments($processedArguments);
-
+            array_push($processed_arguments, 'FIELDS', count($flat_array) / 2);
+            $processed_arguments = array_merge($processed_arguments, $flat_array);
+            parent::set_arguments($processed_arguments);
             return;
         }
-
         if ($arguments[2] !== '') {
-            if (!in_array(strtoupper($arguments[2]), self::$setModifierEnum)) {
-                $enumValues = implode(', ', array_keys(self::$setModifierEnum));
-                throw new UnexpectedValueException("Modifier argument accepts only: {$enumValues} values");
+            if (!in_array(strtoupper($arguments[2]), self::$set_modifier_enum)) {
+                $enum_values = implode(', ', array_keys(self::$set_modifier_enum));
+                throw new UnexpectedValueException("Modifier argument accepts only: {$enum_values} values");
             }
-
-            $processedArguments[] = self::$setModifierEnum[strtolower($arguments[2])];
+            $processed_arguments[] = self::$set_modifier_enum[strtolower($arguments[2])];
         }
-
         // Required + set modifier
         if (!array_key_exists(3, $arguments) || $arguments[3] == '') {
-            array_push($processedArguments, 'FIELDS', count($flatArray) / 2);
-            $processedArguments = array_merge($processedArguments, $flatArray);
-            parent::setArguments($processedArguments);
-
+            array_push($processed_arguments, 'FIELDS', count($flat_array) / 2);
+            $processed_arguments = array_merge($processed_arguments, $flat_array);
+            parent::set_arguments($processed_arguments);
             return;
         }
-
-        if (!in_array(strtoupper($arguments[3]), self::$ttlModifierEnum)) {
-            $enumValues = implode(', ', array_keys(self::$ttlModifierEnum));
-            throw new UnexpectedValueException("Modifier argument accepts only: {$enumValues} values");
+        if (!in_array(strtoupper($arguments[3]), self::$ttl_modifier_enum)) {
+            $enum_values = implode(', ', array_keys(self::$ttl_modifier_enum));
+            throw new UnexpectedValueException("Modifier argument accepts only: {$enum_values} values");
         }
-
         // KEEPTTL requires no additional value
-        if (strtoupper($arguments[3]) === self::$ttlModifierEnum[self::TTL_KEEP_TTL]) {
-            $processedArguments[] = self::$ttlModifierEnum[self::TTL_KEEP_TTL];
-            array_push($processedArguments, 'FIELDS', count($flatArray) / 2);
-            $processedArguments = array_merge($processedArguments, $flatArray);
-            parent::setArguments($processedArguments);
-
+        if (strtoupper($arguments[3]) === self::$ttl_modifier_enum[self::TTL_KEEP_TTL]) {
+            $processed_arguments[] = self::$ttl_modifier_enum[self::TTL_KEEP_TTL];
+            array_push($processed_arguments, 'FIELDS', count($flat_array) / 2);
+            $processed_arguments = array_merge($processed_arguments, $flat_array);
+            parent::set_arguments($processed_arguments);
             return;
         }
-
         if (!array_key_exists(4, $arguments) || !is_int($arguments[4])) {
             throw new UnexpectedValueException('Modifier value is missing or incorrect type');
         }
-
         // Order matters so FIELDS should be at the end
-        array_push($processedArguments, self::$ttlModifierEnum[strtolower($arguments[3])], $arguments[4], 'FIELDS', count($flatArray) / 2);
-        $processedArguments = array_merge($processedArguments, $flatArray);
-
-        parent::setArguments($processedArguments);
+        array_push($processed_arguments, self::$ttl_modifier_enum[strtolower($arguments[3])], $arguments[4], 'FIELDS', count($flat_array) / 2);
+        $processed_arguments = array_merge($processed_arguments, $flat_array);
+        parent::set_arguments($processed_arguments);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,76 +10,56 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Bloom_Filter;
 
-namespace Predis\Command\Redis\BloomFilter;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
+use Predis\Command\Prefixable_Command as RedisCommand;
 use UnexpectedValueException;
-
 /**
  * @see https://redis.io/commands/bf.info/
  *
  * Return information about key filter.
  */
-class BFINFO extends RedisCommand
+class BFINFO extends Redis_Command
 {
     /**
      * @var string[]
      */
-    private $modifierEnum = [
-        'capacity' => 'CAPACITY',
-        'size' => 'SIZE',
-        'filters' => 'FILTERS',
-        'items' => 'ITEMS',
-        'expansion' => 'EXPANSION',
-    ];
-
-    public function getId(): string
+    private $modifier_enum = ['capacity' => 'CAPACITY', 'size' => 'SIZE', 'filters' => 'FILTERS', 'items' => 'ITEMS', 'expansion' => 'EXPANSION'];
+    public function get_id(): string
     {
         return 'BF.INFO';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if (isset($arguments[1])) {
             $modifier = array_pop($arguments);
-
             if ($modifier === '') {
-                parent::setArguments($arguments);
-
+                parent::set_arguments($arguments);
                 return;
             }
-
-            if (!in_array(strtoupper($modifier), $this->modifierEnum)) {
-                $enumValues = implode(', ', array_keys($this->modifierEnum));
-                throw new UnexpectedValueException("Argument accepts only: {$enumValues} values");
+            if (!in_array(strtoupper($modifier), $this->modifier_enum)) {
+                $enum_values = implode(', ', array_keys($this->modifier_enum));
+                throw new UnexpectedValueException("Argument accepts only: {$enum_values} values");
             }
-
-            $arguments[] = $this->modifierEnum[strtolower($modifier)];
+            $arguments[] = $this->modifier_enum[strtolower($modifier)];
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
-
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         if (count($data) > 1) {
             $result = [];
-
-            for ($i = 0, $iMax = count($data); $i < $iMax; ++$i) {
+            for ($i = 0, $i_max = count($data); $i < $i_max; ++$i) {
                 if (array_key_exists($i + 1, $data)) {
                     $result[(string) $data[$i]] = $data[++$i];
                 }
             }
-
             return $result;
         }
-
         return $data;
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

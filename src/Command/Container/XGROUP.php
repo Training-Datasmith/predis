@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Container;
 
 use Predis\Response\Status;
-
 /**
  * @method Status create(string $key, string $group, string $id, bool $mkStream = false, ?string $entriesRead = null)
  * @method int    createConsumer(string $key, string $group, string $consumer)
@@ -23,9 +20,9 @@ use Predis\Response\Status;
  * @method int    destroy(string $key, string $group)
  * @method Status setId(string $key, string $group, string $id, ?string $entriesRead = null)
  */
-class XGROUP extends AbstractContainer
+class XGROUP extends Abstract_Container
 {
-    public function getContainerCommandId(): string
+    public function get_container_command_id(): string
     {
         return 'xgroup';
     }

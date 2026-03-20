@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,31 +10,24 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Search;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see https://redis.io/commands/ft.sugadd/
  *
  * Add a suggestion string to an auto-complete suggestion dictionary.
  */
-class FTSUGADD extends RedisCommand
+class FTSUGADD extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'FT.SUGADD';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         [$key, $string, $score] = $arguments;
-        $commandArguments = (!empty($arguments[3])) ? $arguments[3]->toArray() : [];
-
-        parent::setArguments(array_merge(
-            [$key, $string, $score],
-            $commandArguments
-        ));
+        $command_arguments = !empty($arguments[3]) ? $arguments[3]->to_array() : [];
+        parent::set_arguments(array_merge([$key, $string, $score], $command_arguments));
     }
 }

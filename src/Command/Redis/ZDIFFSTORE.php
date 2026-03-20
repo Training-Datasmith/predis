@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,12 +10,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use Predis\Command\Traits\Keys;
-
 /**
  * @see https://redis.io/commands/zdiffstore/
  *
@@ -27,15 +24,13 @@ use Predis\Command\Traits\Keys;
  *
  * If destination already exists, it is overwritten.
  */
-class ZDIFFSTORE extends RedisCommand
+class ZDIFFSTORE extends Redis_Command
 {
     use Keys {
         Keys::setArguments as setKeys;
     }
-
-    public static $keysArgumentPositionOffset = 1;
-
-    public function getId(): string
+    public static $keys_argument_position_offset = 1;
+    public function get_id(): string
     {
         return 'ZDIFFSTORE';
     }

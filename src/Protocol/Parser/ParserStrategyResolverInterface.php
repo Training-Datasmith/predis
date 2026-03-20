@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Protocol\Parser;
 
-use Predis\Protocol\Parser\Strategy\ParserStrategyInterface;
-
-interface ParserStrategyResolverInterface
+use Predis\Protocol\Parser\Strategy\Parser_Strategy_Interface;
+interface Parser_Strategy_Resolver_Interface
 {
     /**
      * Resolves parser strategy according given protocol version.
      */
-    public function resolve(int $protocolVersion): ParserStrategyInterface;
+    public function resolve(int $protocol_version): Parser_Strategy_Interface;
 }

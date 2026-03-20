@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,17 +10,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Protocol;
 
-use Predis\Command\CommandInterface;
-use Predis\Connection\CompositeConnectionInterface;
-
+use Predis\Command\Command_Interface;
+use Predis\Connection\Composite_Connection_Interface;
 /**
  * Defines a pluggable protocol processor capable of serializing commands and
  * deserializing responses into PHP objects directly from a connection.
  */
-interface ProtocolProcessorInterface
+interface Protocol_Processor_Interface
 {
     /**
      * Writes a request over a connection to Redis.
@@ -29,8 +26,7 @@ interface ProtocolProcessorInterface
      * @param CompositeConnectionInterface $connection Redis connection.
      * @param CommandInterface             $command    Command instance.
      */
-    public function write(CompositeConnectionInterface $connection, CommandInterface $command);
-
+    public function write(Composite_Connection_Interface $connection, Command_Interface $command);
     /**
      * Reads a response from a connection to Redis.
      *
@@ -38,5 +34,5 @@ interface ProtocolProcessorInterface
      *
      * @return mixed
      */
-    public function read(CompositeConnectionInterface $connection);
+    public function read(Composite_Connection_Interface $connection);
 }

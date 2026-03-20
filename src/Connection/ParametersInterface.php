@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
 use Predis\Retry\Retry;
-
 /**
  * Interface defining a container for connection parameters.
  *
@@ -45,7 +42,7 @@ use Predis\Retry\Retry;
  * @property string $compression        (Relay only) Algorithm used for data compression.
  * @method   bool   isDisabledRetry()   Specify if custom retry configuration was provided.
  */
-interface ParametersInterface
+interface Parameters_Interface
 {
     /**
      * Checks if the specified parameters is set.
@@ -55,7 +52,6 @@ interface ParametersInterface
      * @return bool
      */
     public function __isset($parameter);
-
     /**
      * Returns the value of the specified parameter.
      *
@@ -64,18 +60,16 @@ interface ParametersInterface
      * @return mixed|null
      */
     public function __get($parameter);
-
     /**
      * Returns basic connection parameters as a valid URI string.
      *
      * @return string
      */
     public function __toString();
-
     /**
      * Returns an array representation of the connection parameters.
      *
      * @return array
      */
-    public function toArray();
+    public function to_array();
 }

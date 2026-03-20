@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,12 +10,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Search;
 
 use Predis\Command\Command as RedisCommand;
 use Predis\Command\Redis\CONFIG;
-
 /**
  * @deprecated FT.CONFIG GET and SET is deprecated since Redis 8.0.
  * @see CONFIG if you want to manipulate search configuration
@@ -27,26 +24,23 @@ use Predis\Command\Redis\CONFIG;
  * Container command corresponds to any FT.CONFIG *.
  * Represents any FUNCTION command with subcommand as first argument.
  */
-class FTCONFIG extends RedisCommand
+class FTCONFIG extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'FT.CONFIG';
     }
-
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         if (!is_array($data) || $data === array_values($data)) {
             return $data;
         }
-
         // Relay
         $result = [];
         foreach ($data as $key => $value) {
             $group = [$key, $value];
             $result[] = $group;
         }
-
         return $result;
     }
 }

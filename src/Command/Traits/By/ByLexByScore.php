@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,30 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\By;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
-trait ByLexByScore
+trait By_Lex_By_Score
 {
-    private static $argumentsEnum = [
-        'bylex' => 'BYLEX',
-        'byscore' => 'BYSCORE',
-    ];
-
-    public function setArguments(array $arguments): void
+    private static $arguments_enum = ['bylex' => 'BYLEX', 'byscore' => 'BYSCORE'];
+    public function set_arguments(array $arguments): void
     {
-        if (count($arguments) <= static::$byLexByScoreArgumentPositionOffset || false === $arguments[static::$byLexByScoreArgumentPositionOffset]) {
-            parent::setArguments($arguments);
-
+        if (count($arguments) <= static::$by_lex_by_score_argument_position_offset || false === $arguments[static::$by_lex_by_score_argument_position_offset]) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$byLexByScoreArgumentPositionOffset];
-
-        if (is_string($argument) && in_array(strtoupper($argument), self::$argumentsEnum)) {
-            $argument = self::$argumentsEnum[$argument];
+        $argument = $arguments[static::$by_lex_by_score_argument_position_offset];
+        if (is_string($argument) && in_array(strtoupper($argument), self::$arguments_enum)) {
+            $argument = self::$arguments_enum[$argument];
         } else {
             throw new UnexpectedValueException('By argument accepts only "bylex" and "byscore" values');
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$byLexByScoreArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$byLexByScoreArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge($argumentsBefore, [$argument], $argumentsAfter));
+        $arguments_before = array_slice($arguments, 0, static::$by_lex_by_score_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$by_lex_by_score_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [$argument], $arguments_after));
     }
 }

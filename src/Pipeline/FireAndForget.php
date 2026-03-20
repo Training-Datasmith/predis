@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,41 +10,36 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Pipeline;
 
-use Predis\CommunicationException;
-use Predis\Connection\AggregateConnectionInterface;
-use Predis\Connection\ConnectionInterface;
+use Predis\Communication_Exception;
+use Predis\Connection\Aggregate_Connection_Interface;
+use Predis\Connection\Connection_Interface;
 use SplQueue;
 use Throwable;
-
 /**
  * Command pipeline that writes commands to the servers but discards responses.
  */
-class FireAndForget extends Pipeline
+class Fire_And_Forget extends Pipeline
 {
     /**
      * {@inheritdoc}
      */
-    protected function executePipeline(ConnectionInterface $connection, SplQueue $commands): array
+    protected function execute_pipeline(Connection_Interface $connection, SplQueue $commands): array
     {
-        $retry = $connection->getParameters()->retry;
-
-        $retry->callWithRetry(function () use ($connection, $commands): void {
-            if ($connection instanceof AggregateConnectionInterface) {
-                $this->writeToMultiNode($connection, $commands);
+        $retry = $connection->get_parameters()->retry;
+        $retry->call_with_retry(function () use ($connection, $commands): void {
+            if ($connection instanceof Aggregate_Connection_Interface) {
+                $this->write_to_multi_node($connection, $commands);
             } else {
-                $this->writeToSingleNode($connection, $commands);
+                $this->write_to_single_node($connection, $commands);
             }
         }, static function (Throwable $e): void {
-            if ($e instanceof CommunicationException) {
-                $e->getConnection()->disconnect();
+            if ($e instanceof Communication_Exception) {
+                $e->get_connection()->disconnect();
             }
         });
-
         $connection->disconnect();
-
         return [];
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,47 +10,40 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Cluster;
 
 use Predis\Cluster\Hash\CRC16;
-use Predis\Cluster\Hash\HashGeneratorInterface;
-use Predis\NotSupportedException;
-
+use Predis\Cluster\Hash\Hash_Generator_Interface;
+use Predis\Not_Supported_Exception;
 /**
  * Default class used by Predis to calculate hashes out of keys of
  * commands supported by redis-cluster.
  */
-class RedisStrategy extends ClusterStrategy
+class Redis_Strategy extends Cluster_Strategy
 {
-    protected $hashGenerator;
-
+    protected $hash_generator;
     /**
      * @param HashGeneratorInterface|null $hashGenerator Hash generator instance.
      */
-    public function __construct(?HashGeneratorInterface $hashGenerator = null)
+    public function __construct(?Hash_Generator_Interface $hash_generator = null)
     {
         parent::__construct();
-
-        $this->hashGenerator = $hashGenerator ?: new CRC16();
+        $this->hash_generator = $hash_generator ?: new CRC16();
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getSlotByKey($key): int
+    public function get_slot_by_key($key): int
     {
-        $key = $this->extractKeyTag($key);
-
-        return $this->hashGenerator->hash($key) & 0x3FFF;
+        $key = $this->extract_key_tag($key);
+        return $this->hash_generator->hash($key) & 0x3fff;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getDistributor(): void
+    public function get_distributor(): void
     {
         $class = get_class($this);
-        throw new NotSupportedException("$class does not provide an external distributor");
+        throw new Not_Supported_Exception("{$class} does not provide an external distributor");
     }
 }

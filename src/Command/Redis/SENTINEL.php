@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,60 +10,51 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see http://redis.io/topics/sentinel
  */
-class SENTINEL extends RedisCommand
+class SENTINEL extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'SENTINEL';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
-        $argument = $this->getArgument(0);
+        $argument = $this->get_argument(0);
         $argument = is_null($argument) ? null : strtolower($argument);
-
         switch ($argument) {
             case 'masters':
             case 'slaves':
-                return self::processMastersOrSlaves($data);
-
+                return self::process_masters_or_slaves($data);
             default:
                 return $data;
         }
     }
-
     /**
      * Returns a processed response to SENTINEL MASTERS or SENTINEL SLAVES.
      *
      * @param array $servers List of Redis servers.
      */
-    protected static function processMastersOrSlaves(array $servers): array
+    protected static function process_masters_or_slaves(array $servers): array
     {
         foreach ($servers as $idx => $node) {
             $processed = [];
             $count = count($node);
-
             for ($i = 0; $i < $count; ++$i) {
                 $processed[$node[$i]] = $node[++$i];
             }
-
             $servers[$idx] = $processed;
         }
-
         return $servers;
     }
 }

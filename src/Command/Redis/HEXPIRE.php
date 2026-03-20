@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,48 +10,38 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
+use Predis\Command\Prefixable_Command as RedisCommand;
 use UnexpectedValueException;
-
-class HEXPIRE extends RedisCommand
+class HEXPIRE extends Redis_Command
 {
     /**
      * @var array
      */
-    protected $flagsEnum = [
-        'NX', 'XX', 'GT', 'LT',
-    ];
-
-    public function getId(): string
+    protected $flags_enum = ['NX', 'XX', 'GT', 'LT'];
+    public function get_id(): string
     {
         return 'HEXPIRE';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0], $arguments[1]];
-
+        $processed_arguments = [$arguments[0], $arguments[1]];
         if (array_key_exists(3, $arguments) && null !== $arguments[3]) {
-            if (in_array(strtoupper($arguments[3]), $this->flagsEnum, true)) {
-                $processedArguments[] = strtoupper($arguments[3]);
+            if (in_array(strtoupper($arguments[3]), $this->flags_enum, true)) {
+                $processed_arguments[] = strtoupper($arguments[3]);
             } else {
                 throw new UnexpectedValueException('Unsupported flag value');
             }
         }
-
         if (array_key_exists(2, $arguments) && null !== $arguments[2]) {
-            array_push($processedArguments, 'FIELDS', count($arguments[2]));
-            $processedArguments = array_merge($processedArguments, $arguments[2]);
+            array_push($processed_arguments, 'FIELDS', count($arguments[2]));
+            $processed_arguments = array_merge($processed_arguments, $arguments[2]);
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,12 +10,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-use Predis\Command\Traits\With\WithValues;
-
+use Predis\Command\Traits\With\With_Values;
 /**
  * @see https://redis.io/commands/hrandfield/
  *
@@ -25,31 +22,26 @@ use Predis\Command\Traits\With\WithValues;
  * If the provided count argument is positive, return an array of distinct fields.
  * The array's length is either count or the hash's number of fields (HLEN), whichever is lower.
  */
-class HRANDFIELD extends RedisCommand
+class HRANDFIELD extends Redis_Command
 {
-    use WithValues;
-
-    public function getId(): string
+    use With_Values;
+    public function get_id(): string
     {
         return 'HRANDFIELD';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         if (!is_array($data)) {
             return $data;
         }
-
         // flatten Relay (RESP3) maps
         $return = [];
-
         array_walk_recursive($data, static function ($value) use (&$return): void {
             $return[] = $value;
         });
-
         return $return;
     }
 }

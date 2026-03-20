@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,10 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Search;
 
-class SugAddArguments extends CommonArguments
+class Sug_Add_Arguments extends Common_Arguments
 {
     /**
      * Adds INCR modifier.
@@ -24,7 +22,6 @@ class SugAddArguments extends CommonArguments
     public function incr(): self
     {
         $this->arguments[] = 'INCR';
-
         return $this;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,52 +10,36 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
-trait LeftRight
+trait Left_Right
 {
     /**
      * @var array{string: string}
      */
-    private static $leftRightEnum = [
-        'left' => 'LEFT',
-        'right' => 'RIGHT',
-    ];
-
-    public function setArguments(array $arguments): void
+    private static $left_right_enum = ['left' => 'LEFT', 'right' => 'RIGHT'];
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$leftRightArgumentPositionOffset >= $argumentsLength) {
+        $arguments_length = count($arguments);
+        if (static::$left_right_argument_position_offset >= $arguments_length) {
             $arguments[] = 'LEFT';
-            parent::setArguments($arguments);
-
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$leftRightArgumentPositionOffset];
-
-        if (is_string($argument) && in_array(strtoupper($argument), self::$leftRightEnum, true)) {
-            $argument = self::$leftRightEnum[$argument];
+        $argument = $arguments[static::$left_right_argument_position_offset];
+        if (is_string($argument) && in_array(strtoupper($argument), self::$left_right_enum, true)) {
+            $argument = self::$left_right_enum[$argument];
         } else {
-            $enumValues = implode(', ', array_keys(self::$leftRightEnum));
-            throw new UnexpectedValueException("Left/Right argument accepts only: {$enumValues} values");
+            $enum_values = implode(', ', array_keys(self::$left_right_enum));
+            throw new UnexpectedValueException("Left/Right argument accepts only: {$enum_values} values");
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$leftRightArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$leftRightArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [$argument],
-            $argumentsAfter
-        ));
+        $arguments_before = array_slice($arguments, 0, static::$left_right_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$left_right_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [$argument], $arguments_after));
     }
 }

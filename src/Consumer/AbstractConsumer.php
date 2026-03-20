@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,79 +10,65 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Consumer;
 
-use Predis\ClientInterface;
-use ReturnTypeWillChange;
-
-abstract class AbstractConsumer implements ConsumerInterface
+use Predis\Client_Interface;
+use Return_Type_Will_Change;
+abstract class Abstract_Consumer implements Consumer_Interface
 {
     /**
      * @var ClientInterface
      */
     protected $client;
-
     /**
      * @var bool
      */
-    protected $isValid = true;
-
+    protected $is_valid = true;
     /**
      * @var int
      */
     protected $position = 0;
-
-    public function __construct(ClientInterface $client)
+    public function __construct(Client_Interface $client)
     {
         $this->client = $client;
     }
-
     /**
      * {@inheritDoc}
      */
     public function stop(bool $drop = false): bool
     {
-        $this->isValid = false;
-
+        $this->is_valid = false;
         if ($drop) {
             $this->client->disconnect();
-
             return true;
         }
-
         return true;
     }
-
-    public function getClient(): ClientInterface
+    public function get_client(): Client_Interface
     {
         return $this->client;
     }
-
     /**
      * {@inheritDoc}
      */
     public function current()
     {
-        return $this->getValue();
+        return $this->get_value();
     }
-
     /**
      * Returns last message from server.
      *
      * @return mixed
      */
-    #[ReturnTypeWillChange]
-    abstract protected function getValue();
-
+    #[Return_Type_Will_Change]
+    abstract protected function get_value();
     /**
      * {@inheritDoc}
      */
     public function valid()
     {
-        return $this->isValid;
+        return $this->is_valid;
     }
-
     /**
      * {@inheritDoc}
      */
@@ -93,20 +78,18 @@ abstract class AbstractConsumer implements ConsumerInterface
             ++$this->position;
         }
     }
-
     /**
      * {@inheritDoc}
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function key()
     {
         return $this->position;
     }
-
     /**
      * {@inheritDoc}
      */
-    #[ReturnTypeWillChange]
+    #[Return_Type_Will_Change]
     public function rewind(): void
     {
         // NOOP

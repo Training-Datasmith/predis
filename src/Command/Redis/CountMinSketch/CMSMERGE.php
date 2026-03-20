@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,11 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Count_Min_Sketch;
 
-namespace Predis\Command\Redis\CountMinSketch;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/cms.merge/
  *
@@ -23,35 +20,29 @@ use Predis\Command\PrefixableCommand as RedisCommand;
  * All sketches must have identical width and depth.
  * Weights can be used to multiply certain sketches. Default weight is 1.
  */
-class CMSMERGE extends RedisCommand
+class CMSMERGE extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'CMS.MERGE';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = array_merge([$arguments[0], count($arguments[1])], $arguments[1]);
-
+        $processed_arguments = array_merge([$arguments[0], count($arguments[1])], $arguments[1]);
         if (!empty($arguments[2])) {
-            $processedArguments[] = 'WEIGHTS';
-            $processedArguments = array_merge($processedArguments, $arguments[2]);
+            $processed_arguments[] = 'WEIGHTS';
+            $processed_arguments = array_merge($processed_arguments, $arguments[2]);
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        if ($arguments = $this->getArguments()) {
+        if ($arguments = $this->get_arguments()) {
             $arguments[0] = $prefix . $arguments[0];
-
-            for ($i = 2, $iMax = (int) $arguments[1] + 2; $i < $iMax; $i++) {
+            for ($i = 2, $i_max = (int) $arguments[1] + 2; $i < $i_max; $i++) {
                 $arguments[$i] = $prefix . $arguments[$i];
             }
-
-            $this->setRawArguments($arguments);
+            $this->set_raw_arguments($arguments);
         }
     }
 }

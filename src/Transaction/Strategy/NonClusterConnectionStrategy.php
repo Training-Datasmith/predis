@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,202 +10,164 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Transaction\Strategy;
 
-use Predis\Command\CommandInterface;
+use Predis\Command\Command_Interface;
 use Predis\Command\Redis\DISCARD;
 use Predis\Command\Redis\EXEC;
 use Predis\Command\Redis\MULTI;
 use Predis\Command\Redis\UNWATCH;
 use Predis\Command\Redis\WATCH;
-use Predis\CommunicationException;
-use Predis\Connection\ConnectionException;
-use Predis\Connection\NodeConnectionInterface;
-use Predis\Connection\RelayConnection;
-use Predis\Connection\Replication\ReplicationInterface;
-use Predis\Response\ErrorInterface;
-use Predis\Response\ServerException;
-use Predis\TimeoutException;
-use Predis\Transaction\MultiExecState;
-use Predis\Transaction\Response\BypassTransactionResponse;
+use Predis\Communication_Exception;
+use Predis\Connection\Connection_Exception;
+use Predis\Connection\Node_Connection_Interface;
+use Predis\Connection\Relay_Connection;
+use Predis\Connection\Replication\Replication_Interface;
+use Predis\Response\Error_Interface;
+use Predis\Response\Server_Exception;
+use Predis\Timeout_Exception;
+use Predis\Transaction\Multi_Exec_State;
+use Predis\Transaction\Response\Bypass_Transaction_Response;
 use Throwable;
-
 /**
  * Defines strategy for connections that operates on non-distributed hash slots.
  */
-abstract class NonClusterConnectionStrategy implements StrategyInterface
+abstract class Non_Cluster_Connection_Strategy implements Strategy_Interface
 {
     /**
      * @var NodeConnectionInterface|ReplicationInterface
      */
     protected $connection;
-
     /**
      * @var MultiExecState
      */
     protected $state;
-
     /**
      * @param NodeConnectionInterface|ReplicationInterface $connection
      */
-    public function __construct($connection, MultiExecState $state)
+    public function __construct($connection, Multi_Exec_State $state)
     {
         $this->connection = $connection;
         $this->state = $state;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function initializeTransaction(): bool
+    public function initialize_transaction(): bool
     {
-        return 'OK' == $this->executeBypassingTransaction(new MULTI())->getResponse();
+        return 'OK' == $this->execute_bypassing_transaction(new MULTI())->get_response();
     }
-
     /**
      * {@inheritDoc}
      * @throws Throwable
      */
-    public function executeCommand(CommandInterface $command)
+    public function execute_command(Command_Interface $command)
     {
-        if ($this->state->isCAS()) {
-            return $this->executeBypassingTransaction($command);
+        if ($this->state->is_cas()) {
+            return $this->execute_bypassing_transaction($command);
         }
-
-        $retry = $this->connection->getParameters()->retry;
-
-        return $retry->callWithRetry(
-            function () use ($command) {
-                return $this->connection->executeCommand($command);
-            },
-            function (CommunicationException $e): void {
-                $this->onFailCallback($e);
-            }
-        );
+        $retry = $this->connection->get_parameters()->retry;
+        return $retry->call_with_retry(function () use ($command) {
+            return $this->connection->execute_command($command);
+        }, function (Communication_Exception $e): void {
+            $this->on_fail_callback($e);
+        });
     }
-
     /**
      * {@inheritDoc}
      */
-    public function executeTransaction()
+    public function execute_transaction()
     {
-        return $this->executeBypassingTransaction(new EXEC())->getResponse();
+        return $this->execute_bypassing_transaction(new EXEC())->get_response();
     }
-
     /**
      * {@inheritDoc}
      */
     public function multi()
     {
-        return $this->executeBypassingTransaction(new MULTI())->getResponse();
+        return $this->execute_bypassing_transaction(new MULTI())->get_response();
     }
-
     /**
      * {@inheritDoc}
      */
     public function watch(array $keys)
     {
         $watch = new WATCH();
-        $watch->setArguments($keys);
-
-        return $this->executeBypassingTransaction($watch)->getResponse();
+        $watch->set_arguments($keys);
+        return $this->execute_bypassing_transaction($watch)->get_response();
     }
-
     /**
      * {@inheritDoc}
      * @throws Throwable
      */
     public function unwatch()
     {
-        $retry = $this->connection->getParameters()->retry;
-
-        return $retry->callWithRetry(
-            function () {
-                return $this->connection->executeCommand(new UNWATCH());
-            },
-            function (CommunicationException $e): void {
-                $this->onFailCallback($e);
-            }
-        );
+        $retry = $this->connection->get_parameters()->retry;
+        return $retry->call_with_retry(function () {
+            return $this->connection->execute_command(new UNWATCH());
+        }, function (Communication_Exception $e): void {
+            $this->on_fail_callback($e);
+        });
     }
-
     /**
      * {@inheritDoc}
      */
     public function discard()
     {
-        return $this->executeBypassingTransaction(new DISCARD())->getResponse();
+        return $this->execute_bypassing_transaction(new DISCARD())->get_response();
     }
-
     /**
      * Executes a Redis command bypassing the transaction logic.
      *
      * @throws ServerException|Throwable
      */
-    protected function executeBypassingTransaction(CommandInterface $command): BypassTransactionResponse
+    protected function execute_bypassing_transaction(Command_Interface $command): Bypass_Transaction_Response
     {
-        $retry = $this->connection->getParameters()->retry;
-
+        $retry = $this->connection->get_parameters()->retry;
         try {
-            $response = $retry->callWithRetry(
-                function () use ($command) {
-                    return $this->connection->executeCommand($command);
-                },
-                function (CommunicationException $e): void {
-                    $this->onFailCallback($e);
-                }
-            );
-        } catch (ServerException $exception) {
-            if (!$this->connection instanceof RelayConnection) {
+            $response = $retry->call_with_retry(function () use ($command) {
+                return $this->connection->execute_command($command);
+            }, function (Communication_Exception $e): void {
+                $this->on_fail_callback($e);
+            });
+        } catch (Server_Exception $exception) {
+            if (!$this->connection instanceof Relay_Connection) {
                 throw $exception;
             }
-
-            if (strcasecmp($command->getId(), 'EXEC') != 0) {
+            if (strcasecmp($command->get_id(), 'EXEC') != 0) {
                 throw $exception;
             }
-
-            if (!strpos($exception->getMessage(), 'RELAY_ERR_REDIS')) {
+            if (!strpos($exception->get_message(), 'RELAY_ERR_REDIS')) {
                 throw $exception;
             }
-
-            return new BypassTransactionResponse(null);
+            return new Bypass_Transaction_Response(null);
         }
-
-        if ($response instanceof ErrorInterface) {
-            throw new ServerException($response->getMessage());
+        if ($response instanceof Error_Interface) {
+            throw new Server_Exception($response->get_message());
         }
-
-        return new BypassTransactionResponse($response);
+        return new Bypass_Transaction_Response($response);
     }
-
     /**
      * Handle communication exception.
      */
-    private function onFailCallback(CommunicationException $e): void
+    private function on_fail_callback(Communication_Exception $e): void
     {
-        $connection = $e->getConnection();
-
-        if ($connection instanceof NodeConnectionInterface) {
+        $connection = $e->get_connection();
+        if ($connection instanceof Node_Connection_Interface) {
             $connection->disconnect();
-
             return;
         }
-
-        if ($e instanceof ConnectionException) {
-            $nodeConnection = $e->getConnection();
-
-            if ($nodeConnection) {
-                $nodeConnection->disconnect();
-                $this->connection->remove($nodeConnection);
+        if ($e instanceof Connection_Exception) {
+            $node_connection = $e->get_connection();
+            if ($node_connection) {
+                $node_connection->disconnect();
+                $this->connection->remove($node_connection);
             }
         }
-
-        if ($e instanceof TimeoutException) {
-            $nodeConnection = $e->getConnection();
-
-            if ($nodeConnection) {
-                $nodeConnection->disconnect();
+        if ($e instanceof Timeout_Exception) {
+            $node_connection = $e->get_connection();
+            if ($node_connection) {
+                $node_connection->disconnect();
             }
         }
     }

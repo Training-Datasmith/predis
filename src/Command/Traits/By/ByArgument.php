@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,32 +10,25 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\By;
 
 use Predis\Command\Command;
-
 /**
  * @mixin Command
  */
-trait ByArgument
+trait By_Argument
 {
-    private $byModifier = 'BY';
-
-    public function setArguments(array $arguments): void
+    private $by_modifier = 'BY';
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$byArgumentPositionOffset >= $argumentsLength || null === $arguments[static::$byArgumentPositionOffset]) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$by_argument_position_offset >= $arguments_length || null === $arguments[static::$by_argument_position_offset]) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$byArgumentPositionOffset];
-        $argumentsBefore = array_slice($arguments, 0, static::$byArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$byArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge($argumentsBefore, [$this->byModifier, $argument], $argumentsAfter));
+        $argument = $arguments[static::$by_argument_position_offset];
+        $arguments_before = array_slice($arguments, 0, static::$by_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$by_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [$this->by_modifier, $argument], $arguments_after));
     }
 }

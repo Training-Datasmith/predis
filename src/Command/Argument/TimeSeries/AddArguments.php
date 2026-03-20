@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,10 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Time_Series;
 
-namespace Predis\Command\Argument\TimeSeries;
-
-class AddArguments extends CommonArguments
+class Add_Arguments extends Common_Arguments
 {
     /**
      * Is overwrite key and database configuration for DUPLICATE_POLICY,
@@ -22,10 +20,9 @@ class AddArguments extends CommonArguments
      *
      * @return $this
      */
-    public function onDuplicate(string $policy = self::POLICY_BLOCK): self
+    public function on_duplicate(string $policy = self::POLICY_BLOCK): self
     {
         array_push($this->arguments, 'ON_DUPLICATE', $policy);
-
         return $this;
     }
 }

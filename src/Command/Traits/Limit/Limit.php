@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,46 +10,33 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\Limit;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
 trait Limit
 {
-    private static $limitModifier = 'LIMIT';
-
-    public function setArguments(array $arguments): void
+    private static $limit_modifier = 'LIMIT';
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-        $argumentsBefore = array_slice($arguments, 0, static::$limitArgumentPositionOffset);
-
-        if (
-            static::$limitArgumentPositionOffset >= $argumentsLength
-            || false === $arguments[static::$limitArgumentPositionOffset]
-        ) {
-            parent::setArguments($argumentsBefore);
-
+        $arguments_length = count($arguments);
+        $arguments_before = array_slice($arguments, 0, static::$limit_argument_position_offset);
+        if (static::$limit_argument_position_offset >= $arguments_length || false === $arguments[static::$limit_argument_position_offset]) {
+            parent::set_arguments($arguments_before);
             return;
         }
-
-        $argument = $arguments[static::$limitArgumentPositionOffset];
-        $argumentsAfter = array_slice($arguments, static::$limitArgumentPositionOffset + 1);
-
+        $argument = $arguments[static::$limit_argument_position_offset];
+        $arguments_after = array_slice($arguments, static::$limit_argument_position_offset + 1);
         if (true === $argument) {
-            parent::setArguments(array_merge($argumentsBefore, [self::$limitModifier], $argumentsAfter));
-
+            parent::set_arguments(array_merge($arguments_before, [self::$limit_modifier], $arguments_after));
             return;
         }
-
         if (!is_int($argument)) {
             throw new UnexpectedValueException('Wrong limit argument type');
         }
-
-        parent::setArguments(array_merge($argumentsBefore, [self::$limitModifier], [$argument], $argumentsAfter));
+        parent::set_arguments(array_merge($arguments_before, [self::$limit_modifier], [$argument], $arguments_after));
     }
 }

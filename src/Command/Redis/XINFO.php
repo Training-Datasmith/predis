@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,116 +10,97 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\Argument\ArrayableArgument;
+use Predis\Command\Argument\Arrayable_Argument;
 use Predis\Command\Command as RedisCommand;
-use Predis\Command\Redis\Utils\CommandUtility;
-
-class XINFO extends RedisCommand
+use Predis\Command\Redis\Utils\Command_Utility;
+class XINFO extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XINFO';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if ($arguments[0] === 'STREAM') {
-            $this->setStreamArguments($arguments);
+            $this->set_stream_arguments($arguments);
         } else {
-            parent::setArguments($arguments);
+            parent::set_arguments($arguments);
         }
     }
-
-    private function setStreamArguments(array $arguments): void
+    private function set_stream_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0], $arguments[1]];
-
-        if (array_key_exists(2, $arguments) && $arguments[2] instanceof ArrayableArgument) {
-            $processedArguments = array_merge($processedArguments, $arguments[2]->toArray());
+        $processed_arguments = [$arguments[0], $arguments[1]];
+        if (array_key_exists(2, $arguments) && $arguments[2] instanceof Arrayable_Argument) {
+            $processed_arguments = array_merge($processed_arguments, $arguments[2]->to_array());
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function parseResponse($data): array
+    public function parse_response($data): array
     {
-        if ($this->getArgument(0) === 'STREAM') {
-            return $this->parseStreamResponse($data);
+        if ($this->get_argument(0) === 'STREAM') {
+            return $this->parse_stream_response($data);
         }
-
-        return $this->parseDict($data);
+        return $this->parse_dict($data);
     }
-
-    private function parseStreamResponse($data): array
+    private function parse_stream_response($data): array
     {
         if ($data === array_values($data)) {
-            $result = CommandUtility::arrayToDictionary($data, null, false);
+            $result = Command_Utility::array_to_dictionary($data, null, false);
         } else {
-            $result = $data; // Relay
+            $result = $data;
+            // Relay
         }
-
         if (isset($result['entries'])) {
-            $result['entries'] = $this->parseDict($result['entries']);
+            $result['entries'] = $this->parse_dict($result['entries']);
         }
-
         if (isset($result['groups']) && is_array($result['groups'])) {
             $result['groups'] = array_map(static function (array $group): array {
                 if ($group === array_values($group)) {
-                    $group = CommandUtility::arrayToDictionary($group, null, false);
+                    $group = Command_Utility::array_to_dictionary($group, null, false);
                 }
                 if (isset($group['consumers'])) {
                     $group['consumers'] = array_map(static function ($consumer) {
                         if ($consumer === array_values($consumer)) {
-                            return CommandUtility::arrayToDictionary($consumer, null, false);
+                            return Command_Utility::array_to_dictionary($consumer, null, false);
                         }
-
                         return $consumer;
                     }, $group['consumers']);
                 }
-
                 return $group;
             }, $result['groups']);
         }
-
         return $result;
     }
-
-    public function parseResp3Response($data)
+    public function parse_resp3response($data)
     {
         $result = $data;
         if (isset($result['entries'])) {
-            $result['entries'] = $this->parseDict($result['entries']);
+            $result['entries'] = $this->parse_dict($result['entries']);
         }
-
         return $result;
     }
-
-    private function parseDict(array $data): array
+    private function parse_dict(array $data): array
     {
         if ($data !== array_values($data)) {
-            return $data; // Relay
+            return $data;
+            // Relay
         }
-
         $result = [];
-
-        for ($i = 0, $iMax = count($data); $i < $iMax; $i++) {
+        for ($i = 0, $i_max = count($data); $i < $i_max; $i++) {
             if (is_array($data[$i])) {
-                $result[$i] = $this->parseDict($data[$i]);
+                $result[$i] = $this->parse_dict($data[$i]);
                 continue;
             }
-
             if (array_key_exists($i + 1, $data)) {
                 if (is_array($data[$i + 1])) {
-                    $result[$data[$i]] = $this->parseDict($data[++$i]);
+                    $result[$data[$i]] = $this->parse_dict($data[++$i]);
                 } else {
                     $result[$data[$i]] = $data[++$i];
                 }
             }
         }
-
         return $result;
     }
 }

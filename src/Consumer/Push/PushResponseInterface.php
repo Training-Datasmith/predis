@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,25 +10,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Consumer\Push;
 
-use Predis\Response\ResponseInterface;
-
-interface PushResponseInterface extends ResponseInterface
+use Predis\Response\Response_Interface;
+interface Push_Response_Interface extends Response_Interface
 {
     public const PUB_SUB_DATA_TYPE = 'pubsub';
     public const MONITOR_DATA_TYPE = 'monitor';
     public const INVALIDATE_DATA_TYPE = 'invalidate';
     public const MESSAGE_DATA_TYPE = 'message';
-
     /**
      * Returns PUSH notification data type.
      */
-    public function getDataType(): string;
-
+    public function get_data_type(): string;
     /**
      * Returns PUSH notification payload.
      */
-    public function getPayload(): array;
+    public function get_payload(): array;
 }

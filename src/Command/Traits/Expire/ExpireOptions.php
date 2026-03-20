@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,34 +10,23 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\Expire;
 
-trait ExpireOptions
+trait Expire_Options
 {
-    private static $argumentEnum = [
-        'nx' => 'NX',
-        'xx' => 'XX',
-        'gt' => 'GT',
-        'lt' => 'LT',
-    ];
-
-    public function setArguments(array $arguments): void
+    private static $argument_enum = ['nx' => 'NX', 'xx' => 'XX', 'gt' => 'GT', 'lt' => 'LT'];
+    public function set_arguments(array $arguments): void
     {
         $value = array_pop($arguments);
-
         if (null === $value) {
-            parent::setArguments($arguments);
-
+            parent::set_arguments($arguments);
             return;
         }
-
-        if (in_array(strtoupper($value), self::$argumentEnum, true)) {
-            $arguments[] = self::$argumentEnum[strtolower($value)];
+        if (in_array(strtoupper($value), self::$argument_enum, true)) {
+            $arguments[] = self::$argument_enum[strtolower($value)];
         } else {
             $arguments[] = $value;
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
 }

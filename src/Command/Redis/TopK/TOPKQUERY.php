@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,26 +10,23 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Top_K;
 
-namespace Predis\Command\Redis\TopK;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/topk.query/
  *
  * Checks whether an item is one of Top-K items.
  * Multiple items can be checked at once.
  */
-class TOPKQUERY extends RedisCommand
+class TOPKQUERY extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TOPK.QUERY';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

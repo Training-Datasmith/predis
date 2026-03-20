@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,145 +10,119 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see http://redis.io/commands/client-list
  * @see http://redis.io/commands/client-kill
  * @see http://redis.io/commands/client-getname
  * @see http://redis.io/commands/client-setname
  */
-class CLIENT extends RedisCommand
+class CLIENT extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'CLIENT';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         switch ($arguments[0]) {
             case 'LIST':
-                $this->setListArguments($arguments);
+                $this->set_list_arguments($arguments);
                 break;
             case 'NOEVICT':
                 $arguments[0] = 'NO-EVICT';
-                $this->setNoTouchArguments($arguments);
+                $this->set_no_touch_arguments($arguments);
                 break;
             case 'NOTOUCH':
                 $arguments[0] = 'NO-TOUCH';
-                $this->setNoTouchArguments($arguments);
+                $this->set_no_touch_arguments($arguments);
                 break;
             case 'SETINFO':
-                $this->setSetInfoArguments($arguments);
+                $this->set_set_info_arguments($arguments);
                 break;
             default:
-                parent::setArguments($arguments);
+                parent::set_arguments($arguments);
         }
     }
-
-    private function setListArguments(array $arguments): void
+    private function set_list_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0]];
-
+        $processed_arguments = [$arguments[0]];
         if (array_key_exists(1, $arguments) && null !== $arguments[1]) {
-            array_push($processedArguments, 'TYPE', strtoupper($arguments[1]));
+            array_push($processed_arguments, 'TYPE', strtoupper($arguments[1]));
         }
-
         if (array_key_exists(2, $arguments)) {
-            array_push($processedArguments, 'ID', $arguments[2]);
+            array_push($processed_arguments, 'ID', $arguments[2]);
         }
-
         if (count($arguments) > 3) {
-            for ($i = 3, $iMax = count($arguments); $i < $iMax; $i++) {
-                $processedArguments[] = $arguments[$i];
+            for ($i = 3, $i_max = count($arguments); $i < $i_max; $i++) {
+                $processed_arguments[] = $arguments[$i];
             }
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    private function setNoTouchArguments(array $arguments): void
+    private function set_no_touch_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0]];
-
+        $processed_arguments = [$arguments[0]];
         if (array_key_exists(1, $arguments) && null !== $arguments[1]) {
-            $modifier = ($arguments[1]) ? 'ON' : 'OFF';
-            $processedArguments[] = $modifier;
+            $modifier = $arguments[1] ? 'ON' : 'OFF';
+            $processed_arguments[] = $modifier;
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    private function setSetInfoArguments(array $arguments): void
+    private function set_set_info_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0]];
-
-        if (
-            array_key_exists(1, $arguments)
-            && null !== $arguments[1]
-            && array_key_exists(2, $arguments)
-            && null !== $arguments[2]
-        ) {
-            array_push($processedArguments, strtoupper($arguments[1]), $arguments[2]);
+        $processed_arguments = [$arguments[0]];
+        if (array_key_exists(1, $arguments) && null !== $arguments[1] && array_key_exists(2, $arguments) && null !== $arguments[2]) {
+            array_push($processed_arguments, strtoupper($arguments[1]), $arguments[2]);
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($data)
+    public function parse_response($data)
     {
-        $args = array_change_key_case($this->getArguments(), CASE_UPPER);
-
+        $args = array_change_key_case($this->get_arguments(), CASE_UPPER);
         switch (strtoupper($args[0])) {
             case 'LIST':
-                return $this->parseClientList($data);
+                return $this->parse_client_list($data);
             case 'KILL':
             case 'GETNAME':
             case 'SETNAME':
             default:
                 return $data;
-        } // @codeCoverageIgnore
+        }
+        // @codeCoverageIgnore
     }
-
     /**
      * Parses the response to CLIENT LIST and returns a structured list.
      *
      * @param string $data Response buffer.
      */
-    protected function parseClientList($data): array
+    protected function parse_client_list($data): array
     {
         $clients = [];
-
-        foreach (explode("\n", $data, -1) as $clientData) {
+        foreach (explode("\n", $data, -1) as $client_data) {
             $client = [];
-
-            foreach (explode(' ', $clientData) as $kv) {
+            foreach (explode(' ', $client_data) as $kv) {
                 @[$k, $v] = explode('=', $kv);
                 $client[$k] = $v;
             }
-
             $clients[] = $client;
         }
-
         return $clients;
     }
-
     /**
      * @param                          $data
      * @return array|mixed|string|null
      */
-    public function parseResp3Response($data)
+    public function parse_resp3response($data)
     {
-        return $this->parseResponse($data);
+        return $this->parse_response($data);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Replication;
 
-use Predis\CommunicationException;
-
+use Predis\Communication_Exception;
 /**
  * Exception class that identifies a role mismatch when connecting to node
  * managed by redis-sentinel.
  */
-class RoleException extends CommunicationException
+class Role_Exception extends Communication_Exception
 {
 }

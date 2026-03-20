@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,21 +10,18 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Hybrid_Search\Combine;
 
-namespace Predis\Command\Argument\Search\HybridSearch\Combine;
-
-class RRFCombineConfig extends BaseCombine
+class Rrf_Combine_Config extends Base_Combine
 {
     /**
      * @var int
      */
     protected $window;
-
     /**
      * @var int
      */
-    protected $rrfConstant;
-
+    protected $rrf_constant;
     /**
      * The number of top results from each search type to consider for fusion. Defaults to 50.
      *
@@ -34,46 +30,37 @@ class RRFCombineConfig extends BaseCombine
     public function window(int $window): self
     {
         $this->window = $window;
-
         return $this;
     }
-
     /**
      * The RRF ranking constant. A smaller value gives more weight to top-ranked items. Defaults to 60.
      *
      * @return $this
      */
-    public function rrfConstant(int $constant): self
+    public function rrf_constant(int $constant): self
     {
-        $this->rrfConstant = $constant;
-
+        $this->rrf_constant = $constant;
         return $this;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         $this->arguments[] = 'RRF';
         $tokens = [];
-
         if ($this->window !== null) {
             array_push($tokens, 'WINDOW', $this->window);
         }
-
-        if ($this->rrfConstant !== null) {
-            array_push($tokens, 'CONSTANT', $this->rrfConstant);
+        if ($this->rrf_constant !== null) {
+            array_push($tokens, 'CONSTANT', $this->rrf_constant);
         }
-
         if ($this->as) {
             array_push($tokens, ...$this->as);
         }
-
         if (!empty($tokens)) {
             array_push($this->arguments, count($tokens), ...$tokens);
         }
-
         return $this->arguments;
     }
 }

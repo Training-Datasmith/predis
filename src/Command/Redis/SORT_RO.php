@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-use Predis\Command\Traits\By\ByArgument;
+use Predis\Command\Traits\By\By_Argument;
 use Predis\Command\Traits\Get\Get;
-use Predis\Command\Traits\Limit\LimitObject;
+use Predis\Command\Traits\Limit\Limit_Object;
 use Predis\Command\Traits\Sorting;
-
 /**
  * @see https://redis.io/commands/sort_ro/
  *
@@ -27,13 +24,13 @@ use Predis\Command\Traits\Sorting;
  * It is exactly like the original SORT but refuses the STORE option
  * and can safely be used in read-only replicas.
  */
-class SORT_RO extends RedisCommand
+class SORT_RO extends Redis_Command
 {
-    use ByArgument {
-        ByArgument::setArguments as setBy;
+    use By_Argument {
+        By_Argument::setArguments as setBy;
     }
-    use LimitObject {
-        LimitObject::setArguments as setLimit;
+    use Limit_Object {
+        Limit_Object::setArguments as setLimit;
     }
     use Get {
         Get::setArguments as setGetArgument;
@@ -41,36 +38,28 @@ class SORT_RO extends RedisCommand
     use Sorting {
         Sorting::setArguments as setSorting;
     }
-
-    protected static $byArgumentPositionOffset = 1;
-    protected static $getArgumentPositionOffset = 3;
-    protected static $sortArgumentPositionOffset = 4;
-
-    public function getId(): string
+    protected static $by_argument_position_offset = 1;
+    protected static $get_argument_position_offset = 3;
+    protected static $sort_argument_position_offset = 4;
+    public function get_id(): string
     {
         return 'SORT_RO';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         $alpha = array_pop($arguments);
-
         if (is_bool($alpha) && $alpha) {
             $arguments[] = 'ALPHA';
         } elseif (!is_bool($alpha)) {
             $arguments[] = $alpha;
         }
-
-        $this->setSorting($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setGetArgument($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setLimit($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setBy($arguments);
-        $this->filterArguments();
+        $this->set_sorting($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_get_argument($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_limit($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_by($arguments);
+        $this->filter_arguments();
     }
 }

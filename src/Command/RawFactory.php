@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,7 +10,6 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command;
 
 /**
@@ -25,21 +23,20 @@ namespace Predis\Command;
  * commands to Redis and server responses are not further processed before being
  * returned to the caller.
  */
-class RawFactory implements FactoryInterface
+class Raw_Factory implements Factory_Interface
 {
     /**
      * {@inheritdoc}
      */
-    public function supports(string ...$commandIDs): bool
+    public function supports(string ...$command_i_ds): bool
     {
         return true;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function create(string $commandID, array $arguments = []): CommandInterface
+    public function create(string $command_id, array $arguments = []): Command_Interface
     {
-        return new RawCommand($commandID, $arguments);
+        return new Raw_Command($command_id, $arguments);
     }
 }

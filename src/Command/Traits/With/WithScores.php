@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,58 +10,49 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits\With;
 
 use Predis\Command\Command;
-
 /**
  * Handles last argument passed into command as WITHSCORES.
  *
  * @mixin Command
  */
-trait WithScores
+trait With_Scores
 {
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $withScores = array_pop($arguments);
-
-        if (is_bool($withScores) && $withScores) {
+        $with_scores = array_pop($arguments);
+        if (is_bool($with_scores) && $with_scores) {
             $arguments[] = 'WITHSCORES';
-        } elseif (!is_bool($withScores)) {
-            $arguments[] = $withScores;
+        } elseif (!is_bool($with_scores)) {
+            $arguments[] = $with_scores;
         }
-
-        parent::setArguments($arguments);
+        parent::set_arguments($arguments);
     }
-
     /**
      * Checks for the presence of the WITHSCORES modifier.
      */
-    private function isWithScoreModifier(): bool
+    private function is_with_score_modifier(): bool
     {
-        $arguments = parent::getArguments();
-        $lastArgument = (!empty($arguments)) ? $arguments[count($arguments) - 1] : null;
-
-        return is_string($lastArgument) && strtoupper($lastArgument) === 'WITHSCORES';
+        $arguments = parent::get_arguments();
+        $last_argument = !empty($arguments) ? $arguments[count($arguments) - 1] : null;
+        return is_string($last_argument) && strtoupper($last_argument) === 'WITHSCORES';
     }
-
-    public function parseResponse(array $data): array
+    public function parse_response(array $data): array
     {
-        if ($this->isWithScoreModifier()) {
+        if ($this->is_with_score_modifier()) {
             $result = [];
-
-            for ($i = 0, $iMax = count($data); $i < $iMax; ++$i) {
+            for ($i = 0, $i_max = count($data); $i < $i_max; ++$i) {
                 if (is_array($data[$i])) {
-                    $result[$data[$i][0]] = $data[$i][1]; // Relay
+                    $result[$data[$i][0]] = $data[$i][1];
+                    // Relay
                 } elseif (array_key_exists($i + 1, $data)) {
                     $result[$data[$i]] = $data[++$i];
                 }
             }
-
             return $result;
         }
-
         return $data;
     }
 }

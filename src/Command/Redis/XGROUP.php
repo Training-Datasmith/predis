@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,72 +10,57 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/?name=xgroup
  *
  * Container command corresponds to any XGROUP *.
  * Represents any XGROUP command with subcommand as first argument.
  */
-class XGROUP extends RedisCommand
+class XGROUP extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XGROUP';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         switch ($arguments[0]) {
             case 'CREATE':
-                $this->setCreateArguments($arguments);
-
+                $this->set_create_arguments($arguments);
                 return;
-
             case 'SETID':
-                $this->setSetIdArguments($arguments);
-
+                $this->set_set_id_arguments($arguments);
                 return;
-
             default:
-                parent::setArguments($arguments);
+                parent::set_arguments($arguments);
         }
     }
-
-    private function setCreateArguments(array $arguments): void
+    private function set_create_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0], $arguments[1], $arguments[2], $arguments[3]];
-
+        $processed_arguments = [$arguments[0], $arguments[1], $arguments[2], $arguments[3]];
         if (array_key_exists(4, $arguments) && true === $arguments[4]) {
-            $processedArguments[] = 'MKSTREAM';
+            $processed_arguments[] = 'MKSTREAM';
         }
-
         if (array_key_exists(5, $arguments)) {
-            array_push($processedArguments, 'ENTRIESREAD', $arguments[5]);
+            array_push($processed_arguments, 'ENTRIESREAD', $arguments[5]);
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    private function setSetIdArguments(array $arguments): void
+    private function set_set_id_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0], $arguments[1], $arguments[2], $arguments[3]];
-
+        $processed_arguments = [$arguments[0], $arguments[1], $arguments[2], $arguments[3]];
         if (array_key_exists(4, $arguments)) {
-            array_push($processedArguments, 'ENTRIESREAD', $arguments[4]);
+            array_push($processed_arguments, 'ENTRIESREAD', $arguments[4]);
         }
-
-        parent::setArguments($processedArguments);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $arguments = $this->getArguments();
+        $arguments = $this->get_arguments();
         $arguments[1] = $prefix . $arguments[1];
-        $this->setRawArguments($arguments);
+        $this->set_raw_arguments($arguments);
     }
 }

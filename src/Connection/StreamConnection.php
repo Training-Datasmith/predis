@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,25 +10,23 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
-use Predis\Command\CommandInterface;
-use Predis\Command\RawCommand;
-use Predis\CommunicationException;
-use Predis\Connection\Resource\Exception\StreamInitException;
-use Predis\Connection\Resource\StreamFactory;
-use Predis\Connection\Resource\StreamFactoryInterface;
-use Predis\Consumer\Push\PushNotificationException;
-use Predis\Consumer\Push\PushResponse;
+use Predis\Command\Command_Interface;
+use Predis\Command\Raw_Command;
+use Predis\Communication_Exception;
+use Predis\Connection\Resource\Exception\Stream_Init_Exception;
+use Predis\Connection\Resource\Stream_Factory;
+use Predis\Connection\Resource\Stream_Factory_Interface;
+use Predis\Consumer\Push\Push_Notification_Exception;
+use Predis\Consumer\Push\Push_Response;
 use Predis\Protocol\Parser\Strategy\Resp2Strategy;
 use Predis\Protocol\Parser\Strategy\Resp3Strategy;
-use Predis\Protocol\Parser\UnexpectedTypeException;
+use Predis\Protocol\Parser\Unexpected_Type_Exception;
 use Predis\Response\Error;
-use Predis\Response\ErrorInterface as ErrorResponseInterface;
-use Psr\Http\Message\StreamInterface;
+use Predis\Response\Error_Interface as ErrorResponseInterface;
+use Psr\Http\Message\Stream_Interface;
 use RuntimeException;
-
 /**
  * Standard connection to Redis servers implemented on top of PHP's streams.
  * The connection parameters supported by this class are:.
@@ -47,19 +44,17 @@ use RuntimeException;
  *
  * @method StreamInterface getResource()
  */
-class StreamConnection extends AbstractConnection
+class Stream_Connection extends Abstract_Connection
 {
     /**
      * @var StreamFactoryInterface
      */
-    protected $streamFactory;
-
-    public function __construct(ParametersInterface $parameters, ?StreamFactoryInterface $factory = null)
+    protected $stream_factory;
+    public function __construct(Parameters_Interface $parameters, ?Stream_Factory_Interface $factory = null)
     {
         parent::__construct($parameters);
-        $this->streamFactory = $factory ?? new StreamFactory();
+        $this->stream_factory = $factory ?? new Stream_Factory();
     }
-
     /**
      * Disconnects from the server and destroys the underlying resource when the
      * garbage collector kicks in only if the connection has not been marked as
@@ -70,39 +65,33 @@ class StreamConnection extends AbstractConnection
         if (isset($this->parameters->persistent) && $this->parameters->persistent) {
             return;
         }
-
         $this->disconnect();
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function createResource(): StreamInterface
+    protected function create_resource(): Stream_Interface
     {
-        return $this->streamFactory->createStream($this->parameters);
+        return $this->stream_factory->create_stream($this->parameters);
     }
-
     /**
      * {@inheritdoc}
      */
     public function connect(): void
     {
-        if (parent::connect() && $this->initCommands) {
-            $responses = $this->sendPipeline($this->initCommands);
-
-            if ($responses[0][0] instanceof ErrorResponseInterface) {
+        if (parent::connect() && $this->init_commands) {
+            $responses = $this->send_pipeline($this->init_commands);
+            if ($responses[0][0] instanceof Error_Response_Interface) {
                 // Error in HELLO command, Redis < 6.0.
                 // We need to handle it separately and re-send other commands.
-                $this->handleOnConnectResponse($responses[0][0], $responses[0][1]);
-                $responses = $this->sendPipeline(array_slice($this->initCommands, 1));
+                $this->handle_on_connect_response($responses[0][0], $responses[0][1]);
+                $responses = $this->send_pipeline(array_slice($this->init_commands, 1));
             }
-
             foreach ($responses as $response) {
-                $this->handleOnConnectResponse($response[0], $response[1]);
+                $this->handle_on_connect_response($response[0], $response[1]);
             }
         }
     }
-
     /**
      * Sends commands to the server as pipeline and returns responses.
      *
@@ -110,59 +99,50 @@ class StreamConnection extends AbstractConnection
      * @return array<int, array>
      * @throws CommunicationException
      */
-    protected function sendPipeline(array $commands): array
+    protected function send_pipeline(array $commands): array
     {
-        $serialisedCommands = '';
-
+        $serialised_commands = '';
         foreach ($commands as $command) {
-            $serialisedCommands .= $command->serializeCommand();
+            $serialised_commands .= $command->serialize_command();
         }
-
-        $this->write($serialisedCommands);
+        $this->write($serialised_commands);
         $responses = [];
-
         foreach ($commands as $command) {
-            $responses[] = [$this->readResponse($command), $command];
+            $responses[] = [$this->read_response($command), $command];
         }
-
         return $responses;
     }
-
     /**
      * {@inheritdoc}
      */
     public function disconnect(): void
     {
-        if ($this->isConnected()) {
-            $this->getResource()->close();
-
+        if ($this->is_connected()) {
+            $this->get_resource()->close();
             parent::disconnect();
         }
     }
-
     /**
      * {@inheritDoc}
      * @throws CommunicationException
      */
     public function write(string $buffer): void
     {
-        $stream = $this->getResource();
-
+        $stream = $this->get_resource();
         while (($length = strlen($buffer)) > 0) {
             try {
                 $written = $stream->write($buffer);
             } catch (RuntimeException $e) {
-                $this->onStreamError($e, 'Error while writing bytes to the server.');
+                $this->on_stream_error($e, 'Error while writing bytes to the server.');
             }
-
-            if ($length === $written) { // @phpstan-ignore-line
+            if ($length === $written) {
+                // @phpstan-ignore-line
                 return;
             }
-
-            $buffer = substr($buffer, $written); // @phpstan-ignore-line
+            $buffer = substr($buffer, $written);
+            // @phpstan-ignore-line
         }
     }
-
     /**
      * {@inheritdoc}
      * @throws PushNotificationException
@@ -170,207 +150,165 @@ class StreamConnection extends AbstractConnection
      */
     public function read()
     {
-        $stream = $this->getResource();
-
+        $stream = $this->get_resource();
         if ($stream->eof()) {
-            $this->onStreamError(new RuntimeException('', 1), 'Stream is already at the end');
+            $this->on_stream_error(new RuntimeException('', 1), 'Stream is already at the end');
         }
-
         try {
             $chunk = $stream->read(-1);
         } catch (RuntimeException $e) {
-            $this->onStreamError($e, 'Error while reading line from the server.');
+            $this->on_stream_error($e, 'Error while reading line from the server.');
         }
-
         try {
-            $parsedData = $this->parserStrategy->parseData($chunk); // @phpstan-ignore-line
-        } catch (UnexpectedTypeException $e) {
-            $this->onProtocolError("Unknown response prefix: '{$e->getType()}'.");
-
+            $parsed_data = $this->parser_strategy->parse_data($chunk);
+            // @phpstan-ignore-line
+        } catch (Unexpected_Type_Exception $e) {
+            $this->on_protocol_error("Unknown response prefix: '{$e->get_type()}'.");
             return;
         }
-
-        if (!is_array($parsedData)) {
-            return $parsedData;
+        if (!is_array($parsed_data)) {
+            return $parsed_data;
         }
-
-        switch ($parsedData['type']) {
+        switch ($parsed_data['type']) {
             case Resp3Strategy::TYPE_PUSH:
                 $data = [];
-
-                for ($i = 0; $i < $parsedData['value']; ++$i) {
+                for ($i = 0; $i < $parsed_data['value']; ++$i) {
                     $data[$i] = $this->read();
                 }
-
-                return new PushResponse($data);
+                return new Push_Response($data);
             case Resp2Strategy::TYPE_ARRAY:
                 $data = [];
-
-                for ($i = 0; $i < $parsedData['value']; ++$i) {
+                for ($i = 0; $i < $parsed_data['value']; ++$i) {
                     $data[$i] = $this->read();
                 }
-
                 return $data;
-
             case Resp2Strategy::TYPE_BULK_STRING:
-                $bulkData = $this->readByChunks($stream, $parsedData['value']);
-
-                return substr($bulkData, 0, -2);
-
+                $bulk_data = $this->read_by_chunks($stream, $parsed_data['value']);
+                return substr($bulk_data, 0, -2);
             case Resp3Strategy::TYPE_VERBATIM_STRING:
-                $bulkData = $this->readByChunks($stream, $parsedData['value']);
-
-                return substr($bulkData, $parsedData['offset'], -2);
-
+                $bulk_data = $this->read_by_chunks($stream, $parsed_data['value']);
+                return substr($bulk_data, $parsed_data['offset'], -2);
             case Resp3Strategy::TYPE_BLOB_ERROR:
-                $errorMessage = $this->readByChunks($stream, $parsedData['value']);
-
-                return new Error(substr($errorMessage, 0, -2));
-
+                $error_message = $this->read_by_chunks($stream, $parsed_data['value']);
+                return new Error(substr($error_message, 0, -2));
             case Resp3Strategy::TYPE_MAP:
                 $data = [];
-
-                for ($i = 0; $i < $parsedData['value']; ++$i) {
+                for ($i = 0; $i < $parsed_data['value']; ++$i) {
                     $key = $this->read();
                     $data[$key] = $this->read();
                 }
-
                 return $data;
-
             case Resp3Strategy::TYPE_SET:
                 $data = [];
-
-                for ($i = 0; $i < $parsedData['value']; ++$i) {
+                for ($i = 0; $i < $parsed_data['value']; ++$i) {
                     $element = $this->read();
-
                     if (!in_array($element, $data, true)) {
                         $data[] = $element;
                     }
                 }
-
                 return $data;
         }
-
-        return $parsedData;
+        return $parsed_data;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function writeRequest(CommandInterface $command): void
+    public function write_request(Command_Interface $command): void
     {
-        $buffer = $command->serializeCommand();
+        $buffer = $command->serialize_command();
         $this->write($buffer);
     }
-
     /**
      * {@inheritDoc}
      */
-    public function hasDataToRead(): bool
+    public function has_data_to_read(): bool
     {
-        return !$this->getResource()->eof();
+        return !$this->get_resource()->eof();
     }
-
     /**
      * Reads given resource split on chunks with given size.
      *
      * @throws CommunicationException
      */
-    private function readByChunks(StreamInterface $stream, int $chunkSize): string
+    private function read_by_chunks(Stream_Interface $stream, int $chunk_size): string
     {
         $string = '';
-        $bytesLeft = ($chunkSize += 2);
-
+        $bytes_left = $chunk_size += 2;
         do {
             try {
-                $chunk = $stream->read(min($bytesLeft, 4096));
+                $chunk = $stream->read(min($bytes_left, 4096));
             } catch (RuntimeException $e) {
-                $this->onStreamError($e, 'Error while reading bytes from the server.');
+                $this->on_stream_error($e, 'Error while reading bytes from the server.');
             }
-
-            $string .= $chunk; // @phpstan-ignore-line
-            $bytesLeft = $chunkSize - strlen($string);
-        } while ($bytesLeft > 0);
-
+            $string .= $chunk;
+            // @phpstan-ignore-line
+            $bytes_left = $chunk_size - strlen($string);
+        } while ($bytes_left > 0);
         return $string;
     }
-
     /**
      * Handle response from on-connect command.
      *
      * @param                         $response
      * @throws CommunicationException
      */
-    private function handleOnConnectResponse($response, CommandInterface $command): void
+    private function handle_on_connect_response($response, Command_Interface $command): void
     {
-        if ($response instanceof ErrorResponseInterface) {
-            $this->handleError($response, $command);
+        if ($response instanceof Error_Response_Interface) {
+            $this->handle_error($response, $command);
         }
-
-        if ($command->getId() === 'HELLO' && is_array($response)) {
+        if ($command->get_id() === 'HELLO' && is_array($response)) {
             // Searching for the CLIENT ID in RESP2 connection tricky because no dictionaries.
-            if (
-                $this->getParameters()->protocol == 2
-                && false !== $key = array_search('id', $response, true)
-            ) {
-                $this->clientId = $response[$key + 1];
-            } elseif ($this->getParameters()->protocol == 3) {
-                $this->clientId = $response['id'];
+            if ($this->get_parameters()->protocol == 2 && false !== $key = array_search('id', $response, true)) {
+                $this->client_id = $response[$key + 1];
+            } elseif ($this->get_parameters()->protocol == 3) {
+                $this->client_id = $response['id'];
             }
         }
     }
-
     /**
      * Handle server errors.
      *
      * @throws CommunicationException
      */
-    private function handleError(ErrorResponseInterface $error, CommandInterface $failedCommand): void
+    private function handle_error(Error_Response_Interface $error, Command_Interface $failed_command): void
     {
-        if ($failedCommand->getId() === 'CLIENT') {
+        if ($failed_command->get_id() === 'CLIENT') {
             // Do nothing on CLIENT SETINFO command failure
             return;
         }
-
-        if ($failedCommand->getId() === 'HELLO') {
-            if (in_array('AUTH', $failedCommand->getArguments(), true)) {
-                $parameters = $this->getParameters();
-
+        if ($failed_command->get_id() === 'HELLO') {
+            if (in_array('AUTH', $failed_command->get_arguments(), true)) {
+                $parameters = $this->get_parameters();
                 // If Redis <= 6.0
-                $auth = new RawCommand('AUTH', [$parameters->password]);
-                $response = $this->executeCommand($auth);
-
-                if ($response instanceof ErrorResponseInterface) {
-                    $this->onConnectionError("Failed: {$response->getMessage()}");
+                $auth = new Raw_Command('AUTH', [$parameters->password]);
+                $response = $this->execute_command($auth);
+                if ($response instanceof Error_Response_Interface) {
+                    $this->on_connection_error("Failed: {$response->get_message()}");
                 }
             }
-
-            $setName = new RawCommand('CLIENT', ['SETNAME', 'predis']);
-            $response = $this->executeCommand($setName);
-            $this->handleOnConnectResponse($response, $setName);
-
+            $set_name = new Raw_Command('CLIENT', ['SETNAME', 'predis']);
+            $response = $this->execute_command($set_name);
+            $this->handle_on_connect_response($response, $set_name);
             return;
         }
-
-        $this->onConnectionError("Failed: {$error->getMessage()}");
+        $this->on_connection_error("Failed: {$error->get_message()}");
     }
-
     /**
      * Handles stream-related exceptions.
      *
      * @param  RuntimeException                        $e
      * @throws RuntimeException|CommunicationException
      */
-    protected function onStreamError($e, ?string $message = null)
+    protected function on_stream_error($e, ?string $message = null)
     {
         // Code = 1 represents issues related to read/write operation, connection broken.
-        if ($e->getCode() === 1) {
-            $this->onConnectionError($message);
-        } elseif ($e->getCode() === 2) {
+        if ($e->get_code() === 1) {
+            $this->on_connection_error($message);
+        } elseif ($e->get_code() === 2) {
             // Operation has been timed out, connection not necessarily broken.
-            $this->onTimeoutError();
+            $this->on_timeout_error();
         }
-
         throw $e;
     }
 }

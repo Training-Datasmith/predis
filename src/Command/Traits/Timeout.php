@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,45 +10,30 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use UnexpectedValueException;
-
 trait Timeout
 {
-    private static $timeoutModifier = 'TIMEOUT';
-
-    public function setArguments(array $arguments): void
+    private static $timeout_modifier = 'TIMEOUT';
+    public function set_arguments(array $arguments): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$timeoutArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$timeout_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        if ($arguments[static::$timeoutArgumentPositionOffset] === -1) {
-            array_splice($arguments, static::$timeoutArgumentPositionOffset, 1, [false]);
-            parent::setArguments($arguments);
-
+        if ($arguments[static::$timeout_argument_position_offset] === -1) {
+            array_splice($arguments, static::$timeout_argument_position_offset, 1, [false]);
+            parent::set_arguments($arguments);
             return;
         }
-
-        if ($arguments[static::$timeoutArgumentPositionOffset] < 1) {
+        if ($arguments[static::$timeout_argument_position_offset] < 1) {
             throw new UnexpectedValueException('Wrong timeout argument value or position offset');
         }
-
-        $argument = $arguments[static::$timeoutArgumentPositionOffset];
-        $argumentsBefore = array_slice($arguments, 0, static::$timeoutArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$timeoutArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [self::$timeoutModifier],
-            [$argument],
-            $argumentsAfter
-        ));
+        $argument = $arguments[static::$timeout_argument_position_offset];
+        $arguments_before = array_slice($arguments, 0, static::$timeout_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$timeout_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [self::$timeout_modifier], [$argument], $arguments_after));
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,23 +10,19 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Hybrid_Search\Vector_Search;
 
-namespace Predis\Command\Argument\Search\HybridSearch\VectorSearch;
-
-use ValueError;
-
-class RangeVectorSearchConfig extends BaseVectorSearchConfig
+use Value_Error;
+class Range_Vector_Search_Config extends Base_Vector_Search_Config
 {
     /**
      * @var int
      */
     protected $radius;
-
     /**
      * @var float
      */
     protected $epsilon;
-
     /**
      * The search radius/threshold. Finds all vectors within this distance.
      *
@@ -36,54 +31,41 @@ class RangeVectorSearchConfig extends BaseVectorSearchConfig
     public function radius(int $radius): self
     {
         $this->radius = $radius;
-
         return $this;
     }
-
     /**
      * @return $this
      */
     public function epsilon(float $epsilon): self
     {
         $this->epsilon = $epsilon;
-
         return $this;
     }
-
-    public function toArray(): array
+    public function to_array(): array
     {
         if (!$this->vector) {
-            throw new ValueError('Vector configuration not specified.');
+            throw new Value_Error('Vector configuration not specified.');
         }
-
         $this->arguments = array_merge($this->arguments, $this->vector);
-
         if ($this->radius || $this->epsilon) {
             $this->arguments[] = 'RANGE';
         }
-
         $tokens = [];
-
         if ($this->radius !== null) {
             array_push($tokens, 'RADIUS', $this->radius);
         }
-
         if ($this->epsilon !== null) {
             array_push($tokens, 'EPSILON', $this->epsilon);
         }
-
         if (!empty($tokens)) {
             array_push($this->arguments, count($tokens), ...$tokens);
         }
-
         if ($this->filter) {
             $this->arguments = array_merge($this->arguments, $this->filter);
         }
-
         if ($this->as) {
             array_push($this->arguments, ...$this->as);
         }
-
         return $this->arguments;
     }
 }

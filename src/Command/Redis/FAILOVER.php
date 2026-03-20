@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,40 +10,33 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use Predis\Command\Traits\Timeout;
-use Predis\Command\Traits\To\ServerTo;
-
-class FAILOVER extends RedisCommand
+use Predis\Command\Traits\To\Server_To;
+class FAILOVER extends Redis_Command
 {
-    use ServerTo {
-        ServerTo::setArguments as setTo;
+    use Server_To {
+        Server_To::setArguments as setTo;
     }
     use Timeout {
         Timeout::setArguments as setTimeout;
     }
-
-    protected static $toArgumentPositionOffset = 0;
-    protected static $timeoutArgumentPositionOffset = 2;
-
-    public function getId(): string
+    protected static $to_argument_position_offset = 0;
+    protected static $timeout_argument_position_offset = 2;
+    public function get_id(): string
     {
         return 'FAILOVER';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if (array_key_exists(1, $arguments) && false !== $arguments[1]) {
             $arguments[1] = 'ABORT';
         }
-
-        $this->setTimeout($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setTo($arguments);
-        $this->filterArguments();
+        $this->set_timeout($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_to($arguments);
+        $this->filter_arguments();
     }
 }

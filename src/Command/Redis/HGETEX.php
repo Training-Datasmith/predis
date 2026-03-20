@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,13 +10,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
 use UnexpectedValueException;
-
-class HGETEX extends RedisCommand
+class HGETEX extends Redis_Command
 {
     public const NULL = '';
     public const EX = 'ex';
@@ -25,59 +22,42 @@ class HGETEX extends RedisCommand
     public const EXAT = 'exat';
     public const PXAT = 'pxat';
     public const PERSIST = 'persist';
-
     /**
      * @var string[]
      */
-    private static $modifierEnum = [
-        self::EX => 'EX',
-        self::PX => 'PX',
-        self::EXAT => 'EXAT',
-        self::PXAT => 'PXAT',
-        self::PERSIST => 'PERSIST',
-    ];
-
-    public function getId(): string
+    private static $modifier_enum = [self::EX => 'EX', self::PX => 'PX', self::EXAT => 'EXAT', self::PXAT => 'PXAT', self::PERSIST => 'PERSIST'];
+    public function get_id(): string
     {
         return 'HGETEX';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [$arguments[0]];
-
+        $processed_arguments = [$arguments[0]];
         // Only required arguments
         if (!array_key_exists(2, $arguments) || $arguments[2] == '') {
-            array_push($processedArguments, 'FIELDS', count($arguments[1]));
-            $processedArguments = array_merge($processedArguments, $arguments[1]);
-            parent::setArguments($processedArguments);
-
+            array_push($processed_arguments, 'FIELDS', count($arguments[1]));
+            $processed_arguments = array_merge($processed_arguments, $arguments[1]);
+            parent::set_arguments($processed_arguments);
             return;
         }
-
-        if (!in_array(strtoupper($arguments[2]), self::$modifierEnum)) {
-            $enumValues = implode(', ', array_keys(self::$modifierEnum));
-            throw new UnexpectedValueException("Modifier argument accepts only: {$enumValues} values");
+        if (!in_array(strtoupper($arguments[2]), self::$modifier_enum)) {
+            $enum_values = implode(', ', array_keys(self::$modifier_enum));
+            throw new UnexpectedValueException("Modifier argument accepts only: {$enum_values} values");
         }
-
         // PERSIST requires no additional value
-        if (strtoupper($arguments[2]) === self::$modifierEnum['persist']) {
-            $processedArguments[] = self::$modifierEnum['persist'];
-            array_push($processedArguments, 'FIELDS', count($arguments[1]));
-            $processedArguments = array_merge($processedArguments, $arguments[1]);
-            parent::setArguments($processedArguments);
-
+        if (strtoupper($arguments[2]) === self::$modifier_enum['persist']) {
+            $processed_arguments[] = self::$modifier_enum['persist'];
+            array_push($processed_arguments, 'FIELDS', count($arguments[1]));
+            $processed_arguments = array_merge($processed_arguments, $arguments[1]);
+            parent::set_arguments($processed_arguments);
             return;
         }
-
         if (!array_key_exists(3, $arguments) || !is_int($arguments[3])) {
             throw new UnexpectedValueException('Modifier value is missing or incorrect type');
         }
-
         // Order matters so FIELDS should be at the end
-        array_push($processedArguments, self::$modifierEnum[strtolower($arguments[2])], $arguments[3], 'FIELDS', count($arguments[1]));
-        $processedArguments = array_merge($processedArguments, $arguments[1]);
-
-        parent::setArguments($processedArguments);
+        array_push($processed_arguments, self::$modifier_enum[strtolower($arguments[2])], $arguments[3], 'FIELDS', count($arguments[1]));
+        $processed_arguments = array_merge($processed_arguments, $arguments[1]);
+        parent::set_arguments($processed_arguments);
     }
 }

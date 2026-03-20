@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,63 +10,40 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
 trait Count
 {
-    private $countModifier = 'COUNT';
-    private $anyModifier = 'ANY';
-
-    public function setArguments(array $arguments, bool $any = false): void
+    private $count_modifier = 'COUNT';
+    private $any_modifier = 'ANY';
+    public function set_arguments(array $arguments, bool $any = false): void
     {
-        $argumentsLength = count($arguments);
-
-        if (static::$countArgumentPositionOffset >= $argumentsLength) {
-            parent::setArguments($arguments);
-
+        $arguments_length = count($arguments);
+        if (static::$count_argument_position_offset >= $arguments_length) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        if ($arguments[static::$countArgumentPositionOffset] === -1) {
-            array_splice($arguments, static::$countArgumentPositionOffset, 1, [false]);
-            parent::setArguments($arguments);
-
+        if ($arguments[static::$count_argument_position_offset] === -1) {
+            array_splice($arguments, static::$count_argument_position_offset, 1, [false]);
+            parent::set_arguments($arguments);
             return;
         }
-
-        if ($arguments[static::$countArgumentPositionOffset] < 1) {
+        if ($arguments[static::$count_argument_position_offset] < 1) {
             throw new UnexpectedValueException('Wrong count argument value or position offset');
         }
-
-        $countArgument = $arguments[static::$countArgumentPositionOffset];
-        $argumentsBefore = array_slice($arguments, 0, static::$countArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$countArgumentPositionOffset + 2);
-
+        $count_argument = $arguments[static::$count_argument_position_offset];
+        $arguments_before = array_slice($arguments, 0, static::$count_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$count_argument_position_offset + 2);
         if (!$any) {
-            $argumentsAfter = array_slice($arguments, static::$countArgumentPositionOffset + 1);
-            parent::setArguments(array_merge(
-                $argumentsBefore,
-                [$this->countModifier],
-                [$countArgument],
-                $argumentsAfter
-            ));
-
+            $arguments_after = array_slice($arguments, static::$count_argument_position_offset + 1);
+            parent::set_arguments(array_merge($arguments_before, [$this->count_modifier], [$count_argument], $arguments_after));
             return;
         }
-
-        parent::setArguments(array_merge(
-            $argumentsBefore,
-            [$this->countModifier],
-            [$countArgument],
-            [$this->anyModifier],
-            $argumentsAfter
-        ));
+        parent::set_arguments(array_merge($arguments_before, [$this->count_modifier], [$count_argument], [$this->any_modifier], $arguments_after));
     }
 }

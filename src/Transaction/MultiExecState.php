@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,27 +10,28 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Transaction;
 
 /**
  * Utility class used to track the state of a MULTI / EXEC transaction.
  */
-class MultiExecState
+class Multi_Exec_State
 {
-    public const INITIALIZED = 1;    // 0b00001
-    public const INSIDEBLOCK = 2;    // 0b00010
-    public const DISCARDED = 4;    // 0b00100
-    public const CAS = 8;    // 0b01000
-    public const WATCH = 16;   // 0b10000
-
+    public const INITIALIZED = 1;
+    // 0b00001
+    public const INSIDEBLOCK = 2;
+    // 0b00010
+    public const DISCARDED = 4;
+    // 0b00100
+    public const CAS = 8;
+    // 0b01000
+    public const WATCH = 16;
+    // 0b10000
     private $flags;
-
     public function __construct()
     {
         $this->flags = 0;
     }
-
     /**
      * Sets the internal state flags.
      *
@@ -41,7 +41,6 @@ class MultiExecState
     {
         $this->flags = $flags;
     }
-
     /**
      * Gets the internal state flags.
      *
@@ -51,7 +50,6 @@ class MultiExecState
     {
         return $this->flags;
     }
-
     /**
      * Sets one or more flags.
      *
@@ -61,7 +59,6 @@ class MultiExecState
     {
         $this->flags |= $flags;
     }
-
     /**
      * Resets one or more flags.
      *
@@ -71,7 +68,6 @@ class MultiExecState
     {
         $this->flags &= ~$flags;
     }
-
     /**
      * Returns if the specified flag or set of flags is set.
      *
@@ -81,7 +77,6 @@ class MultiExecState
     {
         return ($this->flags & $flags) === $flags;
     }
-
     /**
      * Resets the state of a transaction.
      */
@@ -89,69 +84,62 @@ class MultiExecState
     {
         $this->flags = 0;
     }
-
     /**
      * Returns the state of the RESET flag.
      */
-    public function isReset(): bool
+    public function is_reset(): bool
     {
         return $this->flags === 0;
     }
-
     /**
      * Returns the state of the INITIALIZED flag.
      *
      * @return bool
      */
-    public function isInitialized()
+    public function is_initialized()
     {
         return $this->check(self::INITIALIZED);
     }
-
     /**
      * Returns the state of the INSIDEBLOCK flag.
      *
      * @return bool
      */
-    public function isExecuting()
+    public function is_executing()
     {
         return $this->check(self::INSIDEBLOCK);
     }
-
     /**
      * Returns the state of the CAS flag.
      *
      * @return bool
      */
-    public function isCAS()
+    public function is_cas()
     {
         return $this->check(self::CAS);
     }
-
     /**
      * Returns if WATCH is allowed in the current state.
      */
-    public function isWatchAllowed(): bool
+    public function is_watch_allowed(): bool
     {
         return $this->check(self::INITIALIZED) && !$this->check(self::CAS);
     }
-
     /**
      * Returns the state of the WATCH flag.
      *
      * @return bool
      */
-    public function isWatching()
+    public function is_watching()
     {
         return $this->check(self::WATCH);
     }
-
     /**
      * Returns the state of the DISCARDED flag.
      *
      * @return bool
      */
-    public function isDiscarded()
+    public function is_discarded()
     {
         return $this->check(self::DISCARDED);
     }

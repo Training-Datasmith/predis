@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,39 +10,34 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Cluster\Distributor;
 
-use Predis\Cluster\Hash\HashGeneratorInterface;
-
+use Predis\Cluster\Hash\Hash_Generator_Interface;
 /**
  * This class implements an hashring-based distributor that uses the same
  * algorithm of memcached to distribute keys in a cluster using client-side
  * sharding.
  * @author Lorenzo Castelli <lcastelli@gmail.com>
  */
-class HashRing implements DistributorInterface, HashGeneratorInterface
+class Hash_Ring implements Distributor_Interface, Hash_Generator_Interface
 {
     public const DEFAULT_REPLICAS = 128;
     public const DEFAULT_WEIGHT = 100;
-
     private $ring;
-    private $ringKeys;
-    private $ringKeysCount;
+    private $ring_keys;
+    private $ring_keys_count;
     private $replicas;
-    private $nodeHashCallback;
+    private $node_hash_callback;
     private $nodes = [];
-
     /**
      * @param int   $replicas         Number of replicas in the ring.
      * @param mixed $nodeHashCallback Callback returning a string used to calculate the hash of nodes.
      */
-    public function __construct($replicas = self::DEFAULT_REPLICAS, $nodeHashCallback = null)
+    public function __construct($replicas = self::DEFAULT_REPLICAS, $node_hash_callback = null)
     {
         $this->replicas = $replicas;
-        $this->nodeHashCallback = $nodeHashCallback;
+        $this->node_hash_callback = $node_hash_callback;
     }
-
     /**
      * Adds a node to the ring with an optional weight.
      *
@@ -54,14 +48,9 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
     {
         // In case of collisions in the hashes of the nodes, the node added
         // last wins, thus the order in which nodes are added is significant.
-        $this->nodes[] = [
-            'object' => $node,
-            'weight' => (int) $weight ?: $this::DEFAULT_WEIGHT,
-        ];
-
+        $this->nodes[] = ['object' => $node, 'weight' => (int) $weight ?: $this::DEFAULT_WEIGHT];
         $this->reset();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -75,75 +64,59 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
             if ($this->nodes[$i]['object'] === $node) {
                 array_splice($this->nodes, $i, 1);
                 $this->reset();
-
                 break;
             }
         }
     }
-
     /**
      * Resets the distributor.
      */
     private function reset(): void
     {
-        unset(
-            $this->ring,
-            $this->ringKeys,
-            $this->ringKeysCount
-        );
+        unset($this->ring, $this->ring_keys, $this->ring_keys_count);
     }
-
     /**
      * Returns the initialization status of the distributor.
      */
-    private function isInitialized(): bool
+    private function is_initialized(): bool
     {
-        return isset($this->ringKeys);
+        return isset($this->ring_keys);
     }
-
     /**
      * Calculates the total weight of all the nodes in the distributor.
      *
      * @return int
      */
-    private function computeTotalWeight()
+    private function compute_total_weight()
     {
-        $totalWeight = 0;
-
+        $total_weight = 0;
         foreach ($this->nodes as $node) {
-            $totalWeight += $node['weight'];
+            $total_weight += $node['weight'];
         }
-
-        return $totalWeight;
+        return $total_weight;
     }
-
     /**
      * Initializes the distributor.
      */
     private function initialize(): void
     {
-        if ($this->isInitialized()) {
+        if ($this->is_initialized()) {
             return;
         }
-
         if (!$this->nodes) {
-            throw new EmptyRingException('Cannot initialize an empty hashring.');
+            throw new Empty_Ring_Exception('Cannot initialize an empty hashring.');
         }
-
         $this->ring = [];
-        $totalWeight = $this->computeTotalWeight();
-        $nodesCount = count($this->nodes);
-
+        $total_weight = $this->compute_total_weight();
+        $nodes_count = count($this->nodes);
         foreach ($this->nodes as $node) {
-            $weightRatio = $node['weight'] / $totalWeight;
-            $this->addNodeToRing($this->ring, $node, $nodesCount, $this->replicas, $weightRatio);
+            $weight_ratio = $node['weight'] / $total_weight;
+            $this->add_node_to_ring($this->ring, $node, $nodes_count, $this->replicas, $weight_ratio);
         }
-
         ksort($this->ring, SORT_NUMERIC);
-        $this->ringKeys = array_keys($this->ring);
-        $this->ringKeysCount = count($this->ringKeys);
+        $this->ring_keys = array_keys($this->ring);
+        $this->ring_keys_count = count($this->ring_keys);
     }
-
     /**
      * Implements the logic needed to add a node to the hashring.
      *
@@ -153,30 +126,26 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
      * @param int   $replicas    Number of replicas in the ring.
      * @param float $weightRatio Weight ratio for the node.
      */
-    protected function addNodeToRing(array &$ring, array $node, $totalNodes, $replicas, $weightRatio)
+    protected function add_node_to_ring(array &$ring, array $node, $total_nodes, $replicas, $weight_ratio)
     {
-        $nodeObject = $node['object'];
-        $nodeHash = $this->getNodeHash($nodeObject);
-        $replicas = (int) round($weightRatio * $totalNodes * $replicas);
-
+        $node_object = $node['object'];
+        $node_hash = $this->get_node_hash($node_object);
+        $replicas = (int) round($weight_ratio * $total_nodes * $replicas);
         for ($i = 0; $i < $replicas; ++$i) {
-            $key = $this->hash("$nodeHash:$i");
-            $ring[$key] = $nodeObject;
+            $key = $this->hash("{$node_hash}:{$i}");
+            $ring[$key] = $node_object;
         }
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function getNodeHash($nodeObject)
+    protected function get_node_hash($node_object)
     {
-        if (!isset($this->nodeHashCallback)) {
-            return (string) $nodeObject;
+        if (!isset($this->node_hash_callback)) {
+            return (string) $node_object;
         }
-
-        return call_user_func($this->nodeHashCallback, $nodeObject);
+        return call_user_func($this->node_hash_callback, $node_object);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -184,42 +153,35 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
     {
         return crc32($value);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getByHash($hash)
+    public function get_by_hash($hash)
     {
-        return $this->ring[$this->getSlot($hash)];
+        return $this->ring[$this->get_slot($hash)];
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getBySlot($slot)
+    public function get_by_slot($slot)
     {
         $this->initialize();
-
         if (isset($this->ring[$slot])) {
             return $this->ring[$slot];
         }
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getSlot($hash)
+    public function get_slot($hash)
     {
         $this->initialize();
-
-        $ringKeys = $this->ringKeys;
-        $upper = $this->ringKeysCount - 1;
+        $ring_keys = $this->ring_keys;
+        $upper = $this->ring_keys_count - 1;
         $lower = 0;
-
         while ($lower <= $upper) {
-            $index = ($lower + $upper) >> 1;
-            $item = $ringKeys[$index];
-
+            $index = $lower + $upper >> 1;
+            $item = $ring_keys[$index];
             if ($item > $hash) {
                 $upper = $index - 1;
             } elseif ($item < $hash) {
@@ -228,20 +190,16 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
                 return $item;
             }
         }
-
-        return $ringKeys[$this->wrapAroundStrategy($upper, $lower, $this->ringKeysCount)];
+        return $ring_keys[$this->wrap_around_strategy($upper, $lower, $this->ring_keys_count)];
     }
-
     /**
      * {@inheritdoc}
      */
     public function get($value)
     {
         $hash = $this->hash($value);
-
-        return $this->getByHash($hash);
+        return $this->get_by_hash($hash);
     }
-
     /**
      * Implements a strategy to deal with wrap-around errors during binary searches.
      *
@@ -251,17 +209,16 @@ class HashRing implements DistributorInterface, HashGeneratorInterface
      *
      * @return int
      */
-    protected function wrapAroundStrategy($upper, $lower, $ringKeysCount)
+    protected function wrap_around_strategy($upper, $lower, $ring_keys_count)
     {
         // Binary search for the last item in ringkeys with a value less or
         // equal to the key. If no such item exists, return the last item.
-        return $upper >= 0 ? $upper : $ringKeysCount - 1;
+        return $upper >= 0 ? $upper : $ring_keys_count - 1;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function getHashGenerator(): self
+    public function get_hash_generator(): self
     {
         return $this;
     }

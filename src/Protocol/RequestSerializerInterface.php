@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,15 +10,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Protocol;
 
-use Predis\Command\CommandInterface;
-
+use Predis\Command\Command_Interface;
 /**
  * Defines a pluggable serializer for Redis commands.
  */
-interface RequestSerializerInterface
+interface Request_Serializer_Interface
 {
     /**
      * Serializes a Redis command.
@@ -28,5 +25,5 @@ interface RequestSerializerInterface
      *
      * @return string
      */
-    public function serialize(CommandInterface $command);
+    public function serialize(Command_Interface $command);
 }

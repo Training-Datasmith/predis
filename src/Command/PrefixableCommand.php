@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,88 +10,73 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command;
 
-abstract class PrefixableCommand extends Command implements PrefixableCommandInterface
+abstract class Prefixable_Command extends Command implements Prefixable_Command_Interface
 {
     /**
      * {@inheritDoc}
      */
-    abstract public function getId();
-
+    abstract public function get_id();
     /**
      * {@inheritDoc}
      */
-    abstract public function prefixKeys($prefix);
-
+    abstract public function prefix_keys($prefix);
     /**
      * Applies prefix for all arguments.
      */
-    public function applyPrefixForAllArguments(string $prefix): void
+    public function apply_prefix_for_all_arguments(string $prefix): void
     {
-        $this->setRawArguments(
-            array_map(static function (string $key) use ($prefix): string {
-                return $prefix . $key;
-            }, $this->getArguments())
-        );
+        $this->set_raw_arguments(array_map(static function (string $key) use ($prefix): string {
+            return $prefix . $key;
+        }, $this->get_arguments()));
     }
-
     /**
      * Applies prefix for first argument.
      */
-    public function applyPrefixForFirstArgument(string $prefix): void
+    public function apply_prefix_for_first_argument(string $prefix): void
     {
-        $arguments = $this->getArguments();
+        $arguments = $this->get_arguments();
         $arguments[0] = $prefix . $arguments[0];
-        $this->setRawArguments($arguments);
+        $this->set_raw_arguments($arguments);
     }
-
     /**
      * Applies prefix for interleaved arguments.
      */
-    public function applyPrefixForInterleavedArgument(string $prefix): void
+    public function apply_prefix_for_interleaved_argument(string $prefix): void
     {
-        if ($arguments = $this->getArguments()) {
+        if ($arguments = $this->get_arguments()) {
             $length = count($arguments);
-
             for ($i = 0; $i < $length; $i += 2) {
-                $arguments[$i] = "$prefix{$arguments[$i]}";
+                $arguments[$i] = "{$prefix}{$arguments[$i]}";
             }
-
-            $this->setRawArguments($arguments);
+            $this->set_raw_arguments($arguments);
         }
     }
-
     /**
      * Applies prefix for all keys except last one.
      */
-    public function applyPrefixSkippingLastArgument(string $prefix): void
+    public function apply_prefix_skipping_last_argument(string $prefix): void
     {
-        if ($arguments = $this->getArguments()) {
+        if ($arguments = $this->get_arguments()) {
             $length = count($arguments);
-
             for ($i = 0; $i < $length - 1; ++$i) {
-                $arguments[$i] = "$prefix{$arguments[$i]}";
+                $arguments[$i] = "{$prefix}{$arguments[$i]}";
             }
-
-            $this->setRawArguments($arguments);
+            $this->set_raw_arguments($arguments);
         }
     }
-
     /**
      * Applies prefix for all keys except first one.
      */
-    public function applyPrefixSkippingFirstArgument(string $prefix): void
+    public function apply_prefix_skipping_first_argument(string $prefix): void
     {
-        if ($arguments = $this->getArguments()) {
+        if ($arguments = $this->get_arguments()) {
             $length = count($arguments);
-
             for ($i = 1; $i < $length; ++$i) {
-                $arguments[$i] = "$prefix{$arguments[$i]}";
+                $arguments[$i] = "{$prefix}{$arguments[$i]}";
             }
-
-            $this->setRawArguments($arguments);
+            $this->set_raw_arguments($arguments);
         }
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,20 +10,18 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis\Json;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
+use Predis\Command\Prefixable_Command as RedisCommand;
 use Predis\Command\Traits\Json\Indent;
 use Predis\Command\Traits\Json\Newline;
 use Predis\Command\Traits\Json\Space;
-
 /**
  * @see https://redis.io/commands/json.get/
  *
  * Return the value at path in JSON serialized form
  */
-class JSONGET extends RedisCommand
+class JSONGET extends Redis_Command
 {
     use Indent {
         Indent::setArguments as setIndent;
@@ -35,30 +32,24 @@ class JSONGET extends RedisCommand
     use Space {
         Space::setArguments as setSpace;
     }
-
-    protected static $indentArgumentPositionOffset = 1;
-    protected static $newlineArgumentPositionOffset = 2;
-    protected static $spaceArgumentPositionOffset = 3;
-
-    public function getId(): string
+    protected static $indent_argument_position_offset = 1;
+    protected static $newline_argument_position_offset = 2;
+    protected static $space_argument_position_offset = 3;
+    public function get_id(): string
     {
         return 'JSON.GET';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $this->setSpace($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setNewline($arguments);
-        $arguments = $this->getArguments();
-
-        $this->setIndent($arguments);
-        $this->filterArguments();
+        $this->set_space($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_newline($arguments);
+        $arguments = $this->get_arguments();
+        $this->set_indent($arguments);
+        $this->filter_arguments();
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

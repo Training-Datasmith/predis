@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,8 +10,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Predis\Command\Redis\TimeSeries;
+namespace Predis\Command\Redis\Time_Series;
 
 /**
  * @see https://redis.io/commands/ts.revrange/
@@ -21,7 +19,7 @@ namespace Predis\Command\Redis\TimeSeries;
  */
 class TSREVRANGE extends TSRANGE
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'TS.REVRANGE';
     }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,21 +10,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Argument\Search\Schema_Fields;
 
-namespace Predis\Command\Argument\Search\SchemaFields;
-
-class NumericField extends AbstractField
+class Numeric_Field extends Abstract_Field
 {
     /**
      * @param bool|string $sortable
      */
-    public function __construct(
-        string $identifier,
-        string $alias = '',
-        $sortable = self::NOT_SORTABLE,
-        bool $noIndex = false,
-        bool $allowsMissing = false
-    ) {
-        $this->setCommonOptions('NUMERIC', $identifier, $alias, $sortable, $noIndex, $allowsMissing);
+    public function __construct(string $identifier, string $alias = '', $sortable = self::NOT_SORTABLE, bool $no_index = false, bool $allows_missing = false)
+    {
+        $this->set_common_options('NUMERIC', $identifier, $alias, $sortable, $no_index, $allows_missing);
     }
 }

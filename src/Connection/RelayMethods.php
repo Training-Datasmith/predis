@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,10 +10,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
-trait RelayMethods
+trait Relay_Methods
 {
     /**
      * Registers a new `flushed` event listener.
@@ -22,74 +20,67 @@ trait RelayMethods
      * @param  callable $callback
      * @return bool
      */
-    public function onFlushed(?callable $callback)
+    public function on_flushed(?callable $callback)
     {
-        return $this->client->onFlushed($callback);
+        return $this->client->on_flushed($callback);
     }
-
     /**
      * Registers a new `invalidated` event listener.
      *
      * @param  callable    $callback
      * @return bool
      */
-    public function onInvalidated(?callable $callback, ?string $pattern = null)
+    public function on_invalidated(?callable $callback, ?string $pattern = null)
     {
-        return $this->client->onInvalidated($callback, $pattern);
+        return $this->client->on_invalidated($callback, $pattern);
     }
-
     /**
      * Dispatches all pending events.
      *
      * @return int|false
      */
-    public function dispatchEvents()
+    public function dispatch_events()
     {
-        return $this->client->dispatchEvents();
+        return $this->client->dispatch_events();
     }
-
     /**
      * Adds ignore pattern(s). Matching keys will not be cached in memory.
      *
      * @param  string $pattern,...
      * @return int
      */
-    public function addIgnorePatterns(string ...$pattern)
+    public function add_ignore_patterns(string ...$pattern)
     {
-        return $this->client->addIgnorePatterns(...$pattern);
+        return $this->client->add_ignore_patterns(...$pattern);
     }
-
     /**
      * Adds allow pattern(s). Only matching keys will be cached in memory.
      *
      * @param  string $pattern,...
      * @return int
      */
-    public function addAllowPatterns(string ...$pattern)
+    public function add_allow_patterns(string ...$pattern)
     {
-        return $this->client->addAllowPatterns(...$pattern);
+        return $this->client->add_allow_patterns(...$pattern);
     }
-
     /**
      * Returns the connection's endpoint identifier.
      *
      * @return string|false
      */
-    public function endpointId()
+    public function endpoint_id()
     {
-        return $this->client->endpointId();
+        return $this->client->endpoint_id();
     }
-
     /**
      * Returns a unique representation of the underlying socket connection identifier.
      *
      * @return string|false
      */
-    public function socketId()
+    public function socket_id()
     {
-        return $this->client->socketId();
+        return $this->client->socket_id();
     }
-
     /**
      * Returns information about the license.
      *
@@ -99,7 +90,6 @@ trait RelayMethods
     {
         return $this->client->license();
     }
-
     /**
      * Returns statistics about Relay.
      *
@@ -109,17 +99,15 @@ trait RelayMethods
     {
         return $this->client->stats();
     }
-
     /**
      * Returns the number of bytes allocated, or `0` in client-only mode.
      *
      * @return int
      */
-    public function maxMemory()
+    public function max_memory()
     {
-        return $this->client->maxMemory();
+        return $this->client->max_memory();
     }
-
     /**
      * Flushes Relay's in-memory cache of all databases.
      * When given an endpoint, only that connection will be flushed.
@@ -128,8 +116,8 @@ trait RelayMethods
      *
      * @return bool
      */
-    public function flushMemory(?string $endpointId = null, ?int $db = null)
+    public function flush_memory(?string $endpoint_id = null, ?int $db = null)
     {
-        return $this->client->flushMemory($endpointId, $db);
+        return $this->client->flush_memory($endpoint_id, $db);
     }
 }

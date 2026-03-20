@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,76 +10,65 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see http://redis.io/commands/xadd
  */
-class XADD extends RedisCommand
+class XADD extends Redis_Command
 {
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XADD';
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         $args = [];
-
         $args[] = $arguments[0];
         $options = $arguments[3] ?? [];
-
         if (isset($options['nomkstream']) && $options['nomkstream']) {
             $args[] = 'NOMKSTREAM';
         }
-
         if (isset($options['trimming'])) {
             $args[] = strtoupper($options['trimming']);
         }
-
         // IDMPAUTO or IDMP options (mutually exclusive)
         if (isset($options['idmpauto'])) {
             $args[] = 'IDMPAUTO';
             $args[] = $options['idmpauto'];
         } elseif (isset($options['idmp']) && is_array($options['idmp'])) {
             $args[] = 'IDMP';
-            $args[] = $options['idmp'][0]; // pid
-            $args[] = $options['idmp'][1]; // iid
+            $args[] = $options['idmp'][0];
+            // pid
+            $args[] = $options['idmp'][1];
+            // iid
         }
-
         if (isset($options['trim']) && is_array($options['trim'])) {
             array_push($args, ...$options['trim']);
-
             if (isset($options['limit'])) {
                 $args[] = 'LIMIT';
                 $args[] = $options['limit'];
             }
         }
-
         // ID, default to * to let Redis set it
         $args[] = $arguments[2] ?? '*';
-
         if (isset($arguments[1]) && is_array($arguments[1])) {
             foreach ($arguments[1] as $key => $val) {
                 $args[] = $key;
                 $args[] = $val;
             }
         }
-
-        parent::setArguments($args);
+        parent::set_arguments($args);
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

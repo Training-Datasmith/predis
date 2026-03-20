@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,39 +10,29 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
 trait Keys
 {
-    public function setArguments(array $arguments, bool $withNumkeys = true): void
+    public function set_arguments(array $arguments, bool $with_numkeys = true): void
     {
-        $argumentsLength = count($arguments);
-
-        if (
-            static::$keysArgumentPositionOffset > $argumentsLength
-            || !is_array($arguments[static::$keysArgumentPositionOffset])
-        ) {
+        $arguments_length = count($arguments);
+        if (static::$keys_argument_position_offset > $arguments_length || !is_array($arguments[static::$keys_argument_position_offset])) {
             throw new UnexpectedValueException('Wrong keys argument type or position offset');
         }
-
-        $keysArgument = $arguments[static::$keysArgumentPositionOffset];
-        $argumentsBeforeKeys = array_slice($arguments, 0, static::$keysArgumentPositionOffset);
-        $argumentsAfterKeys = array_slice($arguments, static::$keysArgumentPositionOffset + 1);
-
-        if ($withNumkeys) {
-            $numkeys = count($keysArgument);
-            parent::setArguments(array_merge($argumentsBeforeKeys, [$numkeys], $keysArgument, $argumentsAfterKeys));
-
+        $keys_argument = $arguments[static::$keys_argument_position_offset];
+        $arguments_before_keys = array_slice($arguments, 0, static::$keys_argument_position_offset);
+        $arguments_after_keys = array_slice($arguments, static::$keys_argument_position_offset + 1);
+        if ($with_numkeys) {
+            $numkeys = count($keys_argument);
+            parent::set_arguments(array_merge($arguments_before_keys, [$numkeys], $keys_argument, $arguments_after_keys));
             return;
         }
-
-        parent::setArguments(array_merge($argumentsBeforeKeys, $keysArgument, $argumentsAfterKeys));
+        parent::set_arguments(array_merge($arguments_before_keys, $keys_argument, $arguments_after_keys));
     }
 }

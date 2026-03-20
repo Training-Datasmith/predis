@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,14 +10,12 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Response\Iterator;
 
 use InvalidArgumentException;
-use OuterIterator;
-use ReturnTypeWillChange;
+use Outer_Iterator;
+use Return_Type_Will_Change;
 use UnexpectedValueException;
-
 /**
  * Outer iterator consuming streamable multibulk responses by yielding tuples of
  * keys and values.
@@ -26,23 +23,20 @@ use UnexpectedValueException;
  * This wrapper is useful for responses to commands such as `HGETALL` that can
  * be iterator as $key => $value pairs.
  */
-class MultiBulkTuple extends MultiBulk implements OuterIterator
+class Multi_Bulk_Tuple extends Multi_Bulk implements Outer_Iterator
 {
     private $iterator;
-
     /**
      * @param MultiBulk $iterator Inner multibulk response iterator.
      */
-    public function __construct(MultiBulk $iterator)
+    public function __construct(Multi_Bulk $iterator)
     {
-        $this->checkPreconditions($iterator);
-
+        $this->check_preconditions($iterator);
         $this->size = count($iterator) / 2;
         $this->iterator = $iterator;
-        $this->position = $iterator->getPosition();
-        $this->current = $this->size > 0 ? $this->getValue() : null;
+        $this->position = $iterator->get_position();
+        $this->current = $this->size > 0 ? $this->get_value() : null;
     }
-
     /**
      * Checks for valid preconditions.
      *
@@ -51,28 +45,23 @@ class MultiBulkTuple extends MultiBulk implements OuterIterator
      * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    protected function checkPreconditions(MultiBulk $iterator)
+    protected function check_preconditions(Multi_Bulk $iterator)
     {
-        if ($iterator->getPosition() !== 0) {
-            throw new InvalidArgumentException(
-                'Cannot initialize a tuple iterator using an already initiated iterator.'
-            );
+        if ($iterator->get_position() !== 0) {
+            throw new InvalidArgumentException('Cannot initialize a tuple iterator using an already initiated iterator.');
         }
-
         if (($size = count($iterator)) % 2 !== 0) {
             throw new UnexpectedValueException('Invalid response size for a tuple iterator.');
         }
     }
-
     /**
      * @return MultiBulk
      */
-    #[ReturnTypeWillChange]
-    public function getInnerIterator()
+    #[Return_Type_Will_Change]
+    public function get_inner_iterator()
     {
         return $this->iterator;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -80,18 +69,15 @@ class MultiBulkTuple extends MultiBulk implements OuterIterator
     {
         $this->iterator->drop(true);
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function getValue(): array
+    protected function get_value(): array
     {
         $k = $this->iterator->current();
         $this->iterator->next();
-
         $v = $this->iterator->current();
         $this->iterator->next();
-
         return [$k, $v];
     }
 }

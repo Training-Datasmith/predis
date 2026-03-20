@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,36 +10,29 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Traits;
 
 use Predis\Command\Command;
 use UnexpectedValueException;
-
 /**
  * @mixin Command
  */
 trait Rev
 {
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        if (count($arguments) <= static::$revArgumentPositionOffset || false === $arguments[static::$revArgumentPositionOffset]) {
-            parent::setArguments($arguments);
-
+        if (count($arguments) <= static::$rev_argument_position_offset || false === $arguments[static::$rev_argument_position_offset]) {
+            parent::set_arguments($arguments);
             return;
         }
-
-        $argument = $arguments[static::$revArgumentPositionOffset];
-
+        $argument = $arguments[static::$rev_argument_position_offset];
         if (true === $argument) {
             $argument = 'REV';
         } else {
             throw new UnexpectedValueException('Wrong rev argument type');
         }
-
-        $argumentsBefore = array_slice($arguments, 0, static::$revArgumentPositionOffset);
-        $argumentsAfter = array_slice($arguments, static::$revArgumentPositionOffset + 1);
-
-        parent::setArguments(array_merge($argumentsBefore, [$argument], $argumentsAfter));
+        $arguments_before = array_slice($arguments, 0, static::$rev_argument_position_offset);
+        $arguments_after = array_slice($arguments, static::$rev_argument_position_offset + 1);
+        parent::set_arguments(array_merge($arguments_before, [$argument], $arguments_after));
     }
 }

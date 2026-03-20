@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,18 +10,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Stream;
 
-use Predis\Command\Argument\ArrayableArgument;
-
-class XInfoStreamOptions implements ArrayableArgument
+use Predis\Command\Argument\Arrayable_Argument;
+class X_Info_Stream_Options implements Arrayable_Argument
 {
     /**
      * @var array
      */
     protected $options = [];
-
     /**
      * Modifier provides a more verbose reply.
      * The COUNT option can be used to limit the number of stream and PEL entries that are returned.
@@ -30,18 +26,15 @@ class XInfoStreamOptions implements ArrayableArgument
     public function full(?int $count = null): self
     {
         $this->options[] = 'FULL';
-
         if (null !== $count) {
             array_push($this->options, 'COUNT', $count);
         }
-
         return $this;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         return $this->options;
     }

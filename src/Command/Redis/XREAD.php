@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,57 +10,45 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
-class XREAD extends RedisCommand
+class XREAD extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'XREAD';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
-        $processedArguments = [];
-
+        $processed_arguments = [];
         if (array_key_exists(0, $arguments) && null !== $arguments[0]) {
-            array_push($processedArguments, 'COUNT', $arguments[0]);
+            array_push($processed_arguments, 'COUNT', $arguments[0]);
         }
-
         if (array_key_exists(1, $arguments) && null !== $arguments[1]) {
-            array_push($processedArguments, 'BLOCK', $arguments[1]);
+            array_push($processed_arguments, 'BLOCK', $arguments[1]);
         }
-
         if (array_key_exists(2, $arguments) && null !== $arguments[2]) {
-            $processedArguments[] = 'STREAMS';
-            $processedArguments = array_merge($processedArguments, $arguments[2]);
+            $processed_arguments[] = 'STREAMS';
+            $processed_arguments = array_merge($processed_arguments, $arguments[2]);
         }
-
         $ids = array_slice($arguments, 3);
-        $processedArguments = array_merge($processedArguments, $ids);
-
-        parent::setArguments($processedArguments);
+        $processed_arguments = array_merge($processed_arguments, $ids);
+        parent::set_arguments($processed_arguments);
     }
-
-    public function parseResponse($data)
+    public function parse_response($data)
     {
         if (!$data) {
             return [];
         }
-
         if ($data !== array_values($data)) {
-            return $data; // Relay
+            return $data;
+            // Relay
         }
-
-        $processedData = [];
-
+        $processed_data = [];
         foreach ($data as $stream) {
-            $processedData[$stream[0]] = $stream[1];
+            $processed_data[$stream[0]] = $stream[1];
         }
-
-        return $processedData;
+        return $processed_data;
     }
 }

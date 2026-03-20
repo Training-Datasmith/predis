@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,33 +10,28 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Server;
 
-class LimitOffsetCount implements LimitInterface
+class Limit_Offset_Count implements Limit_Interface
 {
     private const KEYWORD = 'LIMIT';
-
     /**
      * @var int
      */
     private $offset;
-
     /**
      * @var int
      */
     private $count;
-
     public function __construct(int $offset, int $count)
     {
         $this->offset = $offset;
         $this->count = $count;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         return [self::KEYWORD, $this->offset, $this->count];
     }

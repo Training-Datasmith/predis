@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,17 +10,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
 use Predis\Command\Command as RedisCommand;
-
 /**
  * @see https://redis.io/commands/?name=cluster
  */
-class CLUSTER extends RedisCommand
+class CLUSTER extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'CLUSTER';
     }

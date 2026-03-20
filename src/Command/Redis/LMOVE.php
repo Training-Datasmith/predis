@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,25 +10,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Redis;
 
-use Predis\Command\PrefixableCommand as RedisCommand;
-
-class LMOVE extends RedisCommand
+use Predis\Command\Prefixable_Command as RedisCommand;
+class LMOVE extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'LMOVE';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        if ($arguments = $this->getArguments()) {
+        if ($arguments = $this->get_arguments()) {
             $arguments[0] = $prefix . $arguments[0];
             $arguments[1] = $prefix . $arguments[1];
-
-            $this->setRawArguments($arguments);
+            $this->set_raw_arguments($arguments);
         }
     }
 }

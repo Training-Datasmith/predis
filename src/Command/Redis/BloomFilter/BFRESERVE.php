@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,12 +10,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Bloom_Filter;
 
-namespace Predis\Command\Redis\BloomFilter;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-use Predis\Command\Traits\BloomFilters\Expansion;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
+use Predis\Command\Traits\Bloom_Filters\Expansion;
 /**
  * @see https://redis.io/commands/bf.reserve/
  *
@@ -26,31 +23,26 @@ use Predis\Command\Traits\BloomFilters\Expansion;
  * By default, the filter auto-scales by creating additional sub-filters when capacity is reached.
  * The new sub-filter is created with size of the previous sub-filter multiplied by expansion.
  */
-class BFRESERVE extends RedisCommand
+class BFRESERVE extends Redis_Command
 {
     use Expansion {
         Expansion::setArguments as setExpansion;
     }
-
-    protected static $expansionArgumentPositionOffset = 3;
-
-    public function getId(): string
+    protected static $expansion_argument_position_offset = 3;
+    public function get_id(): string
     {
         return 'BF.RESERVE';
     }
-
-    public function setArguments(array $arguments): void
+    public function set_arguments(array $arguments): void
     {
         if (array_key_exists(4, $arguments) && $arguments[4]) {
             $arguments[4] = 'NONSCALING';
         }
-
-        $this->setExpansion($arguments);
-        $this->filterArguments();
+        $this->set_expansion($arguments);
+        $this->filter_arguments();
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

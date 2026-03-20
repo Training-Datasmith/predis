@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,18 +10,17 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command;
 
 /**
  * Defines a command whose keys can be prefixed.
  */
-interface PrefixableCommandInterface extends CommandInterface
+interface Prefixable_Command_Interface extends Command_Interface
 {
     /**
      * Prefixes all the keys found in the arguments of the command.
      *
      * @param string $prefix String used to prefix the keys.
      */
-    public function prefixKeys($prefix);
+    public function prefix_keys($prefix);
 }

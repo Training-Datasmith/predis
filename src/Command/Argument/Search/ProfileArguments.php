@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,18 +10,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Command\Argument\Search;
 
-use Predis\Command\Argument\ArrayableArgument;
-
-class ProfileArguments implements ArrayableArgument
+use Predis\Command\Argument\Arrayable_Argument;
+class Profile_Arguments implements Arrayable_Argument
 {
     /**
      * @var array
      */
     protected $arguments = [];
-
     /**
      * Adds search context.
      *
@@ -31,10 +27,8 @@ class ProfileArguments implements ArrayableArgument
     public function search(): self
     {
         $this->arguments[] = 'SEARCH';
-
         return $this;
     }
-
     /**
      * Adds aggregate context.
      *
@@ -43,10 +37,8 @@ class ProfileArguments implements ArrayableArgument
     public function aggregate(): self
     {
         $this->arguments[] = 'AGGREGATE';
-
         return $this;
     }
-
     /**
      * Removes details of reader iterator.
      *
@@ -55,10 +47,8 @@ class ProfileArguments implements ArrayableArgument
     public function limited(): self
     {
         $this->arguments[] = 'LIMITED';
-
         return $this;
     }
-
     /**
      * Is query string, as if sent to FT.SEARCH.
      *
@@ -68,14 +58,12 @@ class ProfileArguments implements ArrayableArgument
     {
         $this->arguments[] = 'QUERY';
         $this->arguments[] = $query;
-
         return $this;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function toArray(): array
+    public function to_array(): array
     {
         return $this->arguments;
     }

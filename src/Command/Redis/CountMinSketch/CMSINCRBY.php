@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,26 +10,23 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Predis\Command\Redis\Count_Min_Sketch;
 
-namespace Predis\Command\Redis\CountMinSketch;
-
-use Predis\Command\PrefixableCommand as RedisCommand;
-
+use Predis\Command\Prefixable_Command as RedisCommand;
 /**
  * @see https://redis.io/commands/cms.incrby/
  *
  * Increases the count of item by increment.
  * Multiple items can be increased with one call.
  */
-class CMSINCRBY extends RedisCommand
+class CMSINCRBY extends Redis_Command
 {
-    public function getId(): string
+    public function get_id(): string
     {
         return 'CMS.INCRBY';
     }
-
-    public function prefixKeys($prefix): void
+    public function prefix_keys($prefix): void
     {
-        $this->applyPrefixForFirstArgument($prefix);
+        $this->apply_prefix_for_first_argument($prefix);
     }
 }

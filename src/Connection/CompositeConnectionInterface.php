@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,27 +10,24 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Connection;
 
 /**
  * Defines a connection to communicate with a single Redis server that leverages
  * an external protocol processor to handle pluggable protocol handlers.
  */
-interface CompositeConnectionInterface extends NodeConnectionInterface
+interface Composite_Connection_Interface extends Node_Connection_Interface
 {
     /**
      * Returns the protocol processor used by the connection.
      */
-    public function getProtocol();
-
+    public function get_protocol();
     /**
      * Writes the buffer containing over the connection.
      *
      * @param string $buffer String buffer to be sent over the connection.
      */
-    public function writeBuffer($buffer);
-
+    public function write_buffer($buffer);
     /**
      * Reads the given number of bytes from the connection.
      *
@@ -39,12 +35,11 @@ interface CompositeConnectionInterface extends NodeConnectionInterface
      *
      * @return string
      */
-    public function readBuffer($length);
-
+    public function read_buffer($length);
     /**
      * Reads a line from the connection.
      *
      * @return string
      */
-    public function readLine();
+    public function read_line();
 }

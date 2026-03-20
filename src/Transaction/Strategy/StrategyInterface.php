@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the Predis package.
  *
@@ -11,42 +10,36 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Predis\Transaction\Strategy;
 
-use Predis\Command\CommandInterface;
-use Predis\Transaction\Exception\TransactionException;
-
-interface StrategyInterface
+use Predis\Command\Command_Interface;
+use Predis\Transaction\Exception\Transaction_Exception;
+interface Strategy_Interface
 {
     /**
      * Initialize transaction context.
      */
-    public function initializeTransaction(): bool;
-
+    public function initialize_transaction(): bool;
     /**
      * Executes a given command in a transaction context.
      *
      * @return mixed
      * @throws TransactionException
      */
-    public function executeCommand(CommandInterface $command);
-
+    public function execute_command(Command_Interface $command);
     /**
      * Executes previously opened transaction context.
      *
      * @return mixed
      * @throws TransactionException
      */
-    public function executeTransaction();
-
+    public function execute_transaction();
     /**
      * Sends MULTI command.
      *
      * @return mixed
      */
     public function multi();
-
     /**
      * Enable WATCH for given keys.
      *
@@ -54,14 +47,12 @@ interface StrategyInterface
      * @throws TransactionException
      */
     public function watch(array $keys);
-
     /**
      * Disable previously enabled WATCH.
      *
      * @return mixed
      */
     public function unwatch();
-
     /**
      * Discards active transaction context.
      *
