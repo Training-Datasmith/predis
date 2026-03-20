@@ -421,56 +421,89 @@ use Predis\Response\Status;
 interface Client_Interface
 {
     /**
-     * Returns the command factory used by the client.
+     * Returns the command factory used to create Redis command objects.
      *
-     * @return FactoryInterface
+     * @return Factory_Interface The factory responsible for creating {@see Command_Interface} instances.
+     * @since  0.7
      */
-    public function get_command_factory();
+    public function get_command_factory(): Factory_Interface;
+
     /**
-     * Returns the client options specified upon initialization.
+     * Returns the client options container.
      *
-     * @return OptionsInterface
+     * @return Options_Interface The options resolved at construction time.
+     * @since  0.7
      */
-    public function get_options();
+    public function get_options(): Options_Interface;
+
     /**
-     * Opens the underlying connection to the server.
+     * Opens the underlying connection to the Redis server.
+     *
+     * Calling this method is optional for most use cases; the connection is
+     * opened lazily on the first command execution. Use explicit `connect()`
+     * when you need to verify connectivity before executing commands.
+     *
+     * @throws \Predis\Connection\Connection_Exception On connection failure.
+     * @since  0.1
      */
-    public function connect();
+    public function connect(): void;
+
     /**
-     * Closes the underlying connection from the server.
+     * Closes the underlying connection to the Redis server.
+     *
+     * Unlike the Redis `QUIT` command, this does not send a QUIT packet —
+     * it simply closes the socket. The connection can be reopened on the
+     * next command execution.
+     *
+     * @since 0.1
      */
-    public function disconnect();
+    public function disconnect(): void;
+
     /**
-     * Returns the underlying connection instance.
+     * Returns the active connection instance.
      *
-     * @return ConnectionInterface
+     * For cluster and replication setups this returns an aggregate connection
+     * that internally manages multiple node connections.
+     *
+     * @return \Predis\Connection\Connection_Interface The active connection.
+     * @since  0.7
      */
-    public function get_connection();
+    public function get_connection(): \Predis\Connection\Connection_Interface;
+
     /**
-     * Creates a new instance of the specified Redis command.
+     * Creates a new Redis command object without executing it.
      *
-     * @param string $method    Command ID.
-     * @param array  $arguments Arguments for the command.
+     * @param string               $method    The Redis command ID (case-insensitive, e.g. 'SET', 'get').
+     * @param array<int, mixed>    $arguments Arguments as positional values matching the command signature.
      *
-     * @return CommandInterface
+     * @return Command_Interface The prepared command instance.
+     * @throws \InvalidArgumentException When $method is not a registered command.
+     * @since  0.7
      */
-    public function create_command($method, $arguments = []);
+    public function create_command(string $method, array $arguments = []): Command_Interface;
+
     /**
-     * Executes the specified Redis command.
+     * Executes a pre-built Redis command object and returns the parsed response.
      *
-     * @param CommandInterface $command Command instance.
-     *
-     * @return mixed
+     * @param  Command_Interface $command The command to execute.
+     * @return mixed The parsed response value.
+     * @throws \Predis\Response\Server_Exception On Redis error response (when `exceptions` option is true).
+     * @throws \Predis\Client_Exception          On connection-level failure.
+     * @since  0.7
      */
-    public function execute_command(Command_Interface $command);
+    public function execute_command(Command_Interface $command): mixed;
+
     /**
-     * Creates a Redis command with the specified arguments and sends a request
-     * to the server.
+     * Magic method: creates and executes a Redis command from a method call.
      *
-     * @param string $method    Command ID.
-     * @param array  $arguments Arguments for the command.
+     * Enables the fluent `$client->set('key', 'value')` syntax. The method
+     * name is used as the command ID; arguments are forwarded directly.
      *
-     * @return mixed
+     * @param  string            $method    Redis command name (e.g. 'get', 'set', 'hgetall').
+     * @param  array<int, mixed> $arguments Command arguments.
+     * @return mixed The parsed command response.
+     * @since  0.1
+     * @see    Client_Interface::create_command() To build a command without executing it.
      */
-    public function __call($method, $arguments);
+    public function __call(string $method, array $arguments): mixed;
 }

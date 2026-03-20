@@ -21,92 +21,127 @@ use Predis\Connection\Node_Connection_Interface;
 use Return_Type_Will_Change;
 use Traversable;
 /**
- * Compact slot map for redis-cluster.
+ * Compact slot map for Redis Cluster.
+ *
+ * Stores a list of {@see Slot_Range} objects that together cover [0, 16383].
+ * Adjacent ranges assigned to the same node are merged into a single range to
+ * keep memory usage minimal. The map supports ArrayAccess so individual slots
+ * can be read and written as `$map[$slot]`.
+ *
+ * @since 1.0
  */
 class Slot_Map implements ArrayAccess, IteratorAggregate, Countable
 {
     /**
-     * Slot ranges list.
+     * Sorted, compacted list of slot ranges.
      *
-     * @var SlotRange[]
+     * @var list<Slot_Range>
      */
-    private $slot_ranges = [];
+    private array $slot_ranges = [];
     /**
-     * Checks if the given slot is valid.
+     * Returns true when the given integer is a valid Redis Cluster slot number.
      *
-     * @param int $slot Slot index.
+     * Valid slot numbers are in [0, {@see Slot_Range::MAX_SLOTS}] (i.e. 0–16383).
+     *
+     * @param  int  $slot The slot number to check.
+     * @return bool True when $slot is in the valid range.
+     * @since  1.0
      */
-    public static function is_valid($slot): bool
+    public static function is_valid(int $slot): bool
     {
         return $slot >= 0 && $slot <= Slot_Range::MAX_SLOTS;
     }
+
     /**
-     * Checks if the given slot range is valid.
+     * Returns true when [$first, $last] is a valid Redis Cluster slot range.
      *
-     * @param int $first Initial slot of the range.
-     * @param int $last  Last slot of the range.
-     *
-     * @return bool
+     * @param  int  $first First slot (inclusive).
+     * @param  int  $last  Last slot (inclusive).
+     * @return bool True when both endpoints are valid and $first <= $last.
+     * @since  1.0
      */
-    public static function is_valid_range($first, $last)
+    public static function is_valid_range(int $first, int $last): bool
     {
         return Slot_Range::is_valid_range($first, $last);
     }
+
     /**
-     * Resets the slot map.
+     * Clears all slot assignments from the map.
+     *
+     * @since 1.0
      */
     public function reset(): void
     {
         $this->slot_ranges = [];
     }
+
     /**
-     * Checks if the slot map is empty.
+     * Returns true when no slots are assigned.
+     *
+     * @return bool True when the map contains no slot ranges.
+     * @since  1.0
      */
     public function is_empty(): bool
     {
         return empty($this->slot_ranges);
     }
+
     /**
-     * Returns the current slot map as a dictionary of $slot => $node.
+     * Expands all slot ranges into a flat `$slot => $nodeId` dictionary.
      *
-     * The order of the slots in the dictionary is not guaranteed.
+     * Note: this allocates an array with up to 16384 entries.
      *
-     * @return array
+     * @return array<int, string> Slot number → node ID string.
+     * @complexity O(n) where n = total number of assigned slots (up to 16384).
+     * @since 1.0
      */
-    public function to_array()
+    public function to_array(): array
     {
         return array_reduce($this->slot_ranges, static function (array $carry, \Predis\Cluster\Slot_Range $slot_range): array {
             return $carry + $slot_range->to_array();
         }, []);
     }
+
     /**
-     * Returns the list of unique nodes in the slot map.
+     * Returns the unique list of node connection IDs present in the slot map.
+     *
+     * @return list<string> Unique node ID strings.
+     * @since  1.0
      */
     public function get_nodes(): array
     {
-        return array_unique(array_map(static function (\Predis\Cluster\Slot_Range $slot_range) {
+        return array_unique(array_map(static function (\Predis\Cluster\Slot_Range $slot_range): string {
             return $slot_range->get_connection();
         }, $this->slot_ranges));
     }
+
     /**
-     * Returns the list of slot ranges.
+     * Returns the internal list of slot range objects.
      *
-     * @return SlotRange[]
+     * @return list<Slot_Range> Sorted slot ranges.
+     * @since  1.0
      */
-    public function get_slot_ranges()
+    public function get_slot_ranges(): array
     {
         return $this->slot_ranges;
     }
+
     /**
-     * Assigns the specified slot range to a node.
+     * Assigns a contiguous range of slots to a node.
      *
-     * @param int                            $first      Initial slot of the range.
-     * @param int                            $last       Last slot of the range.
-     * @param NodeConnectionInterface|string $connection ID or connection instance.
+     * Only unassigned (gap) slots within [$first, $last] are affected.
+     * Already-assigned slots in that range retain their current assignment.
+     * Adjacent ranges belonging to the same node are merged automatically.
      *
-     * @throws OutOfBoundsException
+     * @param int                                      $first      First slot (inclusive).
+     * @param int                                      $last       Last slot (inclusive).
+     * @param Node_Connection_Interface|string         $connection The node to assign, or its string ID.
+     *
+     * @throws OutOfBoundsException When [$first, $last] is not a valid slot range.
+     * @since  1.0
+     * @see    offsetSet() To assign a single slot.
      */
-    public function set_slots($first, $last, $connection): void
+    public function set_slots(int $first, int $last, $connection): void
     {
         if (!static::is_valid_range($first, $last)) {
             throw new OutOfBoundsException("Invalid slot range {$first}-{$last} for `{$connection}`");

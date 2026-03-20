@@ -13,7 +13,18 @@ declare (strict_types=1);
 namespace Predis;
 
 /**
- * Exception class that identifies client-side errors.
+ * Thrown for client-side errors that occur before a command reaches the server.
+ *
+ * Examples of client-side errors:
+ * - Invalid connection parameters (bad URI, unsupported scheme)
+ * - Attempting to execute a command against an unsupported connection type
+ * - Invalid selector passed to {@see Client::get_client_by()}
+ * - Callable connection factory returning a non-ConnectionInterface value
+ *
+ * Distinct from {@see \Predis\Response\Server_Exception}, which represents
+ * errors returned by Redis itself (RESP error responses).
+ *
+ * @since 0.8
  */
 class Client_Exception extends Predis_Exception
 {

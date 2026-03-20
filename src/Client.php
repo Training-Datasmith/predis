@@ -63,8 +63,29 @@ class Client implements Client_Interface, IteratorAggregate
     /** @var Command\FactoryInterface */
     private $commands;
     /**
-     * @param mixed $parameters Connection parameters for one or more servers.
-     * @param mixed $options    Options to configure some behaviours of the client.
+     * Creates a new Predis client instance.
+     *
+     * The $parameters argument accepts several forms:
+     * - `null` — connects to `tcp://127.0.0.1:6379` with defaults
+     * - `string` — Redis URI, e.g. `tcp://127.0.0.1:6379?database=1`
+     * - `array` (dictionary) — connection parameters as key-value pairs
+     * - `array` (indexed) — multiple servers for cluster/replication
+     * - `Parameters_Interface` — pre-built parameters object
+     * - `Connection_Interface` — pre-built connection (used as-is)
+     * - `callable` — factory receiving `OptionsInterface`, returning `ConnectionInterface`
+     *
+     * The $options argument accepts:
+     * - `null` — use default options
+     * - `array` — options map (see {@see Options} for supported keys)
+     * - `Options_Interface` — pre-built options object
+     *
+     * @param null|string|array<string|int, mixed>|Parameters_Interface|Connection_Interface|callable $parameters
+     *        Connection parameters for one or more servers.
+     * @param null|array<string, mixed>|Options_Interface $options
+     *        Client configuration options.
+     *
+     * @throws \InvalidArgumentException When $options is not a recognised type.
+     * @since  0.1
      */
     public function __construct($parameters = null, $options = null)
     {
@@ -220,13 +241,18 @@ class Client implements Client_Interface, IteratorAggregate
         $this->connection->disconnect();
     }
     /**
-     * Closes the underlying connection and disconnects from the server.
+     * Closes the underlying connection to the server.
      *
-     * This is the same as `Client::disconnect()` as it does not actually send
-     * the `QUIT` command to Redis, but simply closes the connection.
+     * This method does NOT send the Redis `QUIT` command. It simply closes the
+     * socket. It is identical to calling {@see disconnect()} directly.
+     *
+     * @deprecated since 2.0 — Use {@see disconnect()} instead for clarity.
+     *             The name `quit` implies sending a QUIT command to Redis, which
+     *             this method does not do.
      */
     public function quit(): void
     {
+        trigger_error('Client::quit() is deprecated since Predis 2.0; use Client::disconnect() instead.', E_USER_DEPRECATED);
         $this->disconnect();
     }
     /**
@@ -266,17 +292,25 @@ class Client implements Client_Interface, IteratorAggregate
         return $this->connection instanceof Relay_Connection ? $this->connection->unpack($value) : $value;
     }
     /**
-     * Executes a command without filtering its arguments, parsing the response,
-     * applying any prefix to keys or throwing exceptions on Redis errors even
-     * regardless of client options.
+     * Sends a raw command to Redis, bypassing all client-side processing.
      *
-     * It is possible to identify Redis error responses from normal responses
-     * using the second optional argument which is populated by reference.
+     * This method skips:
+     * - Argument filtering and validation
+     * - Response parsing (returns the raw RESP value)
+     * - Key prefixing
+     * - Exception throwing on Redis error responses
      *
-     * @param array $arguments Command arguments as defined by the command signature.
-     * @param bool  $error     Set to TRUE when Redis returned an error response.
+     * Useful for sending commands not yet implemented by Predis, or for
+     * debugging by inspecting the literal server response.
      *
-     * @return mixed
+     * @param  array<int, string|int|float> $arguments Command name followed by arguments,
+     *                                                  e.g. `['SET', 'key', 'value']`.
+     * @param  bool                         $error     Passed by reference; set to true when
+     *                                                  Redis returned an error (RESP `-ERR …`).
+     *
+     * @return mixed The raw response value from Redis (string, int, array, or null).
+     * @since  1.0
+     * @see    execute_command() For the full-featured command execution path.
      */
     public function execute_raw(array $arguments, &$error = null)
     {
